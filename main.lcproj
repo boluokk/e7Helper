@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<lcproj projname="script" appname="e7Helper" autorotate="true" autorun="1" autorunscript="0" cputype="2" is_acc_mode="0" isdebugapkplugin="0" jmpjdcheck="0" localmode="true" pkgname="com.boluo.e7" pluginapkpath="" rgbmode="false" sel="1" showfloatcontrol="1" showhome="1" targetsize="720x1280" updateurl="" useocr="1" useoldmenu="0" ver="2">
+    <lua entry="main.lua">
+        <file name="util.lua"/>
+        <file name="point.lua"/>
+        <file name="path.lua"/>
+        <file name="test.lua"/>
+        <file name="userinterface.lua"/>
+    </lua>
+    <rc entry="main.rc"/>
+    <ui entry="main.ui"/>
+    <luae entry="">
+        <file name="armeabi-v7a"/>
+        <file name="x86"/>
+    </luae>
+</lcproj>
