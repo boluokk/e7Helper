@@ -90,7 +90,7 @@ def save():
             with open(os.path.join(os.getcwd(), re.search(r"([^\\]+)\.[^.]+$", v).group()), mode='w',
                       encoding="UTF-8") as f:
                 f.write(content)
-        print('更新 or 添加(文件成功)!')
+    print('更新 or 添加(文件成功)!')
     with open(os.path.join(r'./release', 'script.lr.md5'), mode='r', encoding='UTF-8') as f:
         oldMD5 = f.read()
     with open(packagePath, mode='rb') as f:
@@ -109,15 +109,11 @@ def save():
     print('更新脚本文件成功!')
     # 上传脚本文件
     os.system('git add .')
-    os.system('git commit -m {}'.format(datetime.now().strftime("%m.%d %H:%M")))
+    inputText = input('输入更新内容: ')
+    inputText = '\"{} {}\"'.format(datetime.now().strftime("%Y.%m.%d-%H:%M"), inputText)
+    os.system('git commit -m {}'.format(inputText))
     os.system('git push')
-    print('push master分支成功!')
-
-    os.system('cd ./release')
-    os.system('git add .')
-    os.system('git commit -m {}'.format(datetime.now().strftime("%m.%d %H:%M")))
-    os.system('git push')
-    print('push resource分支成功!')
+    print('push成功!')
 
 
 def update():
@@ -127,5 +123,5 @@ def update():
 
 if __name__ == '__main__':
     # 保存文件
-    # save()
+    save()
     pass
