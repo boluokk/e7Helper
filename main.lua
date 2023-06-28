@@ -30,32 +30,19 @@ debug_disabled = true
 is_exception_quit = false
 -- UI配置完毕
 ui_config_finish = false
--- 多账号个数
-multiple_account_number = 10
 -- loggerID
 logger_ID = nil
 -- 当前任务
 current_task_index = 1
 -- 当前账号任务
 current_task = {}
--- 当前肉鸽次数
-current_rouge_count = 0
--- 当前账号下标
-current_account_index = 1
--- 当前账号
-current_account_name = "未知"
 -- 检查游戏状态 10s
 check_game_status_interval = 10000
--- 登录信息
-login_type = "卡密"
 -- 检查图色识别时间
--- 一般作战 5分钟 300s
--- 剿灭作战 25分钟 1500s
--- 其他识别 1分钟 60s
 getMillisecond = function (secound) return secound * 1000 end
 check_game_identify_timeout = getMillisecond(180)
 -- 其他ssleep间隔
-other_ssleep_interval = 2
+other_ssleep_interval = 1
 -- 单任务休息时间
 single_task_resttime = 5
 
@@ -102,7 +89,6 @@ end
 -- 1：账号被挤下线
 -- 2：断开网络
 -- 3：其他
--- 9: 高资异常
 -- 是否网络断开、账号被挤之类异常
 if scriptStatus == 0 then 
   -- 重置一些数据
@@ -145,4 +131,3 @@ end
 -- 休息时间(单位分钟)
 -- local restWaitTimes = tonumber(user_config_info.任务完成休息时间) * 60
 -- local restTimes
-hello

@@ -123,5 +123,10 @@ def update():
 
 if __name__ == '__main__':
     # 保存文件
+    # 复制到懒人精灵
+    # copy()
+    # 保存并且上传到gitee
     save()
+    # pull远程到本地
+    # update()
     pass

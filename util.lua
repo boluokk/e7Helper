@@ -52,74 +52,76 @@ findOne = function (target, config)
 	releaseCapture()
 	keepCapture()
 	
+	-- 特殊问题讨伐时间到了会弹出
+	-- findTap({'cmp_国服派遣任务重新进行'}, {tapInterval = 0, sim = 1})
+	if cmpColorEx(point['cmp_国服派遣任务重新进行'], 1) == 1 then ssleep(3) stap('cmp_国服派遣任务重新进行') end
 	-- 提交神经网络
-	if cmpColorEx(point['cmp_正在提交网络神经'], 1) == 1 then
+	if cmpColorEx(point['cmp_国服Connection'], 1) == 1 then
 		releaseCapture()
 		wait(function ()
-			log('正在提交网络神经..1')
+			log('connection..')
 			-- 重置wait()超时时间
 			if TIMEOUT then
 				TIMEOUT = time() + 1000 * TIMEOUTSECOND
 			end
-			if cmpColorEx(point['cmp_正在提交网络神经'], 1) == 0 then keepCapture() return true end
+			if cmpColorEx(point['cmp_国服Connection'], 1) == 0 then keepCapture() return true end
 		end, 1, nil, true)
 	end
 	
 	-- 账号被顶
 	-- 这里有可能：
-	-- 	1、账号被顶的同时脚本也点击了，导致到了登录页面
-	--	2、多次重试会导致 重新输入账号（无网络导致的）
-	--	3、需要重新输入账号密码（监听有无网络)
-	if cmpColorEx(point.cmp_低白白对钩, .95) == 1 or cmpColorEx(point.cmp_红色对勾, .95) == 1 then
-		local exception = ocr("ocr_低白背对钩信息")
-		if #exception > 0 then
-			for i=1,#exception do
-				local curText = exception[i].text
-				if curText:includes({"登录认证已失效", "同步失败"}) then
-					releaseCapture()
-					log('登录失效..')
-					ssleep(1)
-					log('300秒后重新登录')
-					wait(function ()
-						log("点击确认")
-						stap({642,494}, 1, true)
-						ssleep(3)
-						if cmpColorEx(point.cmp_低白白对钩, 0.95) == 0 then return true end
-					end)
-					-- 记录运行任务阶段
-					setNumberConfig("scriptStatus",  1)
-					return reScript()
-				elseif curText:includes({"战斗记录未能成功同步", "未能成功同步到神经网络", "同步到神经网络"}) then
-					log("重试同步神经网络")
-					ssleep(2)
-					stap({844,501}, 1)
-				elseif curText:includes({"网络断开连接", "战斗记录提交失败", "当前信号不稳定", "连接超时"}) then
-					log("网络断开连接")
-					ssleep(2)
-					wait(function ()
-						log("点击确认")
-						stap({642,494}, 1)
-						ssleep(3)
-						if cmpColorEx(point.cmp_低白白对钩, 0.95) == 0 then return true end
-					end)
-					setNumberConfig("scriptStatus",  2)
-					return reScript()
-				elseif curText:includes({"网络异常，登录失败", "登录失败"}) then -- 放弃掉当前账号，重启游戏
-					log("登录失败，网络异常")
-					ssleep(2)
-					setNumberConfig("scriptStatus",  2)
-					sStopApp(current_server)
-					ssleep(3)
-					return reScript()
-				end
-			end
-		end
-	end
+		-- 1、账号被顶的同时脚本也点击了，导致到了登录页面
+		-- 2、多次重试会导致 重新输入账号（无网络导致的）
+		-- 3、需要重新输入账号密码（监听有无网络)
+		-- if cmpColorEx(point.cmp_低白白对钩, .95) == 1 or cmpColorEx(point.cmp_红色对勾, .95) == 1 then
+		-- 	local exception = ocr("ocr_低白背对钩信息")
+		-- 	if #exception > 0 then
+		-- 		for i=1,#exception do
+		-- 			local curText = exception[i].text
+		-- 			if curText:includes({"登录认证已失效", "同步失败"}) then
+		-- 				releaseCapture()
+		-- 				log('登录失效..')
+		-- 				ssleep(1)
+		-- 				log('300秒后重新登录')
+		-- 				wait(function ()
+		-- 					log("点击确认")
+		-- 					stap({642,494}, 1, true)
+		-- 					ssleep(3)
+		-- 					if cmpColorEx(point.cmp_低白白对钩, 0.95) == 0 then return true end
+		-- 				end)
+		-- 				-- 记录运行任务阶段
+		-- 				setNumberConfig("scriptStatus",  1)
+		-- 				return reScript()
+		-- 			elseif curText:includes({"战斗记录未能成功同步", "未能成功同步到神经网络", "同步到神经网络"}) then
+		-- 				log("重试同步神经网络")
+		-- 				ssleep(2)
+		-- 				stap({844,501}, 1)
+		-- 			elseif curText:includes({"网络断开连接", "战斗记录提交失败", "当前信号不稳定", "连接超时"}) then
+		-- 				log("网络断开连接")
+		-- 				ssleep(2)
+		-- 				wait(function ()
+		-- 					log("点击确认")
+		-- 					stap({642,494}, 1)
+		-- 					ssleep(3)
+		-- 					if cmpColorEx(point.cmp_低白白对钩, 0.95) == 0 then return true end
+		-- 				end)
+		-- 				setNumberConfig("scriptStatus",  2)
+		-- 				return reScript()
+		-- 			elseif curText:includes({"网络异常，登录失败", "登录失败"}) then -- 放弃掉当前账号，重启游戏
+		-- 				log("登录失败，网络异常")
+		-- 				ssleep(2)
+		-- 				setNumberConfig("scriptStatus",  2)
+		-- 				sStopApp(current_server)
+		-- 				ssleep(3)
+		-- 				return reScript()
+		-- 			end
+		-- 		end
+		-- 	end
+	-- end
 	
-	-- 记忆模糊
-	-- 断开连接
 	for i=1,#target do
 		tar = target[i]
+		log(tar)
 		if tar == "" then return end
 		if not debug_disabled then log(tar) end
 		if tar:find('img_') then
@@ -216,7 +218,7 @@ findAll = function (target, config)
 			local res = findMultiColorAll(config.rg[1], config.rg[2], config.rg[3], config.rg[4], point[tar][1], point[tar][2], config.dir, config.sim)
 			if res ~= nil then all[tar] = res end
 		end
-		
+
 	end
 	
 	if not next(all) then return end
@@ -307,7 +309,7 @@ stap = function (pos, interval, disableTapCheck)
 	if not interval then interval = tap_interval end
 	-- 解决把挤下线点击了和4点重连接
 	-- 防止误点击
-	if not disableTapCheck then ssleep(interval) findOne("") end
+	if not disableTapCheck then ssleep(interval) findOne('') end
 	-- log(pos)
 	if type(pos) == "table" then tap(pos[1], pos[2]) end
 	if type(pos) == "string" then local p = string.split(point[pos], '|') tap(tonumber(p[1]), tonumber(p[2])) end
@@ -380,11 +382,10 @@ end
 sswipe = function (s, e)
 	touchDown(1, s[1], s[2])
 	ssleep(.05)
-	touchMoveEx(1, e[1], e[2], 500)
 	touchMoveEx(1, e[1], e[2], 100)
-	ssleep(.1)
+	touchMoveEx(1, e[1], e[2], 50)
 	touchUp(1)
-	ssleep(2)
+	ssleep(.8)
 end
 
 doubleFingerSwiper = function (f, s, e, time)
@@ -431,8 +432,6 @@ swiperWithOperator = function ()
 	touchUp(0)
 	touchUp(1)
 end
-
-
 
 -- https://stackoverflow.com/questions/10460126/how-to-remove-spaces-from-a-string-in-lua
 getScreen = function()
@@ -1507,4 +1506,24 @@ resetStatus = function (isMultAcc)
 	setStringConfig("fightCount", 0)
 	setStringConfig("SXYSCount", 1)
 	setStringConfig("currentWeek", getCurWeek())
+end
+
+untilTap = function (target, config)
+	wait(function () if findTap(target, config) then return true end end)
+end
+
+untilAppear = function (target, config)
+	local r1,r2
+	wait(function ()
+		r1,r2 = findOne(target, config)
+		if r1 then return true end 
+	end)
+	return r1,r2
+end
+
+-- 获取竞技场积分
+getArenaPoints = function (p)
+  local points = ''
+  for i in string.gmatch(p, '[0-9]+') do points = points..i end
+  return tonumber(points) or 0
 end
