@@ -302,9 +302,8 @@ log = function(...)
 			print(v)
 			for k,v in pairs(v) do print(v) end 
 		else
-			print(v)
+			if logger_display_left_bottom then stoast(v) else print(v) end
 		end
-		if logger_display_left_bottom then stoast(v) end
 	end
 	
 end

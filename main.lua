@@ -56,8 +56,8 @@ require("userinterface")
 require("test")
 -- log 日志显示在左下角
 logger_display_left_bottom = true
--- console.clearLog()
--- console.dismiss()
+console.clearLog()
+console.dismiss()
 
 -- 其他异常处理 
 -- OOM
@@ -68,8 +68,8 @@ setStopCallBack(function(error)
     sStopApp(current_server)
     reScript()
   else
-    -- console.showTitle(true)
-    -- console.show()
+    console.showTitle(true)
+    console.show()
   end
 end)
 

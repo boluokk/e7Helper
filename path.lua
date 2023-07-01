@@ -20,11 +20,16 @@ path.任务队列 = function ()
     '收取邮件', '刷竞技场', '领养宠物', '成就领取',
     '宠物礼盒', '誓约召唤', '圣域收菜'
   }
-  local curTaskIndex = getStringConfig("current_task_index")
+  local curTaskIndex = tonumber(getStringConfig("current_task_index")) or 1
   for i,v in pairs(allTask) do
-    if curTaskIndex == i and current_task[v] then path[v]() path.回到主页() end
+    if i >= curTaskIndex and current_task[v] then 
+      path[v]()
+      slog(v..'完成')
+      path.回到主页()
+    end
     setStringConfig('current_task_index', i)
   end
+   setStringConfig('current_task_index', 1)
 end
 
 -- finish
