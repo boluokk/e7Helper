@@ -59,7 +59,7 @@ def copyFile(mapperStr, dest):
 
 
 # 保存文件
-def save():
+def saveAndPush():
     # 对main.lua部分属性进行修改(已经修改过的)
     mainLuaPath = os.path.join(projectPath, '脚本', 'main.lua')
     with open(mainLuaPath, "r", encoding='GB18030') as f:
@@ -99,8 +99,10 @@ def save():
         newMD5 = md5.hexdigest()
     # 判定两次文件是否一致
     if oldMD5 == newMD5:
-        print("script.lr的MD5一致, 退出程序!")
-        exit()
+        print("script.lr的MD5一致")
+        text = input('是否退出程序[y/n]')
+        if text == 'y':
+            exit()
     # 更新 script.lr 和 script.lr.md5 文件
     with open(os.path.join(r'./release', 'script.lr.md5'), mode='w', encoding='UTF-8') as f:
         f.write(newMD5)
@@ -113,10 +115,10 @@ def save():
     inputText = '\"{} {}\"'.format(datetime.now().strftime("%Y.%m.%d-%H:%M"), inputText)
     os.system('git commit -m {}'.format(inputText))
     os.system('git push')
-    print('push成功!')
+    print('push 成功!')
 
 
-def update():
+def updateLocal():
     os.system('git pull')
     copy()
 
@@ -126,7 +128,7 @@ if __name__ == '__main__':
     # 复制到懒人精灵
     # copy()
     # 保存并且上传到gitee
-    save()
+    saveAndPush()
     # pull远程到本地
-    # update()
+    # updateLocal()
     pass

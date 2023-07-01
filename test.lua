@@ -1,13 +1,15 @@
+
 test = function ()
-
-    local ticketFlat = untilAppear('mul_国服竞技场旗帜位置', {rg = {275,8,1042,67}})
-    local tmpV, ticket = untilAppear({ 'mul_国服竞技场票数1', 'mul_国服竞技场票数2', 
-                                      'mul_国服竞技场票数3', 'mul_国服竞技场票数4', 'mul_国服竞技场票数5'}, 
-                                      {rg = {ticketFlat[1], 5, ticketFlat[1] + 80 , 60}, sim = 1})
-    ticket = getArenaPoints(ticket)
-    log('所剩票数: '..ticket)
-    exitScript()
-  path.竞技场()
+  -- path.游戏开始()
+  -- path.成就领取()
+  -- path.免费领养宠物()
+  -- path.宠物礼盒()
+  -- path.收取邮件()
+  -- path.刷书签()
+  -- path.竞技场()
+  -- path.圣域()
+  -- path.圣域指挥总部()
+  -- sui.show()
+  -- path.圣域指挥总部()
 end
-
 if not disable_test then test() end

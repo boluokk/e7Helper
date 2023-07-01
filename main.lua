@@ -1,7 +1,7 @@
 -- 系统时间
 time = systemTime
 -- 获取workPath
-work_path = getWorkPath()
+root_path = getWorkPath() .. '/'
 -- 禁止热更新
 hotUpdate_disabled = true
 -- 截图延迟
@@ -26,6 +26,7 @@ disable_test = false
 debug_disabled = true
 -- 禁用日志
 -- disable_log = true
+detail_log_message = false
 -- 是否异常退出
 is_exception_quit = false
 -- UI配置完毕
@@ -33,7 +34,7 @@ ui_config_finish = false
 -- loggerID
 logger_ID = nil
 -- 当前任务
-current_task_index = 1
+current_task_index = tonumber(getStringConfig("current_task_index")) or 0
 -- 当前账号任务
 current_task = {}
 -- 检查游戏状态 10s
@@ -45,7 +46,8 @@ check_game_identify_timeout = getMillisecond(180)
 other_ssleep_interval = 1
 -- 单任务休息时间
 single_task_resttime = 5
-
+-- 开源地址
+open_resource_url = 'https://gitee.com/boluokk/e7-helper'
 require("point")
 require("util")
 -- 导入验证包
@@ -54,17 +56,22 @@ require("userinterface")
 require("test")
 -- log 日志显示在左下角
 logger_display_left_bottom = true
+-- console.clearLog()
+-- console.dismiss()
 
 -- 其他异常处理 
 -- OOM
--- setStopCallBack(function(error)
---   if error then
---     log("异常退出")
---     setNumberConfig("scriptStatus", 3)
---     sStopApp(current_server)
---     reScript()
---   end
--- end)
+setStopCallBack(function(error)
+  if error then
+    log("异常退出")
+    setNumberConfig("scriptStatus", 3)
+    sStopApp(current_server)
+    reScript()
+  else
+    -- console.showTitle(true)
+    -- console.show()
+  end
+end)
 
 -- 分辨率提示
 -- DPI 320
@@ -83,51 +90,8 @@ local scriptStatus = tonumber(getStringConfig("scriptStatus")) or 0
 -- 热更新开始
 if scriptStatus == 0 then
   if not hotUpdate_disabled then hotUpdate() end
-end
--- 脚本状态码
--- 0：表示ok
--- 1：账号被挤下线
--- 2：断开网络
--- 3：其他
--- 是否网络断开、账号被挤之类异常
-if scriptStatus == 0 then 
-  -- 重置一些数据
-  -- UI.配置() while not ui_config_finish do ssleep(0) end -- 等待UI配置完成
-  -- 针对本地是否有对应app
-  -- current_server = user_config_info.服务器选择
-  -- 是否安装了当前所选择的服务器
-  -- tipCheckServer()
-  -- resetStatus(true)
+  sui.show()
 else
-  setStringConfig("scriptStatus", 0)
-  -- if scriptStatus == 1 then -- 认证失效，账号被挤
-  --   local endTime = getTimeBase(5 * 60)
-  --   wait(function ()
-  --     log(getTime(endTime, true).."后重新登录")
-  --   end, 1, 5 * 60)
-  -- end
-  -- -- 如果是网络断开连接，就休息5分钟后再试(尝试是否有网络)
-  -- if scriptStatus == 2 then
-  --   wait(function ()
-  --     local ret,code = httpGet("http://www.baidu.com")
-  --     if code == 200 then return true else log("无网络。。") end
-  --   end, 5)
-  -- end
-  -- 加载配置
-  -- local validData = read("/当前账号配置.txt", true)
-  -- if validData.启动账号 == 1 then
-  --   local publicData = read("/多账号设置.txt", true)
-  --   local validDataCatPublicData = getPublicConfigData(validData, publicData)
-  --   user_config_info = validDataCatPublicData
-  -- else
-  --   local validDataCatPublicData = getPublicConfigData(validData)
-  --   user_config_info = validDataCatPublicData
-  -- end
-  -- log(user_config_info)
-  is_exception_quit = true
-
+  setStringConfig("scriptStatus", "0")
+  path.游戏开始()
 end
-
--- 休息时间(单位分钟)
--- local restWaitTimes = tonumber(user_config_info.任务完成休息时间) * 60
--- local restTimes

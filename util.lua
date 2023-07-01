@@ -28,22 +28,14 @@ findOne = function (target, config)
 	-- 截图延迟
 	ssleep(capture_interval)
 	
+	-- 间隔时间查看游戏是否在运行
 	if time() - app_is_run > check_game_status_interval then
-		-- 程序未运行;关闭脚本,重新运行
-		-- 重启脚本+重启游戏
 		if not sAppIsRunning(current_server) then
 			log("程序未运行。")
-			setNumberConfig("scriptStatus",  3)
-			sStopApp(current_server)
-			ssleep(1)
 			open(server_pkg_name[current_server])
-			return reScript()
 		end
-		-- 程序未在前台
-		if not sAppIsFront(current_server) then
-			-- 雷电有问题
-			-- 不处理
-			--open(server_pkg_name[current_server])
+		if not sAppIsFront(current_server)  then
+			open(server_pkg_name[current_server])
 		end
 		app_is_run = time()
 	end
@@ -68,60 +60,11 @@ findOne = function (target, config)
 		end, 1, nil, true)
 	end
 	
-	-- 账号被顶
-	-- 这里有可能：
-		-- 1、账号被顶的同时脚本也点击了，导致到了登录页面
-		-- 2、多次重试会导致 重新输入账号（无网络导致的）
-		-- 3、需要重新输入账号密码（监听有无网络)
-		-- if cmpColorEx(point.cmp_低白白对钩, .95) == 1 or cmpColorEx(point.cmp_红色对勾, .95) == 1 then
-		-- 	local exception = ocr("ocr_低白背对钩信息")
-		-- 	if #exception > 0 then
-		-- 		for i=1,#exception do
-		-- 			local curText = exception[i].text
-		-- 			if curText:includes({"登录认证已失效", "同步失败"}) then
-		-- 				releaseCapture()
-		-- 				log('登录失效..')
-		-- 				ssleep(1)
-		-- 				log('300秒后重新登录')
-		-- 				wait(function ()
-		-- 					log("点击确认")
-		-- 					stap({642,494}, 1, true)
-		-- 					ssleep(3)
-		-- 					if cmpColorEx(point.cmp_低白白对钩, 0.95) == 0 then return true end
-		-- 				end)
-		-- 				-- 记录运行任务阶段
-		-- 				setNumberConfig("scriptStatus",  1)
-		-- 				return reScript()
-		-- 			elseif curText:includes({"战斗记录未能成功同步", "未能成功同步到神经网络", "同步到神经网络"}) then
-		-- 				log("重试同步神经网络")
-		-- 				ssleep(2)
-		-- 				stap({844,501}, 1)
-		-- 			elseif curText:includes({"网络断开连接", "战斗记录提交失败", "当前信号不稳定", "连接超时"}) then
-		-- 				log("网络断开连接")
-		-- 				ssleep(2)
-		-- 				wait(function ()
-		-- 					log("点击确认")
-		-- 					stap({642,494}, 1)
-		-- 					ssleep(3)
-		-- 					if cmpColorEx(point.cmp_低白白对钩, 0.95) == 0 then return true end
-		-- 				end)
-		-- 				setNumberConfig("scriptStatus",  2)
-		-- 				return reScript()
-		-- 			elseif curText:includes({"网络异常，登录失败", "登录失败"}) then -- 放弃掉当前账号，重启游戏
-		-- 				log("登录失败，网络异常")
-		-- 				ssleep(2)
-		-- 				setNumberConfig("scriptStatus",  2)
-		-- 				sStopApp(current_server)
-		-- 				ssleep(3)
-		-- 				return reScript()
-		-- 			end
-		-- 		end
-		-- 	end
-	-- end
-	
+	-- 账号被顶之类的 todo 
+		
 	for i=1,#target do
 		tar = target[i]
-		log(tar)
+		if detail_log_message then log(tar) end
 		if tar == "" then return end
 		if not debug_disabled then log(tar) end
 		if tar:find('img_') then
@@ -333,12 +276,12 @@ wait = function (func, interval, TIMEOUT, disableRestartGame)
 		ssleep(interval)
 		if TIMEOUT and time() + 0 > TIMEOUT then TIMEOUTSECOND = nil TIMEOUT = nil break end
 		-- wait 超时可能卡主了
-		if not TIMEOUT and not disableRestartGame and time() - waitTimeout > check_game_identify_timeout then
-			log("游戏卡住，重启中.")
-			ssleep(5)
-			setNumberConfig("scriptStatus", 3)
-			sStopApp(current_server)
-			return reScript()
+		-- 重启脚本 + 回退到首页
+		if not TIMEOUT and not disableRestartGame
+									 and time() - waitTimeout > check_game_identify_timeout then
+			path.回到主页()
+			setStringConfig(scriptStatus, '3')
+			reScript()
 		end
 	end
 	
@@ -354,8 +297,6 @@ end
 log = function(...)
 	if disable_log then return end
 	local arg = {...}
-	local a = os.date('%Y-%m-%d %H:%M:%S')
-	print(a)
 	for _, v in pairs(arg) do
 		if type(v) == 'table' then
 			print(v)
@@ -366,6 +307,13 @@ log = function(...)
 		if logger_display_left_bottom then stoast(v) end
 	end
 	
+end
+
+slog = function (msg, level)
+	level = level or 3
+	local a = os.date('%Y-%m-%d %H:%M:%S')
+	msg = a..': '..msg
+	console.println(level, msg)
 end
 
 setLC = function (name, data)
@@ -960,17 +908,6 @@ getDate = function ()
 	return os.date('%Y-%m-%d %H:%M:%S')
 end
 
--- 提示框制作
-showstoast = function (message)
-	ui.newLayout("提示")
-	ui.addTextView("提示","message",message)
-	ui.newRow("提示","row1")
-	ui.addButton("提示","confirm","了解")
-	ui.setOnClick("confirm","closeWin('提示')")
-	ui.setFullScreen("confirm")
-	ui.show("提示",false)
-end
-
 local ISRUN
 closeWin = function (w)
 	ISRUN = false
@@ -1241,11 +1178,11 @@ logger = function (fun, config)
 	showHUD(logger_ID, fun(), config[1], config[2], config[3], config[4], config[5], config[6], config[7], config[8], 0, 0, 0, 0, 2)
 end
 
--- appNames：app名称数组(中文名称，非pkgName)
-sAppIsRunning = function (appNames)
-	if type(appNames) == "string" then appNames = {appNames} end
-	for i=1,#appNames do
-		if appIsRunning(server_pkg_name[appNames[i]]) then return true, appNames[i] end
+-- serverName: 服务器名称数组(中文名称，非pkgName)
+sAppIsRunning = function (serverName)
+	if type(serverName) == "string" then serverName = {serverName} end
+	for i=1,#serverName do
+		if appIsRunning(server_pkg_name[serverName[i]]) then return true, serverName[i] end
 	end
 end
 
@@ -1322,24 +1259,24 @@ getStringLength = function(inputstr)
 end
 
 hotUpdate = function ()
-	local path = 'https://try.gitea.io/boluo/arknights_files/raw/branch/main/'
+	local path = 'https://gitee.com/boluokk/e7-helper/blob/master/release/'
 	-- UI图资源文件
 	local staticFileUrl = path.."files"
 	-- 脚本文件
-	local scriptFileUrl = path.."ArkNightsScript"
+	local scriptFileUrl = path.."script"
 	
 	stoast("正在检查更新...")
-	local fileMsg = hotUpdateProcess(staticFileUrl, {"filesMD5", getStringConfig("filesMD5")}, ".zip")
+	-- local fileMsg = hotUpdateProcess(staticFileUrl, {"filesMD5", getStringConfig("filesMD5")}, ".zip")
 	local scriptMsg = hotUpdateProcess(scriptFileUrl, {"scriptMD5", getStringConfig("scriptMD5")}, ".lr")
-	local m1 = fileMsg and fileMsg.message
-	local m2 = scriptMsg and scriptMsg.message
+	-- local m1 = fileMsg and fileMsg.message
+	local m2 = scriptMsg
 	
 	if m1 or m2 then
 		local message = ""
 		local count = 1
-		if m1 then message = message..count.."："..m1.."\n" count = count + 1 end
+		-- if m1 then message = message..count.."："..m1.."\n" count = count + 1 end
 		if m2 then message = message..count.."："..m2 end
-		wait(function () toast("新消息\n"..message) end, 1, 2)
+		wait(function () toast(message) end, 1, 2)
 	end
 	
 	if scriptMsg then reScript() end
@@ -1349,16 +1286,16 @@ end
 -- md5码不一致
 -- md5一致 X
 hotUpdateProcess = function (url, validFileMd5, fileSuffix)
-	local newAppInfo = shttpGet(url..".json")
+	local newAppInfo = shttpGet(url..".lr.md5", true)
 	local stringkey = validFileMd5[1]
 	if not newAppInfo then log("校验下载异常，请重试") exit() end
 	-- 未初始化
-	if validFileMd5[2] == "" or validFileMd5[2] ~= newAppInfo.md5 then
+	if validFileMd5[2] == "" or validFileMd5[2] ~= newAppInfo then
 		stoast("更新中..")
 		local fileName, splitFileName = sdownloadFile(url..fileSuffix)
 		if fileName then
 			resolveZipFile(splitFileName)
-			setLC(stringkey, newAppInfo.md5)
+			setLC(stringkey, newAppInfo)
 			return newAppInfo
 		else
 			log("文件下载异常，请重试") ssleep(1) exit()
@@ -1526,4 +1463,14 @@ getArenaPoints = function (p)
   local points = ''
   for i in string.gmatch(p, '[0-9]+') do points = points..i end
   return tonumber(points) or 0
+end
+
+uuid = function()
+	local template ="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+	local d = io.open("/dev/urandom", "r"):read(4)
+	math.randomseed(os.time() + d:byte(1) + (d:byte(2) * 256) + (d:byte(3) * 65536) + (d:byte(4) * 4294967296))
+	return string.upper(string.gsub(template, "x", function (c)
+		local v = (c == "x") and math.random(0, 0xf) or math.random(8, 0xb)
+		return string.format("%x", v)
+	end))
 end
