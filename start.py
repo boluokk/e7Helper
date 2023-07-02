@@ -100,9 +100,29 @@ def saveAndPush():
     # 判定两次文件是否一致
     if oldMD5 == newMD5:
         print("script.lr的MD5一致")
-        text = input('是否退出程序[y/n]')
+        text = input('是否退出程序[y/n]:')
         if text == 'y':
             exit()
+    # 修改文档的最新更新内容 + build 文档
+    inputText = input('输入更新内容: ')
+    docPath = os.path.join(os.getcwd(), 'docs', 'docs', 'zh', 'guide.md')
+    isFindTarget = False
+    with open(docPath, "r", encoding='UTF-8') as f:
+        lines = f.readlines()
+        ss = ""
+        for line in lines:
+            if isFindTarget:
+                line = '- ' + inputText + '\n'
+                isFindTarget = False
+            if re.match('### 最近更新: ', line):
+                isFindTarget = True
+            ss += line
+    with open(docPath, "w", encoding='UTF-8') as f:
+        f.write(ss)
+    os.system('cd ./docs')
+    os.system('npm run build')
+    os.system('cd ../')
+    print('文档构建成功!')
     # 更新 script.lr 和 script.lr.md5 文件
     with open(os.path.join(r'./release', 'script.lr.md5'), mode='w', encoding='UTF-8') as f:
         f.write(newMD5)
@@ -111,7 +131,6 @@ def saveAndPush():
     print('更新脚本文件成功!')
     # 上传脚本文件
     os.system('git add .')
-    inputText = input('输入更新内容: ')
     inputText = '\"{} {}\"'.format(datetime.now().strftime("%Y.%m.%d-%H:%M"), inputText)
     os.system('git commit -m {}'.format(inputText))
     os.system('git push')

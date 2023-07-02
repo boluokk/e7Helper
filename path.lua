@@ -9,8 +9,9 @@ path.游戏首页 = function ()
   if not sAppIsRunning(current_server) or not sAppIsFront(current_server) then open(server_pkg_name[current_server]) end
   setControlBarPosNew(0, 1)
   local clickTarget = {'cmp_国服签到右下蓝底', 'cmp_国服签到右下蓝底2', 'cmp_国服公告X', 'cmp_国服登录第七史诗'}
+  local t
   wait(function ()
-    if findOne('cmp_国服主页Rank') then return 1 end
+    if not longAppearMomentDisAppear('cmp_国服主页Rank', nil, nil, 1) then return true end
     if not findTap(clickTarget) then stap(point.回退) end
   end, 1, 7 * 60, nil, true)
 end
@@ -29,7 +30,7 @@ path.任务队列 = function ()
     end
     setStringConfig('current_task_index', i)
   end
-   setStringConfig('current_task_index', 1)
+  console.show()
 end
 
 -- finish
@@ -54,6 +55,7 @@ path.刷书签 = function ()
   if current_task['友情书签'] then table.insert(target, 'mul_国服神秘商店友情书签') end
   local refreshCount = current_task['更新次数']
   local enoughResources = true
+  local msg
   for i=1,refreshCount do
     for i=1,4 do
       local pos, countTarget = findOne(target, {rg = {538,8,677,713}})
@@ -87,10 +89,13 @@ path.刷书签 = function ()
     end
 
     -- 刷新次数: 1 (神秘奖牌: 5*5, 誓约书签: 10*5, 友情书签: 20*5)
-    log('刷新次数: '..i..'(神秘奖牌: '..g1..'*5, 誓约书签: '..g2..'*5, 友情书签: '..g3..'*5)')
+    msg = '刷新次数: '..i..'(神秘奖牌: '..g1..'*5, 誓约书签: '..g2..'*5, 友情书签: '..g3..'*5)'
+    log(msg)
     untilTap('cmp_国服神秘商店立即更新')
     untilTap('cmp_国服神秘商店购买确认')
   end
+  slog(msg)
+  console.show()
 end
 
 path.回到主页 = function ()
@@ -117,7 +122,11 @@ path.刷竞技场 = function ()
     if not findOne('cmp_国服主页Rank') then return 1 end
   end)
   untilTap('cmp_国服竞技场')
-  untilAppear('cmp_国服竞技场配置防御队')
+  local r1, r2 = untilAppear({'cmp_国服竞技场配置防御队', 'cmp_国服竞技场每周结算时间'})
+  if r2 == 'cmp_国服竞技场每周结算时间' then
+    slog('竞技场每周结算时间退出')
+    return
+  end
   log('进入竞技场')
   -- 竞技策略
   -- 个人积分
@@ -220,7 +229,6 @@ path.刷竞技场 = function ()
     untilTap('cmp_国服竞技场战斗开始')
     path.战斗代理()
   end, .5, nil, true)
-  
 end
 
 -- need test
@@ -259,7 +267,7 @@ path.领养宠物 = function ()
   end)
   -- 免费领取一次
   wait(function ()
-    stap({46,462})
+    stap({34,151})
     if findOne('cmp_国服宠物领养') then return 1 end
   end)
 end
@@ -393,10 +401,10 @@ end
 
 path.圣域精灵之森领取 = function ()
   log('精灵之森处理')
-  local target = {'cmp_国服圣域企鹅蛋', 'cmp_国服圣域精灵之泉', 'cmp_国服圣域种植地'}
+  local target = {'cmp_国服圣域企鹅蛋', 'cmp_国服圣域精灵之泉', 'cmp_国服圣域种植地', 'cmp_国服圣域种植地收获'}
   if findTap('cmp_国服圣域精灵之森小红点') then
-    untilAppear('cmp_建筑升级状态')
-    ssleep(1)
+    -- untilAppear('cmp_建筑升级状态')
+    untilAppear('cmp_国服圣域企鹅巢穴')
     for i,v in pairs(target) do
       if findTap(v) then
         wait(function ()

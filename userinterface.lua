@@ -55,7 +55,7 @@ loadProfile =function (path)
 end
 
 suie.取消 = exit
-suie.开始 = function () 
+suie.启动 = function () 
   suie.开启前()
   path.游戏开始()
 end
@@ -84,6 +84,13 @@ end
 suie.开始刷书签 = function ()
   suie.开启前()
   path.刷书签()
+end
+suie.使用说明 = function ()
+  runIntent({
+    ['action'] = 'android.intent.action.VIEW',
+    ['uri'] = open_resource_doc
+  })
+  exit()
 end
 sui.show = function ()
   newLayout()
@@ -123,10 +130,10 @@ sui.show = function ()
   addEditText('更新次数', '333')
   addButton('开始刷书签')
   newRow()
+  addButton('使用说明')
+  addTextView('  |  ')
+  addButton('启动')
   addButton('取消')
-  addButton('开始')
-  -- newRow()
-  -- addTextView('开源地址:   '..open_resource_url)
   ui.show(parentUid, false)
 
   -- load config

@@ -47,7 +47,7 @@ other_ssleep_interval = 1
 -- 单任务休息时间
 single_task_resttime = 5
 -- 开源地址
-open_resource_url = 'https://gitee.com/boluokk/e7-helper'
+open_resource_doc = 'https://boluokk.gitee.io/e7-helper/'
 require("point")
 require("util")
 -- 导入验证包
@@ -68,8 +68,8 @@ setStopCallBack(function(error)
     sStopApp(current_server)
     reScript()
   else
-    console.showTitle(true)
-    console.show()
+    setNumberConfig("scriptStatus", "0")
+    setStringConfig('current_task_index', 1)
   end
 end)
 
