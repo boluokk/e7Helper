@@ -1258,7 +1258,7 @@ getStringLength = function(inputstr)
 end
 
 hotUpdate = function ()
-	local path = 'https://gitee.com/boluokk/e7-helper/blob/master/release/'
+	local path = 'https://gitee.com/boluokk/e7-helper/raw/master/release/'
 	-- UI图资源文件
 	local staticFileUrl = path.."files"
 	-- 脚本文件
@@ -1272,9 +1272,9 @@ hotUpdate = function ()
 	
 	if m1 or m2 then
 		local message = ""
-		local count = 1
+		-- local count = 1
 		-- if m1 then message = message..count.."："..m1.."\n" count = count + 1 end
-		if m2 then message = message..count.."："..m2 end
+		if m2 then message = m2 end
 		wait(function () toast(message) end, 1, 2)
 	end
 	
@@ -1300,8 +1300,7 @@ hotUpdateProcess = function (url, validFileMd5, fileSuffix)
 			log("文件下载异常，请重试") ssleep(1) exit()
 		end
 	end
-	
-	log("无需更新，已经最新版本")
+	log("已经最新版本")
 end
 
 -- 成功返回
@@ -1311,7 +1310,7 @@ sdownloadFile = function (url)
 	local fileName = url:match("[%w_]+%.[%w]+$")
 	-- {"update", "zip"}
 	local splitFileName = fileName:split(".")
-	if downloadFile(url, work_path.."/"..fileName, downloadFileProgressTip) == 0 then return fileName, splitFileName end
+	if downloadFile(url, root_path..fileName, downloadFileProgressTip) == 0 then return fileName, splitFileName end
 end
 
 -- 下载提示
@@ -1325,10 +1324,10 @@ resolveZipFile = function (fileNameArray)
 	if fileType == "zip" then -- 解压文件
 		if sFileExist("/"..fileName) then sdelfile("/"..fileName) end
 		stoast("开始解压文件..")
-		unZip(work_path.."/"..fileName.."."..fileType, work_path.."/"..fileName)
+		unZip(root_path..fileName.."."..fileType, root_path..fileName)
 		stoast("解压完成")
 	elseif fileType == "lr" then -- 重新安装文件
-		installLrPkg(work_path.."/"..fileName.."."..fileType)
+		installLrPkg(root_path..fileName.."."..fileType)
 		stoast("安装脚本文件完成")
 	end
 end

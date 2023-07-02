@@ -100,14 +100,14 @@ def saveAndPush():
     # 判定两次文件是否一致
     if oldMD5 == newMD5:
         print("script.lr的MD5一致")
-        text = input('是否退出程序[y/n]:')
-        if text == 'y':
+        sameMD5IsExit = input('是否退出程序[y/n]:') == 'y'
+        if sameMD5IsExit:
             exit()
     # 修改文档的最新更新内容 + build 文档
-    changeDoc = input('是否更新文档[y/n]: ')
+    isChangeDoc = input('是否更新文档[y/n]: ') == 'y'
     inputText = input('输入更新内容: ')
     isFindTarget = False
-    if changeDoc:
+    if isChangeDoc:
         docPath = os.path.join(os.getcwd(), 'docs', 'docs', 'zh', 'guide.md')
         with open(docPath, "r", encoding='UTF-8') as f:
             lines = f.readlines()
