@@ -11,7 +11,7 @@
 #### 此APP工具源码: [https://gitee.com/boluokk/e7-helper](https://gitee.com/boluokk/e7-helper) 👍
 
 ### 最近更新: 
-- 添加使用手册,修复一些问题
+- 更新文档
 
 ### 设备兼容
 

@@ -104,25 +104,25 @@ def saveAndPush():
         if text == 'y':
             exit()
     # 修改文档的最新更新内容 + build 文档
+    changeDoc = input('是否更新文档[y/n]: ')
     inputText = input('输入更新内容: ')
-    docPath = os.path.join(os.getcwd(), 'docs', 'docs', 'zh', 'guide.md')
     isFindTarget = False
-    with open(docPath, "r", encoding='UTF-8') as f:
-        lines = f.readlines()
-        ss = ""
-        for line in lines:
-            if isFindTarget:
-                line = '- ' + inputText + '\n'
-                isFindTarget = False
-            if re.match('### 最近更新: ', line):
-                isFindTarget = True
-            ss += line
-    with open(docPath, "w", encoding='UTF-8') as f:
-        f.write(ss)
-    os.system('cd ./docs')
-    os.system('npm run build')
-    os.system('cd ../')
-    print('文档构建成功!')
+    if changeDoc:
+        docPath = os.path.join(os.getcwd(), 'docs', 'docs', 'zh', 'guide.md')
+        with open(docPath, "r", encoding='UTF-8') as f:
+            lines = f.readlines()
+            ss = ""
+            for line in lines:
+                if isFindTarget:
+                    line = '- ' + inputText + '\n'
+                    isFindTarget = False
+                if re.match('### 最近更新: ', line):
+                    isFindTarget = True
+                ss += line
+        with open(docPath, "w", encoding='UTF-8') as f:
+            f.write(ss)
+        os.system('cd docs && npm run build')
+        print('文档构建成功!')
     # 更新 script.lr 和 script.lr.md5 文件
     with open(os.path.join(r'./release', 'script.lr.md5'), mode='w', encoding='UTF-8') as f:
         f.write(newMD5)
