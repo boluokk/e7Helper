@@ -1,6 +1,6 @@
 # 必读
 
-#### 下载: [下载链接(密码6666)](https://wwos.lanzouj.com/in7ed1174w4f)
+#### 下载: [下载链接(密码6666)](https://wwos.lanzouj.com/ioVOc117nsqh)
 
 #### QQ频道: 24oyp5x92q
 
@@ -11,7 +11,7 @@
 #### 此APP工具源码: [https://gitee.com/boluokk/e7-helper](https://gitee.com/boluokk/e7-helper) 👍
 
 ### 最近更新: 
-- 更新下载链接
+- 更新apk, 修复获取成就、圣域收菜bug
 
 ### 设备兼容
 
