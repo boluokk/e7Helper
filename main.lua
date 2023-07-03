@@ -3,7 +3,7 @@ time = systemTime
 -- 获取workPath
 root_path = getWorkPath() .. '/'
 -- 禁止热更新
-hotUpdate_disabled = true
+hotUpdate_disabled = false
 -- 截图延迟
 capture_interval = 0
 -- 游戏代理识图间隔
