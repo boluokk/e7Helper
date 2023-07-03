@@ -318,31 +318,29 @@ path.成就领取 = function ()
       if curTarget and v:find(curTarget[1].text) then return 1 end
     end)
     -- 三姐妹日记比较特殊
-    if findOne(v) then
-      if v == 'cmp_国服三姐妹日记' then
-        local targ = {'cmp_国服每日成就', 'cmp_国服每周成就'}
-        local key = {{'每日', '日'}, {'每周', '周'}}
-        for i,v in pairs(targ) do
-          if findOne(v) then
-            -- 切换到 每日/每周点数
-            wait(function ()
-              stap(v)
-              if findOne('ocr_国服每日每周点数', {keyword = key[i]}) then return 1 end
-            end)
-            untilTap('mul_国服每日每周小红球', {rg = {415,141,946,185}, sim = .98})
-            wait(function ()
-              stap({574,40})
-              if findOne('cmp_国服声誉总分下方花') then return 1 end
-            end)
-          end
+    if v == 'cmp_国服三姐妹日记' then
+      local targ = {'cmp_国服每日成就', 'cmp_国服每周成就'}
+      local key = {{'每日', '日'}, {'每周', '周'}}
+      for i,v in pairs(targ) do
+        if findOne(v) then
+          -- 切换到 每日/每周点数
+          wait(function ()
+            stap(v)
+            if findOne('ocr_国服每日每周点数', {keyword = key[i]}) then return 1 end
+          end)
+          untilTap('mul_国服每日每周小红球', {rg = {415,141,946,185}, sim = .98})
+          wait(function ()
+            stap({574,40})
+            if findOne('cmp_国服声誉总分下方花') then return 1 end
+          end)
         end
-      else
-        wait(function ()
-          findTap('cmp_国服成就领取绿色')
-          if findOne('cmp_国服成就前往灰色') then return 1 end
-          stap({574,40})
-        end)
       end
+    else
+      wait(function ()
+        findTap('cmp_国服成就领取绿色')
+        if findOne('cmp_国服成就前往灰色') then log(11) return 1 end
+        stap({574,40})
+      end)
     end
   end
 end
@@ -435,12 +433,12 @@ path.圣域精灵之森领取 = function ()
   local target = {'cmp_国服圣域企鹅蛋', 'cmp_国服圣域精灵之泉', 'cmp_国服圣域种植地', 'cmp_国服圣域种植地收获'}
   if findTap('cmp_国服圣域精灵之森小红点') then
     -- untilAppear('cmp_建筑升级状态')
-    untilAppear('cmp_国服圣域企鹅巢穴')
+    untilAppear('cmp_国服圣域企鹅巢穴') ssleep(.5)
     for i,v in pairs(target) do
-      if findTap(v) then
+      if wait(function () if findTap(v) then return true end end, 0, 1) then
         wait(function ()
           stap({104,100})
-          if findOne('cmp_建筑升级状态') then ssleep(1) return 1 end
+          if findOne('cmp_国服圣域企鹅巢穴') then ssleep(.5) return 1 end
         end)
       end
     end
