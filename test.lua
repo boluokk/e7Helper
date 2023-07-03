@@ -12,5 +12,6 @@ test = function ()
   -- sui.show()
   -- path.圣域指挥总部()
   -- path.游戏开始()
+  -- log(work_path)
 end
 if not disable_test then test() end

@@ -85,6 +85,7 @@ def saveAndPush():
             # print(curFileAbsPath)
         # 读取文件, 写入到git所在文件夹中
         for v in curFileAbsPath:
+            print(v)
             with open(v, mode='r', encoding='GB18030') as f:
                 content = f.read()
             with open(os.path.join(os.getcwd(), re.search(r"([^\\]+)\.[^.]+$", v).group()), mode='w',

@@ -11,7 +11,7 @@ path.游戏首页 = function ()
   local clickTarget = {'cmp_国服签到右下蓝底', 'cmp_国服签到右下蓝底2', 'cmp_国服公告X', 'cmp_国服登录第七史诗'}
   local t
   wait(function ()
-    if not longAppearMomentDisAppear('cmp_国服主页Rank', nil, nil, 1) then return true end
+    if not longAppearMomentDisAppear('cmp_国服主页Rank', nil, nil, 1) then return 1 end
     if not findTap(clickTarget) then stap(point.回退) end
   end, 1, 7 * 60, nil, true)
 end
@@ -21,20 +21,22 @@ path.任务队列 = function ()
     '收取邮件', '刷竞技场', '领养宠物', '成就领取',
     '宠物礼盒', '誓约召唤', '圣域收菜'
   }
-  local curTaskIndex = tonumber(getStringConfig("current_task_index")) or 1
+  local curTaskIndex = sgetNumberConfig("current_task_index", 1)
   for i,v in pairs(allTask) do
-    if i >= curTaskIndex and current_task[v] then 
+    if i > curTaskIndex and current_task[v] then 
       path[v]()
       slog(v..'完成')
       path.回到主页()
     end
-    setStringConfig('current_task_index', i)
+    setNumberConfig('current_task_index', i)
   end
   console.show()
 end
 
 -- finish
-path.刷书签 = function ()
+path.刷书签 = function (rest)
+  rest = rest or 0
+  setNumberConfig("is_refresh_book_tag", 1)
   path.游戏首页()
   wait(function ()
     stap(point.秘密商店)
@@ -47,17 +49,18 @@ path.刷书签 = function ()
   -- mul_国服神秘商店友情书签
   -- mul_国服神秘商店誓约书签
   local target = {}
-  local g1 = 0
-  local g2 = 0
-  local g3 = 0
+  local g1 = sgetNumberConfig("g1", 0)
+  local g2 = sgetNumberConfig("g2", 0)
+  local g3 = sgetNumberConfig("g3", 0)
   if current_task['神秘奖牌'] then table.insert(target, 'mul_国服神秘商店神秘奖牌') end 
   if current_task['誓约书签'] then table.insert(target, 'mul_国服神秘商店誓约书签') end
   if current_task['友情书签'] then table.insert(target, 'mul_国服神秘商店友情书签') end
-  local refreshCount = current_task['更新次数']
+  local refreshCount = current_task['更新次数'] or 334
   local enoughResources = true
   local msg
   for i=1,refreshCount do
-    for i=1,4 do
+    if i > rest then
+      for i=1,4 do
       local pos, countTarget = findOne(target, {rg = {538,8,677,713}})
       if pos then
         local newRg = {1147, pos[2] - 80, 1226, pos[2] + 80}
@@ -66,34 +69,45 @@ path.刷书签 = function ()
         -- 统计获得物品次数
         if countTarget == 'mul_国服神秘商店神秘奖牌' then
           g1 = g1 + 1
+          setNumberConfig("g1", g1)
         elseif countTarget == 'mul_国服神秘商店誓约书签' then
           g2 = g2 + 1
+          setNumberConfig("g2", g2)
         elseif countTarget == 'mul_国服神秘商店友情书签' then
           g3 = g3 + 1
+          setNumberConfig("g3", g3)
         end
         -- 等待购买特效消失
-        ssleep(2)
+        wait(function ()
+          if not longAppearMomentDisAppear({'cmp_国服神秘商店立即更新', 'cmp_国服神秘商店购买资源不足'}, nil, nil, 1.5) then return 1 end
+        end)
       end
       -- 资源是否耗尽
       wait(function ()
-        local r1, r2 = findOne({'cmp_国服神秘商店购买资源不足', 'cmp_国服神秘商店立即更新'})
+        local r1, r2 = findOne({'cmp_国服神秘商店购买资源不足', 'cmp_国服神秘商店立即更新'}, {sim = 1})
         if r2 == 'cmp_国服神秘商店立即更新' then return 1 end
         if r2 == 'cmp_国服神秘商店购买资源不足' then enoughResources = false return 1 end
       end)
-      if i == 2 and enoughResources then sswipe({858,578}, {858,150}) end
+      if i == 2 and enoughResources then sswipe({858,578}, {858,150}) ssleep(.5) end
+      end
+      msg = '刷新次数: '..i..'(神秘奖牌: '..g1..'*5, 誓约书签: '..g2..'*5, 友情书签: '..g3..'*5)'
+      if not enoughResources then 
+        log('资源耗尽!')
+        slog('资源耗尽!')
+        untilTap('cmp_国服神秘商店取消')
+        break
+      end
+      -- 刷新次数: 1 (神秘奖牌: 5*5, 誓约书签: 10*5, 友情书签: 20*5)
+      log(msg)
+      -- 如果网络不好会导致两次点击, 改成 sim = 1
+      untilTap('cmp_国服神秘商店立即更新', {sim = 1})
+      untilTap('cmp_国服神秘商店购买确认')
+      wait(function () findOne('') end, .1, 1.5)
     end
-    if not enoughResources then 
-      log('资源耗尽!')
-      untilTap('cmp_国服神秘商店取消')
-      break
-    end
-
-    -- 刷新次数: 1 (神秘奖牌: 5*5, 誓约书签: 10*5, 友情书签: 20*5)
-    msg = '刷新次数: '..i..'(神秘奖牌: '..g1..'*5, 誓约书签: '..g2..'*5, 友情书签: '..g3..'*5)'
-    log(msg)
-    untilTap('cmp_国服神秘商店立即更新')
-    untilTap('cmp_国服神秘商店购买确认')
+    setNumberConfig("refresh_book_tag_count", i)
   end
+  setNumberConfig("refresh_book_tag_count", 0)
+  setNumberConfig("is_refresh_book_tag", 0)
   slog(msg)
   console.show()
 end
@@ -103,7 +117,7 @@ path.回到主页 = function ()
   wait(function ()
     if findOne('cmp_国服主页Rank') then 
       if not t then t = time() end
-      if t and time() - t > 2000 then return 1 end
+      if t and time() - t > 1000 then return 1 end
       return
     end
     findTap({
@@ -122,10 +136,25 @@ path.刷竞技场 = function ()
     if not findOne('cmp_国服主页Rank') then return 1 end
   end)
   untilTap('cmp_国服竞技场')
-  local r1, r2 = untilAppear({'cmp_国服竞技场配置防御队', 'cmp_国服竞技场每周结算时间'})
+  local r1, r2
+  wait(function ()
+    stap({386,17})
+    r1, r2 = findOne({'cmp_国服竞技场配置防御队', 'cmp_国服竞技场每周结算时间', 'cmp_国服竞技场每周排名奖励'})
+    if r1 then return 1 end
+  end)
   if r2 == 'cmp_国服竞技场每周结算时间' then
     slog('竞技场每周结算时间退出')
     return
+  end
+  if r2 == 'cmp_国服竞技场每周排名奖励' then
+    slog('竞技场获取每周排名奖励')
+    local rankIndex = current_task['竞技场每周奖励'] or 0
+    local pos = point.国服竞技场每周奖励[rankIndex]
+    wait(function ()
+      stap(pos)
+      if findOne(point.国服竞技场每周奖励判定[rankIndex]) then return 1 end
+    end)
+    untilTap('cmp_国服竞技场领取每周奖励')
   end
   log('进入竞技场')
   -- 竞技策略
@@ -136,7 +165,9 @@ path.刷竞技场 = function ()
   -- 交战对手切换
   wait(function ()
     stap({1108,116})
-    if findOne('mul_国服竞技场挑战', {rg = {879,146,990,686}}) then ssleep(1) return 1 end
+    if findOne({'mul_国服竞技场挑战', 'mul_国服竞技场再次挑战', 'mul_国服竞技场已挑战过对手'}, {rg = {879,146,990,686}}) then 
+      ssleep(1) return 1 
+    end
   end, .5)
   
   -- 刷新对手到达次数
@@ -188,12 +219,9 @@ path.刷竞技场 = function ()
     -- 过滤非敌人积分; 敌人积分转换成数字
     enemyPointsInfo = table.filter(enemyPointsInfo, function (v) 
       if v.text:find('积分') or v.text:find('积') or v.text:find('分') then
-        local tmp, isChallenge = untilAppear({'mul_国服竞技场已挑战过对手', 'mul_国服竞技场挑战', 'mul_国服竞技场再次挑战'}, 
-                                              {rg = {886, v.t - 50, 990, v.b + 50}})
-        if isChallenge == 'mul_国服竞技场挑战' then
-          v.text = getArenaPoints(v.text) 
-          return 1 
-        end
+        local tmp, isChallenge = untilAppear({'mul_国服竞技场已挑战过对手', 'mul_国服竞技场挑战', 
+                                              'mul_国服竞技场再次挑战'}, {rg = {886, v.t - 50, 990, v.b + 50}})
+        if isChallenge == 'mul_国服竞技场挑战' then v.text = getArenaPoints(v.text) return 1 end
        end 
     end)
     -- log(enemyPointsInfo)
@@ -274,7 +302,7 @@ end
 
 -- todo 每周成就
 path.成就领取 = function ()
-  if not findOne({'cmp_国服成就红点', 'cmp_国服成就红点2'}) then return 1 end
+  -- if not findOne({'cmp_国服成就红点', 'cmp_国服成就红点2'}) then log('无成就领取') return 1 end
   wait(function ()
     stap(point.成就)
     ssleep(1)
@@ -321,7 +349,7 @@ end
 
 -- finish
 path.宠物礼盒 = function ()
-  if findOne('cmp_国服宠物礼盒') then untilTap('cmp_国服宠物礼盒') end
+  if findOne('cmp_国服宠物礼盒') then untilTap('cmp_国服宠物礼盒') else log('无宠物礼盒') end
 end
 
 -- finish
@@ -376,8 +404,8 @@ path.誓约召唤 = function ()
   end)
   if findTap('cmp_国服免费1次召唤') then untilTap('cmp_国服召唤确认') end
   wait(function ()
-    stap({161,658})
-    if findOne('cmp_国服10次召唤') then return 1 end
+    stap({156,659})
+    if findOne('cmp_国服10次召唤', {sim = 1}) then return 1 end
   end)
 end
 
@@ -397,6 +425,9 @@ path.圣域生产奖励领取 = function ()
   untilAppear('cmp_国服圣域首页')
   log('欧勒毕斯之心处理')
   findTap('cmp_国服欧勒毕斯之心')
+  wait(function ()
+    if findOne('cmp_国服圣域首页') then ssleep(.5) return 1 end
+  end)
 end
 
 path.圣域精灵之森领取 = function ()
@@ -430,15 +461,15 @@ path.圣域指挥总部 = function ()
     end)
     local dispatchLevel = findOne('ocr_国服派遣任务等级')
     local dispatchLevelSort = {'12', '8', '6', '4', '2', '1', '30'}
-    if not dispatchLevel then log('无派遣') return true end
+    if not dispatchLevel then log('无派遣') return 1 end
     if #dispatchLevel > 1 then
       -- 过滤非派遣等级
       dispatchLevel = table.filter(dispatchLevel, 
                                   function (v) if v.text:includes({'所需时间', '小时', '分', '秒'}) and 
-                                  findOne('mul_国服派遣执行', {rg = {890, v.t, 980, v.b + 75}}) then return true end end)
+                                  findOne('mul_国服派遣执行', {rg = {890, v.t, 980, v.b + 75}}) then return 1 end end)
       -- 根据设置等级查询优先派遣level
       for i,v in pairs(dispatchLevelSort) do
-        local result = table.findv(dispatchLevel, function (val) if val.text:includes({v}) then return true end end)
+        local result = table.findv(dispatchLevel, function (val) if val.text:includes({v}) then return 1 end end)
         if result then dispatchLevel = result break end
       end
     end
@@ -451,8 +482,8 @@ end
 
 path.圣域首页 = function ()
   wait(function ()
+    if findOne('cmp_国服圣域首页') then ssleep(1) return 1 end
     stap({31,32})
     ssleep(2)
-    if findOne('cmp_国服圣域首页') then ssleep(1) return 1 end
   end)
 end

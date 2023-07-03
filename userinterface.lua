@@ -55,7 +55,7 @@ loadProfile =function (path)
 end
 
 suie.取消 = exit
-suie.启动 = function () 
+suie.启动 = function ()
   suie.开启前()
   path.游戏开始()
 end
@@ -83,7 +83,7 @@ suie.开启前 = function ()
 end
 suie.开始刷书签 = function ()
   suie.开启前()
-  path.刷书签()
+  path.刷书签(sgetNumberConfig("refresh_book_tag_count", 0))
 end
 suie.使用说明 = function ()
   runIntent({
@@ -116,6 +116,9 @@ sui.show = function ()
   addCheckBox('叶子买票', '叶子买票')
   addTextView('刷新交战次数:')
   addEditText('交战剩余次数', '30')
+  newRow()
+  addTextView('竞技场每周奖励: ')
+  addRadioGroup('竞技场每周奖励', {'天空石', '神秘奖牌'})
   -- newRow()
   -- local mission = {'圣域', '探险', '讨伐', '战争'}
   -- addTextView('派遣任务:')

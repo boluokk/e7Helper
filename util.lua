@@ -279,8 +279,9 @@ wait = function (func, interval, TIMEOUT, disableRestartGame)
 		-- 重启脚本 + 回退到首页
 		if not TIMEOUT and not disableRestartGame
 									 and time() - waitTimeout > check_game_identify_timeout then
+			log('超时重试')
+			setNumberConfig("scriptStatus", 3)
 			path.回到主页()
-			setStringConfig(scriptStatus, '3')
 			reScript()
 		end
 	end
@@ -308,8 +309,10 @@ log = function(...)
 	
 end
 
-slog = function (msg, level)
+slog = function (msg, level, clear)
+	msg = msg or ''
 	level = level or 3
+	if clear then console.clearLog() end
 	local a = os.date('%Y-%m-%d %H:%M:%S')
 	msg = a..': '..msg
 	console.println(level, msg)
@@ -461,7 +464,7 @@ function Gesture:dispatch()
 end
 
 read = function (path, needDecode)
-	local resource = readFile(work_path..path)
+	local resource = readFile(root_path..path)
 	if needDecode then
 		resource = jsonLib.decode(resource)
 	end
@@ -1166,7 +1169,7 @@ stringMather = function (fun, str)
 end
 
 sFileExist = function (path)
-	local path = work_path..path
+	local path = root_path..path
 	return fileExist(path)
 end
 
@@ -1333,7 +1336,7 @@ resolveZipFile = function (fileNameArray)
 end
 
 sdelfile = function (path)
-	delfile(work_path..path)
+	delfile(root_path..path)
 end
 
 shttpGet = function (url, disableDecode)
@@ -1430,17 +1433,6 @@ tipCheckServer = function (close)
 	end, 1, 10)
 	
 	if close then exit() end
-end
-
---重置状态
-resetStatus = function (isMultAcc)
-	setStringConfig("scriptStatus", 0)
-	if isMultAcc then setStringConfig("curAccount", 0) end
-	setStringConfig("taskIndex", 0)
-	setStringConfig("rougeIndex", 1)
-	setStringConfig("fightCount", 0)
-	setStringConfig("SXYSCount", 1)
-	setStringConfig("currentWeek", getCurWeek())
 end
 
 untilTap = function (target, config)
