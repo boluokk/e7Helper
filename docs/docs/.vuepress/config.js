@@ -1,16 +1,16 @@
 // .vuepress/config.js
 module.exports = {
     title: "E7Helper",
-	description: '一个说明文档',
+	description: '使用说明文档',
 	base: "./",
     themeConfig: {
       sidebar: "auto",
       nav: [
-        { text: '加入QQ群', link: 'https://qm.qq.com/cgi-bin/qm/qr?k=VDbA_uNXhESF6lPYIWMkjrJsET_gMAIA&jump_from=webapi&authKey=EB4BuIVLGgt4HTVdkxcucF6W4GV81Hoz6E0/aXBu4C8JI0gRiDrPvSNMVEgXvoZn' },
+        { text: '加入QQ群', link: 'https://qm.qq.com/cgi-bin/qm/qr?k=o6MW-K-Ws6A2-S_WhHEro1JggzREWPzt&jump_from=webapi&authKey=PRSHw0kOjKtnqEVwyXCRHnKKwAWhzXWD/y486deoyZ/AWyNfGLwHIEwjb8gf9yoX' },
         { 
           text: '下载链接',
           items: [
-            { text: '下载链接(密码8888)', link: 'https://wwos.lanzouf.com/iXgww0na16ja' }
+            { text: '下载链接(密码6666)', link: 'https://wwos.lanzouj.com/in7ed1174w4f' }
           ]
         },
       ]
