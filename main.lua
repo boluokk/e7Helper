@@ -3,7 +3,7 @@ time = systemTime
 -- 获取workPath
 root_path = getWorkPath() .. '/'
 -- 禁止热更新
-hotUpdate_disabled = false
+hotupdate_disabled = false
 -- 截图延迟
 capture_interval = 0
 -- 游戏代理识图间隔
@@ -19,7 +19,7 @@ server_pkg_name = {
 -- 当前服务器
 current_server = "国服"
 -- wait 间隔
-wait_interval = .4
+wait_interval = .5
 -- 禁用测试
 disable_test = false
 -- debug
@@ -48,7 +48,7 @@ getMillisecond = function (secound) return secound * 1000 end
 -- 单位秒
 check_game_identify_timeout = getMillisecond(15)
 -- 其他ssleep间隔
-other_ssleep_interval = .5
+other_ssleep_interval = 0
 -- 单任务休息时间
 single_task_resttime = 5
 -- 开源说明手册地址
@@ -73,7 +73,7 @@ setStopCallBack(function(error)
     reScript()
   else
     setNumberConfig("scriptStatus", 0)
-    setNumberConfig("current_task_index", 1)
+    setNumberConfig("current_task_index", 0)
     setNumberConfig("is_refresh_book_tag", 0)
     setNumberConfig("refresh_book_tag_count", 0)
     setNumberConfig("g1", 0)
@@ -100,7 +100,7 @@ local scriptStatus = sgetNumberConfig("scriptStatus", 0)
 -- 热更新开始
 if scriptStatus == 0 then
   console.clearLog()
-  if not hotUpdate_disabled then hotUpdate() end
+  if not hotupdate_disabled then hotUpdate() end
   sui.show()
 else
   setNumberConfig("scriptStatus", 0)

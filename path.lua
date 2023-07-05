@@ -5,15 +5,26 @@ path.游戏开始 = function ()
   path.任务队列()
 end
 
+-- isBack: 通过按back来回退
 path.游戏首页 = function ()
-  if not sAppIsRunning(current_server) or not sAppIsFront(current_server) then open(server_pkg_name[current_server]) end
+  isBack = true
+  if not sAppIsRunning(current_server) or not sAppIsFront(current_server) then 
+    isBack = false
+    open(server_pkg_name[current_server]) 
+  end
   setControlBarPosNew(0, 1)
   local clickTarget = {'cmp_国服签到右下蓝底', 'cmp_国服签到右下蓝底2', 'cmp_国服公告X', 'cmp_国服登录第七史诗'}
   local t
   wait(function ()
     if not longAppearMomentDisAppear('cmp_国服主页Rank', nil, nil, 1) then return 1 end
-    if not findTap(clickTarget) then stap(point.回退) end
-  end, 1, 7 * 60, nil, true)
+    if not findTap(clickTarget) then
+      if not isBack then 
+        stap(point.回退) 
+      else
+        back()
+      end
+    end
+  end, 1, 7 * 60)
 end
 
 path.任务队列 = function ()
@@ -21,9 +32,9 @@ path.任务队列 = function ()
     '收取邮件', '刷竞技场', '领养宠物', '成就领取',
     '宠物礼盒', '誓约召唤', '圣域收菜'
   }
-  local curTaskIndex = sgetNumberConfig("current_task_index", 1)
+  local curTaskIndex = sgetNumberConfig("current_task_index", 0)
   for i,v in pairs(allTask) do
-    if i > curTaskIndex and current_task[v] then 
+    if i > curTaskIndex and current_task[v] then
       path[v]()
       slog(v..'完成')
       path.回到主页()
@@ -120,11 +131,10 @@ path.回到主页 = function ()
       if t and time() - t > 1000 then return 1 end
       return
     end
-    findTap({
-      'cmp_国服派遣任务重新进行'
-      }, {tapInterval = 0})
+    findTap({'cmp_国服派遣任务重新进行'}, {tapInterval = 0})
     if t then t = time() end
-    stap(point.退出)
+    -- stap(point.退出)
+    back()
   end, .6)
 end
 
@@ -302,7 +312,7 @@ end
 
 -- todo 每周成就
 path.成就领取 = function ()
-  -- if not findOne({'cmp_国服成就红点', 'cmp_国服成就红点2'}) then log('无成就领取') return 1 end
+  if not findOne({'cmp_国服成就红点', 'cmp_国服成就红点2'}) then log('无成就领取') return 1 end
   wait(function ()
     stap(point.成就)
     ssleep(1)
@@ -424,6 +434,7 @@ path.圣域生产奖励领取 = function ()
   log('欧勒毕斯之心处理')
   findTap('cmp_国服欧勒毕斯之心')
   wait(function ()
+    stap({649,58})
     if findOne('cmp_国服圣域首页') then ssleep(.5) return 1 end
   end)
 end
@@ -433,12 +444,15 @@ path.圣域精灵之森领取 = function ()
   local target = {'cmp_国服圣域企鹅蛋', 'cmp_国服圣域精灵之泉', 'cmp_国服圣域种植地', 'cmp_国服圣域种植地收获'}
   if findTap('cmp_国服圣域精灵之森小红点') then
     -- untilAppear('cmp_建筑升级状态')
-    untilAppear('cmp_国服圣域企鹅巢穴') ssleep(.5)
+    wait(function ()
+      stap({104,100})
+      if findOne('cmp_国服圣域企鹅巢穴') then return 1 end
+    end)
     for i,v in pairs(target) do
-      if wait(function () if findTap(v) then return true end end, 0, 1) then
+      if wait(function () if findTap(v) then return true end end, 0, .5) then
         wait(function ()
           stap({104,100})
-          if findOne('cmp_国服圣域企鹅巢穴') then ssleep(.5) return 1 end
+          if findOne('cmp_国服圣域企鹅巢穴') then return 1 end
         end)
       end
     end

@@ -1464,3 +1464,8 @@ uuid = function()
 		return string.format("%x", v)
 	end))
 end
+
+back = function ()
+	log('back')
+	keyPress("back")
+end
