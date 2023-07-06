@@ -11,7 +11,7 @@
 #### 此APP工具源码: [https://gitee.com/boluokk/e7-helper](https://gitee.com/boluokk/e7-helper) 👍
 
 ### 最近更新: 
-- 更新apk, 修复获取成就、圣域收菜bug
+- 修复刷标签bug,添加骑士团功能
 
 ### 设备兼容
 

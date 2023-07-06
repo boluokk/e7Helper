@@ -2,7 +2,7 @@ sui = {}
 -- ui事件
 suie = {}
 parentUid = 'E7Helper '.. os.date('%Y-%m-%d %H:%M:%S')
-
+grindUid = '刷图设置'
 -- bin: bid、bname
 addButton = function (bin, partid)
   partid = partid or parentUid
@@ -53,6 +53,7 @@ end
 loadProfile =function (path)
   ui.loadProfile(root_path..path)
 end
+dismiss = function (id) ui.dismiss(id) end
 
 suie.取消 = exit
 suie.启动 = function ()
@@ -79,7 +80,7 @@ suie.开启前 = function ()
   -- 保存配置
   saveProfile('config.txt')
   ui_config_finish = true
-  ui.dismiss(parentUid)
+  dismiss(parentUid)
 end
 suie.开始刷书签 = function ()
   suie.开启前()
@@ -92,6 +93,13 @@ suie.使用说明 = function ()
   })
   exit()
 end
+suie.刷图设置 = function ()
+  sui.showGrindSetting()
+end
+-- 刷图
+suie.刷图测试 = function ()
+  dismiss(grindUid)
+end
 sui.show = function ()
   newLayout()
   newRow()
@@ -101,9 +109,10 @@ sui.show = function ()
   addRadioGroup('服务器', servers)
   newRow()
   -- 功能区
-  local selections = {
+  local selections = { -- '圣域派遣'
     '收取邮件', '刷竞技场', '领养宠物', '成就领取',
-    '宠物礼盒', '誓约召唤', '圣域收菜', -- '圣域派遣'
+    '宠物礼盒', '誓约召唤', '圣域收菜', '骑士团',
+    '骑士团签到', '骑士团任务奖励', '骑士团捐赠'
   }
   for i,v in pairs(selections) do
     addCheckBox(v, v)
@@ -124,6 +133,9 @@ sui.show = function ()
   -- addTextView('派遣任务:')
   -- addRadioGroup('派遣任务', mission)
   newRow()
+  addTextView('骑士团捐赠：')
+  addRadioGroup('骑士团捐赠类型', {'金币', '勇气证据', '全部'})
+  newRow()
   local tag = {
     '神秘奖牌', '誓约书签', '友情书签'
   }
@@ -137,13 +149,23 @@ sui.show = function ()
   addTextView('  |  ')
   addButton('启动')
   addButton('取消')
+  newRow()
+  addButton('刷图设置')
+  addButton('定时(未做)')
+  addButton('刷初始(未做)')
   ui.show(parentUid, false)
 
   -- load config
   loadProfile('config.txt')
   wait(function ()
     if ui_config_finish then return true end
-  end, .2, nil, true)
+  end, .05, nil, true)
+end
+
+sui.showGrindSetting = function ()
+  newLayout(grindUid)
+  addButton('刷图测试', grindUid)
+  ui.show(grindUid, false)
 end
 
 

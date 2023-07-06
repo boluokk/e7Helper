@@ -13,9 +13,12 @@ path.游戏首页 = function ()
     open(server_pkg_name[current_server]) 
   end
   setControlBarPosNew(0, 1)
-  local clickTarget = {'cmp_国服签到右下蓝底', 'cmp_国服签到右下蓝底2', 'cmp_国服公告X', 'cmp_国服登录第七史诗'}
+  local clickTarget = {'cmp_国服签到右下蓝底', 'cmp_国服签到右下蓝底2', 'cmp_国服公告X', 
+                       'cmp_国服登录第七史诗', 'cmp_国服服务器维护中'}
   local t
-  wait(function ()
+  if wait(function ()
+    -- 服务器维护中
+    if findOne('cmp_国服服务器维护中') then return 'exit' end
     if not longAppearMomentDisAppear('cmp_国服主页Rank', nil, nil, 1) then return 1 end
     if not findTap(clickTarget) then
       if not isBack then 
@@ -24,24 +27,110 @@ path.游戏首页 = function ()
         back()
       end
     end
-  end, 1, 7 * 60)
+  end, 1, 7 * 60) == 'exit' then
+    slog('服务器维护中...')
+    exit()  
+  end
 end
 
 path.任务队列 = function ()
   local allTask = {
     '收取邮件', '刷竞技场', '领养宠物', '成就领取',
-    '宠物礼盒', '誓约召唤', '圣域收菜'
+    '宠物礼盒', '誓约召唤', '圣域收菜', '骑士团'
   }
   local curTaskIndex = sgetNumberConfig("current_task_index", 0)
   for i,v in pairs(allTask) do
     if i > curTaskIndex and current_task[v] then
       path[v]()
       slog(v..'完成')
+      setNumberConfig("exception_count", 1)
       path.回到主页()
     end
     setNumberConfig('current_task_index', i)
   end
-  console.show()
+end
+
+-- finish
+path.骑士团 = function ()
+  if not findOne('cmp_国服骑士团红点') then log('骑士团签到无需处理') return 1 end
+  wait(function ()
+    stap(point.骑士团)
+    ssleep(1)
+    if not findOne('cmp_国服主页Rank') then return 1 end
+  end)
+  untilAppear('cmp_国服左上骑士团')
+
+  if current_task.骑士团签到 then path.骑士团签到() end
+  if current_task.骑士团捐赠 then path.骑士团捐赠() end
+  if current_task.骑士团任务奖励 then path.骑士团任务奖励() end
+
+end
+
+path.骑士团签到 = function ()
+  if findTap('cmp_国服骑士团签到') then
+    wait(function ()
+      stap({509,35})
+      if findOne('cmp_国服左上骑士团') then return 1 end
+    end)
+  end
+end
+
+path.骑士团捐赠 = function ()
+  wait(function ()
+    stap({1090,414})
+    if findOne("500|130|FFFFFF,513|121|FFFFFF,520|132|FFFFFF,544|128|FFFFFF,538|137|FFFFFF") then
+      return 1
+    end
+  end)
+  -- 金币
+  -- 勇气证据
+  -- 都捐赠
+  local giveType = current_task.骑士团捐赠类型
+  if giveType == 0 then
+    findTap('cmp_国服金币捐赠')
+  elseif giveType == 1 then
+    findTap('cmp_国服勇气证据捐赠')
+  elseif giveType == 2 then
+    findTap('cmp_国服金币捐赠')
+    wait(function ()
+      stap({515,40})
+      if findOne('cmp_国服左上骑士团') then return 1 end
+    end)
+    findTap('cmp_国服勇气证据捐赠')
+  end
+  wait(function ()
+    stap({515,40})
+    if findOne('cmp_国服左上骑士团') then return 1 end
+  end)
+end
+
+path.骑士团任务奖励 = function ()
+  wait(function ()
+    stap({1114,698})
+    if findOne('cmp_国服骑士团每周任务') then return 1 end
+  end)
+  -- 上方小红点处理, 这个识别的mul_...可以公用
+  if findTap('mul_国服每日每周小红球', {rg = {437,140,987,212}, sim = .98}) then
+    wait(function ()
+      stap({600,81})
+      if findOne('cmp_国服骑士团每周任务') then return 1 end
+    end)
+  end
+  -- 中间领取处理
+  -- 好似只用滑动一下, 也就是只有两页
+  for i=1,2 do
+    wait(function ()
+      if findTap('mul_国服骑士团任务领取', {rg = {866,255,990,722}}) then
+        wait(function ()
+          stap({600,81})
+          if findOne('cmp_国服骑士团每周任务') then return 1 end
+        end)
+      else
+        return 1
+      end
+    end)
+    if i == 1 then sswipe({574,674}, {574,287}) ssleep(.5) end
+  end
 end
 
 -- finish
@@ -72,7 +161,8 @@ path.刷书签 = function (rest)
   for i=1,refreshCount do
     if i > rest then
       for i=1,4 do
-      local pos, countTarget = findOne(target, {rg = {538,8,677,713}})
+      -- 可能会出现乱买, 相似度不够高?
+      local pos, countTarget = findOne(target, {rg = {538,8,677,713}, sim = .97})
       if pos then
         local newRg = {1147, pos[2] - 80, 1226, pos[2] + 80}
         untilTap('mul_国服神秘商店购买', {rg = newRg})
@@ -90,14 +180,14 @@ path.刷书签 = function (rest)
         end
         -- 等待购买特效消失
         wait(function ()
-          if not longAppearMomentDisAppear({'cmp_国服神秘商店立即更新', 'cmp_国服神秘商店购买资源不足'}, nil, nil, 1.5) then return 1 end
+          if not longAppearMomentDisAppear({'cmp_国服神秘商店立即更新', 'cmp_国服神秘商店购买资源不足', 'cmp_国服一般商店'}, nil, nil, 1.5) then return 1 end
         end)
       end
       -- 资源是否耗尽
       wait(function ()
-        local r1, r2 = findOne({'cmp_国服神秘商店购买资源不足', 'cmp_国服神秘商店立即更新'}, {sim = 1})
+        local r1, r2 = findOne({'cmp_国服神秘商店购买资源不足', 'cmp_国服神秘商店立即更新', 'cmp_国服一般商店'}, {sim = 1})
         if r2 == 'cmp_国服神秘商店立即更新' then return 1 end
-        if r2 == 'cmp_国服神秘商店购买资源不足' then enoughResources = false return 1 end
+        if r2 == 'cmp_国服神秘商店购买资源不足' or r2 == 'cmp_国服一般商店' then enoughResources = false return 1 end
       end)
       if i == 2 and enoughResources then sswipe({858,578}, {858,150}) ssleep(.5) end
       end
@@ -105,22 +195,24 @@ path.刷书签 = function (rest)
       if not enoughResources then 
         log('资源耗尽!')
         slog('资源耗尽!')
-        untilTap('cmp_国服神秘商店取消')
+        -- untilTap('cmp_国服神秘商店取消')
+        path.游戏首页()
         break
       end
       -- 刷新次数: 1 (神秘奖牌: 5*5, 誓约书签: 10*5, 友情书签: 20*5)
       log(msg)
+      slog(msg, nil, true)
       -- 如果网络不好会导致两次点击, 改成 sim = 1
       untilTap('cmp_国服神秘商店立即更新', {sim = 1})
       untilTap('cmp_国服神秘商店购买确认')
-      wait(function () findOne('') end, .1, 1.5)
+      untilAppear('cmp_国服神秘商店第一个商品')
+      setNumberConfig("exception_count", 1)
     end
     setNumberConfig("refresh_book_tag_count", i)
   end
   setNumberConfig("refresh_book_tag_count", 0)
   setNumberConfig("is_refresh_book_tag", 0)
   slog(msg)
-  console.show()
 end
 
 path.回到主页 = function ()
@@ -269,7 +361,7 @@ path.刷竞技场 = function ()
   end, .5, nil, true)
 end
 
--- need test
+-- finish
 path.战斗代理 = function ()
   log('战斗开始')
   -- 开启auto
@@ -310,7 +402,7 @@ path.领养宠物 = function ()
   end)
 end
 
--- todo 每周成就
+-- finish
 path.成就领取 = function ()
   if not findOne({'cmp_国服成就红点', 'cmp_国服成就红点2'}) then log('无成就领取') return 1 end
   wait(function ()
@@ -449,7 +541,7 @@ path.圣域精灵之森领取 = function ()
       if findOne('cmp_国服圣域企鹅巢穴') then return 1 end
     end)
     for i,v in pairs(target) do
-      if wait(function () if findTap(v) then return true end end, 0, .5) then
+      if wait(function () if findTap(v) then return 1 end end, 0, .5) then
         wait(function ()
           stap({104,100})
           if findOne('cmp_国服圣域企鹅巢穴') then return 1 end

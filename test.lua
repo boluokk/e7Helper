@@ -13,5 +13,8 @@ test = function ()
   -- path.圣域指挥总部()
   -- path.游戏开始()
   -- log(work_path)
+  -- log(findOne('mul_国服骑士团任务领取', {rg = {866,255,990,722}}))
+  -- path.骑士团()
+  -- exitScript()
 end
 if not disable_test then test() end

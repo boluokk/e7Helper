@@ -3,11 +3,11 @@ time = systemTime
 -- 获取workPath
 root_path = getWorkPath() .. '/'
 -- 禁止热更新
-hotupdate_disabled = false
+hotupdate_disabled = true
 -- 截图延迟
 capture_interval = 0
 -- 游戏代理识图间隔
-game_running_capture_interval = 3 
+game_running_capture_interval = 3
 -- 点击延迟
 tap_interval = 0
 -- app运行时间
@@ -21,7 +21,7 @@ current_server = "国服"
 -- wait 间隔
 wait_interval = .5
 -- 禁用测试
-disable_test = false
+disable_test = true
 -- debug
 debug_disabled = true
 -- 禁用日志
@@ -39,6 +39,8 @@ sgetNumberConfig = function (key, defval) return tonumber(getNumberConfig(key, d
 is_refresh_book_tag = sgetNumberConfig('is_refresh_book_tag', 0)
 -- 当前任务
 current_task_index = sgetNumberConfig("current_task_index", 0)
+-- 异常退出次数
+exception_count = sgetNumberConfig('exception_count', 1)
 -- 当前账号任务
 current_task = {}
 -- 检查游戏状态 10s
@@ -79,6 +81,7 @@ setStopCallBack(function(error)
     setNumberConfig("g1", 0)
     setNumberConfig("g2", 0)
     setNumberConfig("g3", 0)
+    console.show()
   end
 end)
 
@@ -87,7 +90,6 @@ end)
 -- 分辨率 720x1280
 local disPlayDPI = getDisplayDpi()
 local displaySizeWidth, displaySizeHeight = getDisplaySize()
-
 if disPlayDPI ~= 320 or (displaySizeHeight ~= 1280 and displaySizeHeight > 0) 
                     or (displaySizeWidth ~= 720 and displaySizeWidth > 0) then
   wait(function ()
@@ -104,6 +106,15 @@ if scriptStatus == 0 then
   sui.show()
 else
   setNumberConfig("scriptStatus", 0)
+  -- 多次异常关闭脚本
+  -- 退出游戏还是重启游戏?
+  if exception_count > 3 then 
+    slog('连续3次异常退出') 
+    setNumberConfig("exception_count", 1) 
+    exit() 
+  else
+    setNumberConfig("exception_count", exception_count + 1)
+  end 
   -- 加载本地配置
   current_task = read('config.txt', true)
   if is_refresh_book_tag == 1 then
