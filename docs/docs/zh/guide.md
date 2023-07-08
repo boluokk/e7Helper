@@ -11,7 +11,7 @@
 #### 此APP工具源码: [https://gitee.com/boluokk/e7-helper](https://gitee.com/boluokk/e7-helper) 👍
 
 ### 最近更新: 
-- 刷标签功能兼容bug修复
+- 更新文档
 
 ### 设备兼容
 
@@ -41,4 +41,8 @@
 
 1. #### 怎么刷书签?🍃
 
-   > 点击 [开始刷书签] 并且设置好次数就行了。(<font color='orange'>不要同时挂自动战斗会导致模拟器非常卡, 可能会乱买东西</font>)
+   > 点击 [开始刷书签] 并且设置好次数就行了。(<font color='orange'>如果模拟器很卡的话, 可能会导致乱买东西!</font>)
+   
+### 常见问题?😀
+1. #### 模拟器玩E7很卡?
+   > 可以通过修改程序优先级: [https://www.ldmnq.com/forum/45337.html](https://www.ldmnq.com/forum/45337.html)
