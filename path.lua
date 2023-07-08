@@ -36,7 +36,7 @@ end
 path.任务队列 = function ()
   local allTask = {
     '收取邮件', '刷竞技场', '领养宠物', '成就领取',
-    '宠物礼盒', '誓约召唤', '圣域收菜', '骑士团'
+    '宠物礼盒', '誓约召唤', '圣域收菜', '社团开启'
   }
   local curTaskIndex = sgetNumberConfig("current_task_index", 0)
   for i,v in pairs(allTask) do
@@ -51,22 +51,22 @@ path.任务队列 = function ()
 end
 
 -- finish
-path.骑士团 = function ()
-  if not findOne('cmp_国服骑士团红点') then log('骑士团签到无需处理') return 1 end
+path.社团开启 = function ()
+  -- if not findOne('cmp_国服骑士团红点') then log('骑士团签到无需处理') return 1 end
   wait(function ()
-    stap(point.骑士团)
+    stap(point.社团)
     ssleep(1)
     if not findOne('cmp_国服主页Rank') then return 1 end
   end)
   untilAppear('cmp_国服左上骑士团')
 
-  if current_task.骑士团签到 then path.骑士团签到() end
-  if current_task.骑士团捐赠 then path.骑士团捐赠() end
-  if current_task.骑士团任务奖励 then path.骑士团任务奖励() end
+  if current_task.社团签到 then path.社团签到() end
+  if current_task.社团捐赠 then path.社团捐赠() end
+  if current_task.社团奖励 then path.社团奖励() end
 
 end
 
-path.骑士团签到 = function ()
+path.社团签到 = function ()
   if findTap('cmp_国服骑士团签到') then
     wait(function ()
       stap({509,35})
@@ -75,7 +75,7 @@ path.骑士团签到 = function ()
   end
 end
 
-path.骑士团捐赠 = function ()
+path.社团捐赠 = function ()
   wait(function ()
     stap({1090,414})
     if findOne("500|130|FFFFFF,513|121|FFFFFF,520|132|FFFFFF,544|128|FFFFFF,538|137|FFFFFF") then
@@ -85,7 +85,7 @@ path.骑士团捐赠 = function ()
   -- 金币
   -- 勇气证据
   -- 都捐赠
-  local giveType = current_task.骑士团捐赠类型
+  local giveType = current_task.社团捐赠类型
   if giveType == 0 then
     findTap('cmp_国服金币捐赠')
   elseif giveType == 1 then
@@ -104,7 +104,7 @@ path.骑士团捐赠 = function ()
   end)
 end
 
-path.骑士团任务奖励 = function ()
+path.社团奖励 = function ()
   wait(function ()
     stap({1114,698})
     if findOne('cmp_国服骑士团每周任务') then return 1 end
@@ -162,7 +162,7 @@ path.刷书签 = function (rest)
     if i > rest then
       for i=1,4 do
       -- 可能会出现乱买, 相似度不够高?
-      local pos, countTarget = findOne(target, {rg = {538,8,677,713}, sim = .97})
+      local pos, countTarget = findOne(target, {rg = {538,8,677,713}})
       if pos then
         local newRg = {1147, pos[2] - 80, 1226, pos[2] + 80}
         untilTap('mul_国服神秘商店购买', {rg = newRg})
@@ -189,7 +189,14 @@ path.刷书签 = function (rest)
         if r2 == 'cmp_国服神秘商店立即更新' then return 1 end
         if r2 == 'cmp_国服神秘商店购买资源不足' or r2 == 'cmp_国服一般商店' then enoughResources = false return 1 end
       end)
-      if i == 2 and enoughResources then sswipe({858,578}, {858,150}) ssleep(.5) end
+      -- 写死判定，可能会connection导致滑动失效
+      if i == 2 and enoughResources then 
+        wait(function ()
+          sswipe({858,578}, {858,150})
+          ssleep(1)
+          if findOne({'cmp_国服神秘商店第二个商品', 'cmp_国服神秘商店第三个商品', 'cmp_国服神秘商店第四个商品'}) then return 1 end
+        end)
+      end
       end
       msg = '刷新次数: '..i..'(神秘奖牌: '..g1..'*5, 誓约书签: '..g2..'*5, 友情书签: '..g3..'*5)'
       if not enoughResources then 
@@ -524,7 +531,11 @@ end
 path.圣域生产奖励领取 = function ()
   untilAppear('cmp_国服圣域首页')
   log('欧勒毕斯之心处理')
-  findTap('cmp_国服欧勒毕斯之心')
+  wait(function () 
+    if findTap('cmp_国服欧勒毕斯之心') then
+      return 1
+    end
+  end, .1, 1)
   wait(function ()
     stap({649,58})
     if findOne('cmp_国服圣域首页') then ssleep(.5) return 1 end
@@ -590,4 +601,18 @@ path.圣域首页 = function ()
     stap({31,32})
     ssleep(2)
   end)
+end
+
+path.友情体力 = function ()
+  log('购买体力')
+  wait(function ()
+    stap(point.商店)
+    ssleep(1)
+    if not findOne('cmp_国服主页Rank') then return 1 end
+  end)
+  untilAppear('cmp_国服一般商店')
+end
+
+path.净化深渊 = function ()
+  
 end

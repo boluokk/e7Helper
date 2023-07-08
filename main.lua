@@ -48,9 +48,9 @@ check_game_status_interval = 10000
 -- 检查图色识别时间
 getMillisecond = function (secound) return secound * 1000 end
 -- 单位秒
-check_game_identify_timeout = getMillisecond(15)
+check_game_identify_timeout = getMillisecond(20)
 -- 其他ssleep间隔
-other_ssleep_interval = 0
+other_ssleep_interval = 1
 -- 单任务休息时间
 single_task_resttime = 5
 -- 开源说明手册地址
