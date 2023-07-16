@@ -8,13 +8,16 @@ hotupdate_disabled = true
 capture_interval = 0
 -- 游戏代理识图间隔
 game_running_capture_interval = 3
+-- 所有配置文件名称
+fileNames = {'config.txt', 'fightConfig.txt', 'bagConfig.txt'}
 -- 点击延迟
 tap_interval = 0
 -- app运行时间
 app_is_run = time()
 --server pkg name
 server_pkg_name = {
-  ["国服"] = "com.zlongame.cn.epicseven",
+  ["国服"] = 'com.zlongame.cn.epicseven',
+  ['B服'] = 'com.zlongame.cn.epicseven.bilibili', 
 }
 -- 当前服务器
 current_server = "国服"
@@ -22,11 +25,8 @@ current_server = "国服"
 wait_interval = .5
 -- 禁用测试
 disable_test = true
--- debug
-debug_disabled = true
--- 禁用日志
--- disable_log = true
-detail_log_message = false
+-- 详细日志
+detail_log_message = true
 -- 是否异常退出
 is_exception_quit = false
 -- UI配置完毕
@@ -55,14 +55,17 @@ other_ssleep_interval = 1
 single_task_resttime = 5
 -- 开源说明手册地址
 open_resource_doc = 'https://boluokk.gitee.io/e7-helper'
+-- log 日志显示在左下角
+-- true stoat 打印
+-- false print 打印
+logger_display_left_bottom = true
+-- 打印配置信息
+print_config_info = false
 require("point")
 require("util")
--- 导入验证包
 require("userinterface")
 -- 测试
 require("test")
--- log 日志显示在左下角
-logger_display_left_bottom = true
 console.dismiss()
 
 -- 其他异常处理 
@@ -88,13 +91,16 @@ end)
 -- 分辨率提示
 -- DPI 320
 -- 分辨率 720x1280
+-- 或者   1280x720
 local disPlayDPI = getDisplayDpi()
 local displaySizeWidth, displaySizeHeight = getDisplaySize()
-if disPlayDPI ~= 320 or (displaySizeHeight ~= 1280 and displaySizeHeight > 0) 
-                    or (displaySizeWidth ~= 720 and displaySizeWidth > 0) then
+if disPlayDPI ~= 320 or ((displaySizeHeight ~= 1280 and displaySizeHeight > 0) and 
+                         (displaySizeHeight ~= 720 and displaySizeHeight > 0)) 
+                     or ((displaySizeWidth ~= 720 and displaySizeWidth > 0) and 
+                         (displaySizeWidth ~= 1280 and displaySizeWidth > 0)) then
   wait(function ()
-    toast("当前分辨率：\t宽度："..displaySizeWidth.."\t高度："..displaySizeHeight.."\tDPI："..disPlayDPI.."\n"..
-          "请手动配置成(模拟器或者虚拟机设置中)：\t宽度：720\t高度：1280\tDPI：320\n后重启脚本")
+    toast("当前分辨率："..displaySizeWidth.."x"..displaySizeHeight.."\tDPI："..disPlayDPI.."\n"..
+          "请手动配置成(模拟器或者虚拟机设置中)：\n分辨率: 720x1280或者1280x720 \nDPI：320\n之后重启脚本")
   end, 1, 99999999 * 60)
 end
 
@@ -102,6 +108,7 @@ local scriptStatus = sgetNumberConfig("scriptStatus", 0)
 -- 热更新开始
 if scriptStatus == 0 then
   console.clearLog()
+  slog('<- start time')
   if not hotupdate_disabled then hotUpdate() end
   sui.show()
 else
@@ -116,7 +123,8 @@ else
     setNumberConfig("exception_count", exception_count + 1)
   end 
   -- 加载本地配置
-  current_task = read('config.txt', true)
+  -- current_task = read('config.txt', true)
+  current_task = uiConfigUnion(fileNames)
   if is_refresh_book_tag == 1 then
     path.游戏首页()
     path.刷书签(sgetNumberConfig("refresh_book_tag_count", 0))

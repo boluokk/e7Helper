@@ -7,15 +7,15 @@ end
 
 -- isBack: 通过按back来回退
 path.游戏首页 = function ()
+  current_server = server_pkg_name[getUIRealValue('服务器', current_task.服务器)]
   isBack = true
   if not sAppIsRunning(current_server) or not sAppIsFront(current_server) then 
     isBack = false
     open(server_pkg_name[current_server]) 
   end
   setControlBarPosNew(0, 1)
-  local clickTarget = {'cmp_国服签到右下蓝底', 'cmp_国服签到右下蓝底2', 'cmp_国服公告X', 
-                       'cmp_国服登录第七史诗', 'cmp_国服服务器维护中'}
-  local t
+  local clickTarget = {'cmp_国服签到右下蓝底', 'cmp_国服签到右下蓝底2', 
+                       'cmp_国服公告X', 'cmp_国服登录第七史诗', 'cmp_国服放弃战斗', 'cmp_国服结束啊'}
   if wait(function ()
     -- 服务器维护中
     if findOne('cmp_国服服务器维护中') then return 'exit' end
@@ -34,14 +34,18 @@ path.游戏首页 = function ()
 end
 
 path.任务队列 = function ()
-  local allTask = {
-    '收取邮件', '刷竞技场', '领养宠物', '成就领取',
-    '宠物礼盒', '誓约召唤', '圣域收菜', '社团开启'
-  }
+  local allTask = table.filter(ui_option.任务, function (v)
+    return not v:includes({'社团签到', 
+                           '社团奖励', 
+                           '社团捐赠'})
+  end)
   local curTaskIndex = sgetNumberConfig("current_task_index", 0)
   for i,v in pairs(allTask) do
     if i > curTaskIndex and current_task[v] then
-      path[v]()
+      -- 0 表示异常
+      -- 1 或者 nil 表示 ok 
+      -- 2 表示重做
+      if path[v]() == 2 then path.回到主页() path[v]() end
       slog(v..'完成')
       setNumberConfig("exception_count", 1)
       path.回到主页()
@@ -58,7 +62,10 @@ path.社团开启 = function ()
     ssleep(1)
     if not findOne('cmp_国服主页Rank') then return 1 end
   end)
-  untilAppear('cmp_国服左上骑士团')
+  wait(function ()
+    stap({447,47})
+    if findOne('cmp_国服左上骑士团') then return 1 end
+  end)
 
   if current_task.社团签到 then path.社团签到() end
   if current_task.社团捐赠 then path.社团捐赠() end
@@ -107,13 +114,13 @@ end
 path.社团奖励 = function ()
   wait(function ()
     stap({1114,698})
-    if findOne('cmp_国服骑士团每周任务') then return 1 end
+    if findOne('cmp_国服骑士团每周任务', {sim = 1}) then return 1 end
   end)
   -- 上方小红点处理, 这个识别的mul_...可以公用
   if findTap('mul_国服每日每周小红球', {rg = {437,140,987,212}, sim = .98}) then
     wait(function ()
       stap({600,81})
-      if findOne('cmp_国服骑士团每周任务') then return 1 end
+      if findOne('cmp_国服骑士团每周任务', {sim = 1}) then return 1 end
     end)
   end
   -- 中间领取处理
@@ -122,8 +129,8 @@ path.社团奖励 = function ()
     wait(function ()
       if findTap('mul_国服骑士团任务领取', {rg = {866,255,990,722}}) then
         wait(function ()
-          stap({600,81})
-          if findOne('cmp_国服骑士团每周任务') then return 1 end
+          stap({424,30})
+          if findOne('cmp_国服骑士团每周任务', {sim = 1}) then return 1 end
         end)
       else
         return 1
@@ -144,7 +151,7 @@ path.刷书签 = function (rest)
   end)
   log('进入神秘商店')
   untilAppear('cmp_国服神秘商店立即更新')
-  ssleep(1)
+  untilAppear('cmp_国服神秘商店第一个商品') ssleep(.5)
   -- 开始挂机刷新书签了
   -- mul_国服神秘商店友情书签
   -- mul_国服神秘商店誓约书签
@@ -162,7 +169,8 @@ path.刷书签 = function (rest)
     if i > rest then
       for i=1,4 do
       -- 可能会出现乱买, 相似度不够高?
-      local pos, countTarget = findOne(target, {rg = {538,8,677,713}})
+      -- 第一排神秘会漏掉? todo 
+      local pos, countTarget = findOne(target, {rg = {538,30,677,720}}) -- 532,48,675,723
       if pos then
         local newRg = {1147, pos[2] - 80, 1226, pos[2] + 80}
         untilTap('mul_国服神秘商店购买', {rg = newRg})
@@ -212,7 +220,7 @@ path.刷书签 = function (rest)
       -- 如果网络不好会导致两次点击, 改成 sim = 1
       untilTap('cmp_国服神秘商店立即更新', {sim = 1})
       untilTap('cmp_国服神秘商店购买确认')
-      untilAppear('cmp_国服神秘商店第一个商品')
+      untilAppear('cmp_国服神秘商店第一个商品') ssleep(.5)
       setNumberConfig("exception_count", 1)
     end
     setNumberConfig("refresh_book_tag_count", i)
@@ -230,7 +238,7 @@ path.回到主页 = function ()
       if t and time() - t > 1000 then return 1 end
       return
     end
-    findTap({'cmp_国服派遣任务重新进行'}, {tapInterval = 0})
+    -- findTap({'cmp_国服派遣任务重新进行'}, {tapInterval = 0})
     if t then t = time() end
     -- stap(point.退出)
     back()
@@ -258,10 +266,10 @@ path.刷竞技场 = function ()
   if r2 == 'cmp_国服竞技场每周排名奖励' then
     slog('竞技场获取每周排名奖励')
     local rankIndex = current_task['竞技场每周奖励'] or 0
-    local pos = point.国服竞技场每周奖励[rankIndex]
+    local pos = point.国服竞技场每周奖励[rankIndex + 1]
     wait(function ()
       stap(pos)
-      if findOne(point.国服竞技场每周奖励判定[rankIndex]) then return 1 end
+      if findOne(point.国服竞技场每周奖励判定[rankIndex + 1]) then return 1 end
     end)
     untilTap('cmp_国服竞技场领取每周奖励')
   end
@@ -369,23 +377,50 @@ path.刷竞技场 = function ()
 end
 
 -- finish
-path.战斗代理 = function ()
+-- open2x 开启2倍数
+-- petSkill 神兽技能
+path.战斗代理 = function (isRepeat)
   log('战斗开始')
   -- 开启auto
-  untilAppear('cmp_国服Auto')
+  if not isRepeat then
+    untilAppear('cmp_国服Auto')
+    wait(function ()
+      stap('cmp_国服Auto')
+      ssleep(1)
+      if findOne(point.国服AUto成功) then return 1 end
+    end)
+  end
+
   wait(function ()
-    stap('cmp_国服Auto')
+    if findOne('cmp_国服二倍速') then return 1 end
     ssleep(1)
-    if findOne(point.国服AUto成功) then return 1 end
+    stap('cmp_国服二倍速')
   end)
 
   -- 等待结束
   -- 每次限定超时战斗为5分钟
-  wait(function ()
-    -- 部分会有一个结束前置页, 直接点击掉
-    stap({615,23})
-    if findTap({'cmp_国服战斗完成竞技场确定', 'cmp_国服战斗完成确定'}, {tapInterval = 1}) then return 1 end
-  end, game_running_capture_interval, 10 * 60)
+  if not isRepeat then
+    wait(function ()
+      -- 部分会有一个结束前置页, 直接点击掉
+      stap({615,23})
+      if findTap({'cmp_国服战斗完成竞技场确定', 'cmp_国服战斗完成确定'}, {tapInterval = 1}) then return 1 end
+    end, game_running_capture_interval, 10 * 60)
+  else
+    local target = {'战斗开始', '确认', '重新进行'}
+    local endTarget = {'cmp_国服行动力不足', 'cmp_国服战斗问号', 'cmp_国服背包空间不足'}
+    wait(function ()
+      if findOne('ocr_国服重复战斗完成', {keyword = {'重复战斗已结束'}}) 
+                  and findOne('ocr_国服右下角', {keyword = {'确认'}}) then 
+        wait(function ()
+          if not findTap('ocr_国服右下角', {keyword = target}) then 
+           if findOne(endTarget) then return 1 end 
+          end
+        end)
+        return 1
+      end
+      if findOne('cmp_国服神兽技能', {sim = .9}) then stap({903,664}) end
+    end, game_running_capture_interval, 25 * 7 * 60) -- 25 * 7 (一把7分钟)
+  end
   log('战斗代理完成')
 end
 
@@ -398,10 +433,13 @@ path.领养宠物 = function ()
     if not findOne('cmp_国服主页Rank') then return 1 end
   end)
   untilTap('cmp_国服宠物领养')
-  wait(function ()
+  if wait(function ()
     stap('cmp_国服宠物免费领养')
-    if not findOne('cmp_国服宠物免费领养') or findOne('cmp_国服宠物背包不足') then return 1 end
-  end)
+    if not findOne('cmp_国服宠物免费领养') then return 1 end
+    if findOne('cmp_国服宠物背包不足') then path.宠物背包清理() return 2 end
+  end) == 2 then
+    return 2
+  end
   -- 免费领取一次
   wait(function ()
     stap({34,151})
@@ -479,12 +517,13 @@ path.收取邮件 = function ()
   -- 部分无法用全部领取的
   wait(function ()
     if not findTap('cmp_国服邮件领取绿底') then return 1 end
-    local tmp, target = untilAppear({'cmp_国服邮件收信', 'cmp_国服邮件领取蓝底', 'cmp_国服邮件获得奖励Tip', 'cmp_国服邮件页面', 'cmp_国服邮件领取英雄确定'})
+    local tmp, target = untilAppear({'cmp_国服邮件收信', 'cmp_国服邮件领取蓝底', 'cmp_国服邮件获得奖励Tip', 
+                                     'cmp_国服邮件页面', 'cmp_国服邮件领取英雄确定'})
     if target and target ~= 'cmp_国服邮件页面' then untilTap(target) end
     wait(function ()
       stap({563,85})
       findTap('cmp_国服邮件领取英雄确定')
-      if findOne('cmp_国服邮件页面') then return 1 end
+      if findOne('cmp_国服邮件页面') then ssleep(.5) return 1 end
     end)
   end, 1, 5 * 60, nil, true)
 end
@@ -512,7 +551,7 @@ path.誓约召唤 = function ()
   if findTap('cmp_国服免费1次召唤') then untilTap('cmp_国服召唤确认') end
   wait(function ()
     stap({156,659})
-    if findOne('cmp_国服10次召唤', {sim = 1}) then return 1 end
+    if findOne('cmp_国服10次召唤') then return 1 end
   end)
 end
 
@@ -615,4 +654,469 @@ end
 
 path.净化深渊 = function ()
   
+end
+
+path.战斗选择页 = function ()
+  wait(function ()
+    stap(point.战斗)
+    ssleep(1)
+    if not findOne('cmp_国服主页Rank') then return 1 end
+  end)
+  untilAppear('cmp_国服战斗类型页')
+  wait(function ()
+    stap({280,260})
+    if not findOne('cmp_国服迷宫主页', {sim = 1}) then return 1 end
+  end)
+end
+
+-- 刷图
+path.刷图开启 = function ()
+  -- 图过滤
+  log('开启刷图')
+  -- 讨伐
+  local passAll = ui_option.战斗类型
+  for i,v in pairs(passAll) do
+    if current_task[v] then
+      path.战斗选择页()
+      wait(function ()
+        stap(point.战斗模式位置[v])
+        if findOne('ocr_国服战斗类型', {keyword = cutStringGetBinWord(v)}) then return 1 end
+      end)
+      if path[v]() ~= 0 then
+        slog(v..'完成')
+      else
+        slog(v..'未完成')
+      end
+      path.游戏首页()
+    end
+  end
+end
+
+-- 跑图模式1
+-- 讨伐 精灵祭坛
+-- 834,686 834,147
+-- typeTarget: mul_国服双足飞龙
+-- levelTarget: 13
+-- fightCount: 10
+path.通用刷图模式1 = function (typeTarget, levelTarget, fightCount)
+  local p
+  local key = {'阶段', '祭坛', '区域', '讨伐'}
+  -- 关卡
+  for i=1,3 do
+    if wait(function ()
+      if findTap(typeTarget, {rg = point.国服战斗类型区域, sim = .9}) then return 1 end
+      swipeEndStop({834,686}, {834,300}, .3)
+      ssleep(1)
+    end, 1, 5) then
+      break
+    else
+      sswipe({835,300}, {835,2000})
+      ssleep(1)
+    end
+    if i == 3 then slog('关卡可能未到开启时间') return 0 end
+  end
+  untilAppear('mul_国服短选择队伍')
+
+  -- 确定滑动到最上层
+  wait(function ()
+    if findOne('ocr_国服战斗级别', {keyword = {'1阶', '初级', '区域1'}}) then return 1 end
+    sswipe({835,100}, {835,3000})
+    ssleep(.5)
+    p = findOne('mul_国服级别光圈')
+    if p then point.ocr_国服战斗级别 = {p[1] - 100, p[2] - 130, p[1] + 100, p[2]} p = {p[1], p[2] + 50} end
+  end)
+  -- 遍历级别
+  local newTextVal
+  -- 新值重复次数
+  local newTextValReCount = 0
+  wait(function ()
+    local curTextVal
+    wait(function () curTextVal = findOne('ocr_国服战斗级别', {keyword = key}) end, 0, .5)
+    if curTextVal then curTextVal = curTextVal[1].text end
+    if curTextVal and curTextVal:find(levelTarget) then return 1 end
+    if not newTextVal then
+      newTextVal = curTextVal
+      newTextValReCount = newTextValReCount + 1
+    else
+      if newTextVal == curTextVal then 
+        newTextValReCount = newTextValReCount + 1
+      else
+        newTextVal = curTextVal
+        newTextValReCount = 0
+      end
+      if newTextValReCount == 3 then
+        sswipe({835,100}, {835,3000})
+        ssleep(1)
+        newTextVal = nil
+        newTextValReCount = 0
+      end
+    end
+    stap(p)
+    p = findOne('mul_国服级别光圈')
+    if p then point.ocr_国服战斗级别 = {p[1] - 100, p[2] - 130, p[1] + 100, p[2]} p = {p[1], p[2] + 50} end
+  end, 1, 5 * 60)
+
+  -- 0 表示此图并未打过
+  local selectGroup
+  local temp_other_ssleep_interval = other_ssleep_interval
+  other_ssleep_interval = 2
+  if not wait(function ()
+    if findTap('ocr_国服右下角', {keyword = {'选择队', '选择'}}) then return 1 end
+  end, .1, 8) then
+    return 0
+  end
+  temp_other_ssleep_interval = temp_other_ssleep_interval
+
+  untilAppear('ocr_国服右下角', {keyword = {'战斗开始'}})
+  local greenPos
+  if not wait(function ()
+    greenPos = findOne('mul_国服是否可自动挂机', {rg = {495,489,776,608}, sim = .9})
+    if greenPos then return 1 end
+  end, .1, 1) then
+    log('未开启自动挂机')
+    slog('未开启自动挂机')
+    return 0
+  else
+    wait(function ()
+      if findOne('mul_国服重复战斗绿色', {rg = {495,489,776,608}, sim = .9}) then return 1 end
+      ssleep(1)
+      stap(greenPos)
+    end)
+  end
+
+  -- untilTap('ocr_国服右下角', {keyword = {'战斗开始'}})
+
+  local pos, noAct
+  if wait(function ()
+    pos, noAct = findOne({'cmp_国服行动力不足', 'ocr_国服右下角'}, {keyword = {'战斗开始'}})
+    if noAct == 'cmp_国服行动力不足' then 
+      slog('行动力不足') 
+      log('行动力不足!')
+      if path.补充体力() == 0 then return 0 end
+    end
+    if noAct == 'ocr_国服右下角' then stap({pos[1].l, pos[1].t}) end
+    if findOne({'cmp_国服二倍速', 'cmp_国服一倍速'}) then return 1 end
+  end) == 0  then
+    return 0
+  end
+  local tmp, noAction
+  wait(function ()
+    tmp, noAction = findOne({'cmp_国服二倍速', 'cmp_国服一倍速'})
+    if noAction then return 1 end
+  end)
+
+  local staticTarget = {'cmp_国服二倍速', 'cmp_国服行动力不足', 'cmp_国服一倍速', 'cmp_国服背包空间不足'}
+
+  for i=1,fightCount do
+    path.战斗代理(true) 
+
+    wait(function ()
+      -- 疲劳问题
+      wait(function ()
+        tmp, noAction = findOne(staticTarget)
+        if noAction then return 1 end
+      end)
+      if noAction == 'cmp_国服行动力不足' then 
+        slog('行动力不足') 
+        log('行动力不足!')
+        if path.补充体力() == 0 then return 0 end
+      end
+      -- 判定背包类型
+      if noAction == 'cmp_国服背包空间不足' then
+        slog('清理背包空间')
+        log('清理背包空间!')
+        local bagSpaceType
+        local bagKey = {'英雄', '装备', '神器'}
+        wait(function ()
+          bagSpaceType = findOne('ocr_背包满类型', {keyword = bagKey})
+          if bagSpaceType then
+            bagSpaceType = bagSpaceType[1].text
+            return 1
+          end
+        end)
+        if bagSpaceType:includes({'英雄'}) then
+          path.清理英雄背包()
+        elseif bagSpaceType:includes({'装备'}) then
+          path.清理装备背包()
+        elseif bagSpaceType:includes({'神器'}) then
+          path.清理神器背包()
+        end
+        -- 再次点击，可能还会出现背包问题
+        wait(function ()
+          if findOne('ocr_国服右下角', {keyword = '战斗开始'}) then
+            if findOne(staticTarget) then return 1 end
+            stap({1150,659})
+          end
+        end)
+      end
+      return 1
+    end, 1, 5 * 60)
+
+    log('完成次数: '..i)
+  end
+
+end
+
+path.补充体力 = function ()
+  local energyType = current_task.补充行动力类型
+  local targetRg = {352,237,935,456}
+  local pos
+  if energyType == 2 then slog('不补充行动力') return 0 end
+  if energyType == 0 then
+    if not wait(function ()
+      pos = findOne('mul_国服行动力叶子', {rg = targetRg})
+      if pos then stap(pos) return 1 end
+    end, .1, 3) then
+      slog('未能补充行动力')
+      return 0
+    end
+  end
+  if energyType == 1 then
+    -- 存在叶子
+    -- 不存在叶子
+    if not wait(function ()
+      pos = findOne({'mul_国服行动力叶子', 'mul_国服行动力砖石'}, {rg = targetRg})
+      if pos then stap(pos) return 1 end
+    end) then
+      slog('未能补充行动力')
+      return 0
+    end
+  end
+  -- 点击确认
+  -- 可能有bug, 如果叶子和砖石都没有了
+  -- untilTap('cmp_国服竞技场购买票')
+  if not wait(function ()
+    if findTap('cmp_国服竞技场购买票') then return 1 end
+  end, .1, 8) then
+    slog('购买行动力失败')
+    return 0
+  end
+  return 1
+end
+
+-- 跑图模式2
+path.通用刷图模式2 = function ()
+  
+end
+
+-- 跑图
+path.讨伐 = function ()
+  local type = 'mul_国服'..getUIRealValue('讨伐关卡类型', '讨伐类型')
+  local level = getUIRealValue('讨伐级别', '讨伐级别')
+  local fc = current_task.讨伐次数
+  return path.通用刷图模式1(type, level, fc)
+end
+
+path.精灵祭坛 = function ()
+  local type = 'mul_国服'..getUIRealValue('精灵祭坛关卡类型', '精灵祭坛类型')..'精灵'
+  local level = getUIRealValue('精灵祭坛级别', '精灵祭坛级别')
+  local fc = current_task.精灵祭坛次数
+  return path.通用刷图模式1(type, level, fc)
+end
+
+path.净化深渊 = function ()
+  wait(function ()
+    stap(point.战斗)
+    ssleep(1)
+    if not findOne('cmp_国服主页Rank') then return 1 end
+  end)
+  path.战斗选择页()
+  wait(function ()
+    stap(point.战斗模式位置['深渊'])
+    if findOne('ocr_国服战斗类型', {keyword = cutStringGetBinWord('深渊')}) then return 1 end
+  end)
+  if findTap('cmp_国服深渊净化') then
+    untilTap('cmp_国服深渊净化确认')
+  end
+end
+
+path.宠物背包清理 = function ()
+  wait(function ()
+    stap({1160,668})
+    if findOne('cmp_国服宠物自动补满') then
+      return 1
+    end
+  end)
+
+  wait(function ()
+    stap('cmp_国服宠物自动补满')
+    ssleep(1)
+    if findOne('cmp_国服设置自动填充目标') then return 1 end
+  end)
+
+  path.过滤背包选择(ui_option.宠物级别, 'cmp_国服宠物')
+  -- 特殊造型
+  wait(function ()
+    if findOne('cmp_国服不包含特点造型宠物') then return 1 end
+    stap('cmp_国服不包含特点造型宠物')
+  end)
+
+  wait(function ()
+    stap({995,657})
+    if not findOne('cmp_国服设置自动填充目标') then
+      return 1
+    end
+  end)
+
+  -- 释放宠物
+  untilTap('cmp_国服释放宠物')
+  untilTap('cmp_国服邮件领取确认蓝底')
+end
+
+path.清理装备背包 = function ()
+  wait(function ()
+    if findOne('cmp_国服背包装备自动选择') then
+      return 1
+    end
+    stap({1081,157})
+  end)
+  wait(function ()
+    if findOne('mul_国服背包绿钩') then
+      return 1
+    end
+    stap('cmp_国服背包装备自动选择')
+  end)
+  path.过滤背包选择(ui_option.装备类型, 'cmp_国服')
+  path.过滤背包选择(ui_option.装备等级, 'cmp_国服')
+  path.过滤背包选择(ui_option.装备强化等级, 'cmp_国服')
+
+  -- 武器类型很奇怪, 我大号里武器并又没满，但是没有这几个选项(可能是背包没有慢的原因)
+  -- test
+  local weaponType = {
+    '185|231|00CB64',
+    '185|284|00CB64',
+    '185|336|00CB64',
+    '185|389|00CB64',
+    '185|444|00CB64',
+    '186|496|00CB64',
+  }
+
+  for i,v in pairs(weaponType) do
+    local pos = string.split(v, '|')
+    pos = {tonumber(pos[1]), tonumber(pos[2])}
+    wait(function ()
+      if findOne(v) then return 1 end
+      stap(pos)
+    end)
+  end
+
+  wait(function ()
+    if findOne('cmp_国服背包装备自动选择') then
+      return 1
+    end
+    stap({334,90})
+  end)
+
+  untilTap('cmp_国服装备出售')
+  untilTap('cmp_国服邮件领取确认蓝底')
+  wait(function ()
+    if findOne('ocr_国服右下角', {keyword = '战斗开始'}) then
+      return 1
+    end
+    stap({486,17})
+  end)
+end
+
+path.清理英雄背包 = function ()
+  wait(function ()
+    stap({1019,666})
+    if findOne('cmp_国服传送英雄') then return 1 end
+  end)
+
+  wait(function ()
+    stap({1081,89})
+    ssleep(1)
+    if findOne('715|210|44C8FD,715|260|45CBFE,715|312|44C8FD') then
+      return 1
+    end
+  end)
+  -- 过滤等级
+  path.过滤背包选择(ui_option.英雄等级, 'cmp_国服英雄')
+
+  -- 特殊设置
+  local specialSetting = {
+    '883|605|00CB64', -- 隐藏收藏英雄
+    '883|657|00CB64', -- 隐藏亲密度10
+    '587|657|00CB64', -- 隐藏MAX等级
+  }
+  for i,v in pairs(specialSetting) do
+    local pos = string.split(v, '|')
+    pos = {tonumber(pos[1]), tonumber(pos[2])}
+    wait(function ()
+      if findOne(v) then return 1 end
+      stap(pos)
+    end)
+  end
+  
+  wait(function ()
+    stap({548,34})
+    if findOne('cmp_国服传送英雄') then return 1 end
+  end)
+
+  wait(function ()
+    if longDisappearMomentTap("1052|242|7E411F", nil, nil, 1) or findOne('714|543|41C2FC') then
+      return 1
+    end
+    stap({1121,273})
+  end)
+
+  wait(function ()
+    stap({548,34})
+    if findOne('cmp_国服传送英雄') then return 1 end
+  end)
+
+  untilTap('cmp_国服传送英雄')
+  untilTap('cmp_国服邮件领取确认蓝底')
+  path.跳转('ocr_国服右下角', {keyword = '战斗开始'})
+end
+
+path.清理神器背包 = function ()
+  wait(function ()
+    if findOne('cmp_国服背包装备自动选择') then
+      return 1
+    end
+    stap({1081,157})
+  end)
+  wait(function ()
+    if findOne('mul_国服背包绿钩') then
+      return 1
+    end
+    stap('cmp_国服背包装备自动选择')
+  end)
+  path.过滤背包选择(ui_option.神器星级, 'cmp_国服神器')
+  path.过滤背包选择(ui_option.神器强化, 'cmp_国服神器强化')
+
+  untilTap('cmp_国服神器出售')
+  untilTap('cmp_国服邮件领取确认蓝底')
+  path.跳转('ocr_国服右下角', {keyword = '战斗开始'})
+end
+-- 过滤等级或者类型
+-- level：级别table
+-- target: 目标前缀
+path.过滤背包选择 = function (level, target)
+  for i,v in pairs(level) do
+    local target = target..v
+    if current_task[v] then
+      wait(function ()
+        if findOne(target) then return 1 end
+        stap(target)
+      end)
+    else
+      wait(function ()
+        if not findOne(target) then
+          return 1
+        end
+        stap(target)
+      end)
+    end
+  end
+end
+
+path.跳转 = function (target, config)
+  wait(function ()
+    if not longAppearMomentDisAppear(target, config, nil, .5) then
+      return 1
+    end
+    back()
+  end, 1, 5 * 60)
 end

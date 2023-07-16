@@ -25,7 +25,7 @@ fileMapping = {
 md5 = hashlib.md5()
 
 
-# 将文件复制到你的懒人精灵下(自动创建项目)
+# 会自动将文件复制到你的懒人精灵下(自动创建项目)
 def copy():
     mkDir(fileMapping, projectPath)
 
@@ -138,6 +138,7 @@ def saveAndPush():
     print('push 成功!')
 
 
+# 远程拉去最新代码
 def updateLocal():
     os.system('git pull')
     copy()

@@ -59,14 +59,23 @@ findOne = function (target, config)
 			if cmpColorEx(point['cmp_国服Connection'], 1) == 0 then keepCapture() return true end
 		end, 1, nil, true)
 	end
+	-- 维护公告关闭掉
+	if cmpColorEx(point['cmp_国服维护公告'], 1) == 1 then
+		tap(421,142)
+		ssleep(1)
+		releaseCapture()
+		if cmpColorEx(point['cmp_国服邮件领取确认蓝底'], .95) == 1 then
+			tap(743,442)
+			return
+		end
+	end
 	
 	-- 账号被顶之类的 todo 
 		
 	for i=1,#target do
 		tar = target[i]
-		if detail_log_message then log(tar) end
 		if tar == "" then return end
-		if not debug_disabled then log(tar) end
+		if detail_log_message then log(tar) end
 		if tar:find('img_') then
 			ret,x,y = findPicEx(config.rg[1], config.rg[2], config.rg[3], config.rg[4], tar..config.imgEnd, config.sim)
 			if x ~= -1 then return {x, y}, tar end
@@ -116,7 +125,6 @@ end
 findTap = function (target, config)
 	local r,w = findOne(target, config)
 	if not config then config = {} end
-	-- if r then stap(r) return true end
 	if r then
 		return wait(function ()
 			if type(r[1]) == 'table' then
@@ -124,9 +132,8 @@ findTap = function (target, config)
 			else
 				stap(r, config.tapInterval)
 			end
-			-- if config and config.tapSleepsTime then ssleep(tapSleepsTime) end
 			ssleep(other_ssleep_interval)
-			if not findOne(target, config) then return w end
+			if not findOne(w, config) then return w end
 		end)
 	end
 end
@@ -213,6 +220,8 @@ longDisappearTap = function (target, config, pos, timeout, waitTimeOut)
 end
 
 -- 显示多久 [确保必须是appear页面]
+-- 显示中间突然断掉 true
+-- 显示到时间完 false
 longAppearMomentDisAppear = function (target, config, pos, timeout)
 	local t = time()
 	local timeout = timeout or 1.5
@@ -288,12 +297,6 @@ wait = function (func, interval, TIMEOUT, disableRestartGame)
 	
 end
 
--- find operator set position
--- 0 < q1 <= 5 and 0 < q2 <= 10
-findOSP = function (queue)
-	return point.operatorSet[queue[1]][queue[2]]
-end
-
 -- log_history = {}
 log = function(...)
 	if disable_log then return end
@@ -327,7 +330,6 @@ getLC = function (name)
 	local data = getStringConfig(name)
 	if data then jsonLib.decode(data) end
 end
-
 
 sswipe = function (s, e)
 	touchDown(1, s[1], s[2])
@@ -371,15 +373,12 @@ fingerSwiperPath = function (firstPoint, otherPoints, interval)
 	
 end
 
--- 特别处理 控制中枢
--- 有异常，并不是每次结果都是一样的???
-swiperWithOperator = function ()
-	touchDown(0, 1227, 360)
-	touchDown(1, 1227, 360)
-	sleep(50)
-	touchMoveEx(0, -503, 360, 50)
-	touchMoveEx(0, -503, 360, 500)
-	touchUp(0)
+-- 滑动后暂停
+swipeEndStop = function (start, dest, stopTime, swTime)
+	touchDown(1, start[1], start[2])
+	ssleep(.05)
+	touchMoveEx(1, dest[1], dest[2], swTime or 500)
+	ssleep(stopTime or 0)
 	touchUp(1)
 end
 
@@ -465,6 +464,7 @@ end
 
 read = function (path, needDecode)
 	local resource = readFile(root_path..path)
+	if resource and #resource == 0 then return {} end
 	if needDecode then
 		resource = jsonLib.decode(resource)
 	end
@@ -723,6 +723,28 @@ table.containsTable = function (old, new)
 	return ans
 end
 
+-- 将多个table合并成一个table: 包括key和value
+mergeTables = function(...)
+    local mergedTable = {}
+    
+    local function mergeTable(table)
+        for key, value in pairs(table) do
+            if type(value) == "table" then
+                mergedTable[key] = mergeTable(value)
+            else
+                mergedTable[key] = value
+            end
+        end
+    end
+    
+    local tables = {...}
+    for _, table in ipairs(tables) do
+        mergeTable(table)
+    end
+    
+    return mergedTable
+end
+
 --  in = {
 --    "A" = {1,4,5,7},
 --    "B" = {1,2,5,6},
@@ -865,7 +887,6 @@ filterImgSuffix = function (t)
 	end
 	return c
 end
-
 
 -- 获取倒数时间
 getTimeBase = function (secound)
@@ -1161,7 +1182,6 @@ input = function(selector, text)
 	for _, n in pairs(node) do nodeLib.setText(n, text) end
 end
 
-
 stringMather = function (fun, str)
 	local str = string.trim(str)
 	if #str == 0 then return end
@@ -1216,11 +1236,26 @@ open = function (appid)
 	runApp(appid)
 end
 
+-- displaySizeWidth
+-- displaySizeHeight
 stoast = function (message, x, y, messageSize)
+	-- 0无旋转 1表示屏幕逆时针旋转90度 2表示屏幕逆时针旋转180度 3表示屏幕逆时针旋转270度
 	if getDisplayRotate() == 0 then
-		toast(message, x or 0, y or 0, messageSize or 12)
+		if displaySizeWidth == 720 then
+			toast(message, x or 0, y or 0, messageSize or 12)
+			return
+		end
+		if displaySizeWidth == 1280 then
+			toast(message, x or 0, y or 720, messageSize or 8)
+		end
 	else
-		toast(message, x or 0, y or 720, messageSize or 8)
+		if displaySizeWidth == 720 then
+			toast(message, x or 0, y or 720, messageSize or 8)
+			return
+		end
+		if displaySizeWidth == 1280 then
+			toast(message, x or 0, y or 0, messageSize or 12)
+		end
 	end
 end
 
@@ -1269,19 +1304,14 @@ hotUpdate = function ()
 	
 	stoast("正在检查更新...")
 	-- local fileMsg = hotUpdateProcess(staticFileUrl, {"filesMD5", getStringConfig("filesMD5")}, ".zip")
-	local scriptMsg = hotUpdateProcess(scriptFileUrl, {"scriptMD5", getStringConfig("scriptMD5")}, ".lr")
-	-- local m1 = fileMsg and fileMsg.message
-	local m2 = scriptMsg
+	local scriptMsg, state = hotUpdateProcess(scriptFileUrl, {"scriptMD5", getStringConfig("scriptMD5")}, ".lr")
 	
-	if m1 or m2 then
-		local message = ""
-		-- local count = 1
-		-- if m1 then message = message..count.."："..m1.."\n" count = count + 1 end
-		if m2 then message = m2 end
-		wait(function () toast(message) end, 1, 2)
+	if scriptMsg then
+		slog(scriptMsg)
+		toast(scriptMsg)
 	end
 	
-	if scriptMsg then reScript() end
+	if state == 0 then reScript() end
 end
 
 -- 第一次初始化
@@ -1298,12 +1328,13 @@ hotUpdateProcess = function (url, validFileMd5, fileSuffix)
 		if fileName then
 			resolveZipFile(splitFileName)
 			setLC(stringkey, newAppInfo)
-			return newAppInfo
+			return newAppInfo, 0
 		else
 			log("文件下载异常，请重试") ssleep(1) exit()
 		end
 	end
 	log("已经最新版本")
+	return newAppInfo, 1
 end
 
 -- 成功返回
@@ -1335,9 +1366,7 @@ resolveZipFile = function (fileNameArray)
 	end
 end
 
-sdelfile = function (path)
-	delfile(root_path..path)
-end
+sdelfile = function (path) delfile(root_path..path) end
 
 shttpGet = function (url, disableDecode)
 	local ret, code = httpGet(url)
@@ -1436,7 +1465,7 @@ tipCheckServer = function (close)
 end
 
 untilTap = function (target, config)
-	wait(function () if findTap(target, config) then return true end end)
+	wait(function () if findTap(target, config) then return 1 end end)
 end
 
 untilAppear = function (target, config)
@@ -1469,3 +1498,46 @@ back = function ()
 	log('back')
 	keyPress("back")
 end
+
+-- 本身 + 对半获取词
+-- input: 欧多马顿
+-- output:
+--				欧多马顿
+--				欧多
+--				马顿
+cutStringGetBinWord = function (input)
+    local output = {}
+    local len = getStringLength(input)
+    local step = math.floor(len / 2)
+    table.insert(output, input)
+    for i = 1, len, step do
+        local firstPart = utf8.mid(input, i, step)
+        table.insert(output, firstPart)
+    end
+    return output
+end
+
+-- 数据格式转换, 针对UI配置30
+uiDataCovert = function (data)
+  local ans = {}
+  for i,v in pairs(data) do
+		if tonumber(v) then
+			ans[i] = tonumber(v)
+		else
+			ans[i] = v
+		end
+  end
+  return ans
+end
+
+-- ui 配置文件合并
+-- 手动过滤一些特殊值
+-- 直接将UI配置选项, 配置到point中去, 这样能保证下标数字和真正的值都能用
+uiConfigUnion = function (fileNames)
+  local ans = {}
+  for i,v in pairs(fileNames) do table.insert(ans, uiDataCovert(read(v, true))) end
+  return mergeTables(ans)
+end
+
+-- get UI real value
+getUIRealValue = function (optionName, indexName) return ui_option[optionName][current_task[indexName] + 1] end
