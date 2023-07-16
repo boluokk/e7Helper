@@ -7,7 +7,7 @@ end
 
 -- isBack: 通过按back来回退
 path.游戏首页 = function ()
-  current_server = server_pkg_name[getUIRealValue('服务器', current_task.服务器)]
+  current_server = getUIRealValue('服务器', '服务器')
   isBack = true
   if not sAppIsRunning(current_server) or not sAppIsFront(current_server) then 
     isBack = false

@@ -11,7 +11,7 @@
 #### 此APP工具源码: [https://gitee.com/boluokk/e7-helper](https://gitee.com/boluokk/e7-helper) （好用就给个star吧, 你的star将会是作者更新的最大动力!）👍
 
 ### 最近更新: 
-- 更新文档
+- 添加B服支持、横屏支持1280x720(DPI320)
 
 ### 设备兼容
 
