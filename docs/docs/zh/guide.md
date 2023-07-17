@@ -8,10 +8,10 @@
 
 #### 源码借鉴: [https://github.com/tkkcc/ArkLights](https://github.com/tkkcc/ArkLights)（一款明日方舟自动化工具）👍
 
-#### 此APP工具源码: [https://gitee.com/boluokk/e7-helper](https://gitee.com/boluokk/e7-helper) （好用就给个star吧, 你的star将会是作者更新的最大动力!）👍
+#### 此APP工具源码: [https://gitee.com/boluokk/e7-helper](https://gitee.com/boluokk/e7-helper) （好用就给个star吧, 你的star将会是作者最大的帮助）👍
 
 ### 最近更新: 
-- 添加B服支持、横屏支持1280x720(DPI320)
+- 添加刷图(讨伐 + 精灵祭坛)
 
 ### 设备兼容
 
@@ -47,6 +47,8 @@
 1. #### 模拟器玩E7很卡?
    > 可以通过修改程序优先级: [https://www.ldmnq.com/forum/45337.html](https://www.ldmnq.com/forum/45337.html)
 2. #### 为什么我刷标签会在主界面乱点或者没反应?
-   > 将主题设置成默认的酒馆主题
+   > 在脚本中选中主题为 [自定义] 选项
 3. #### 软件第一次打开为什么一直在等待root开启?
    > 在模拟器设置中将root开启(找不到, 百度xx模拟器怎么开启root)
+4. #### 为什么脚本点击开始会弹出背包设置?
+   > 脚本中部分功能运行中会需要清理背包: 收取宠物、刷图

@@ -26,7 +26,7 @@ wait_interval = .5
 -- 禁用测试
 disable_test = true
 -- 详细日志
-detail_log_message = true
+detail_log_message = false
 -- 是否异常退出
 is_exception_quit = false
 -- UI配置完毕

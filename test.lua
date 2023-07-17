@@ -23,8 +23,10 @@ test = function ()
   -- path.清理英雄背包()
   -- path.清理装备背包()
   -- path.清理神器背包()
-  local key = {'英雄', '装备', '神器'}
-  log(findOne('ocr_国服右下角'))
+  -- local key = {'英雄', '装备', '神器'}
+  -- log(findTap('cmp_国服背包空间不足'))
+  -- path.背包处理()
+  log(findOne({'cmp_国服背包空间不足', 'cmp_国服行动力不足' , 'cmp_国服战斗问号'}))
   exitScript()
 end
 if not disable_test then test() end

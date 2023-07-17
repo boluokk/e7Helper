@@ -68,6 +68,9 @@ end
 dismiss = function (id) ui.dismiss(id) end
 suie.取消 = exit
 suie.启动 = function ()
+  -- 是否配置了清理背包(必须配置, 不然会出问题卡死)
+  log('背包配置文件')
+  if not sFileExist('bagConfig.txt') then log('请配置满背包处理!') suie.清理背包() return end
   suie.开启前()
   if print_config_info then
     print(current_task)
@@ -160,7 +163,7 @@ sui.show = function ()
   addRadioGroup('社团捐赠类型', ui_option.社团捐赠类型)
   newRow()
   local tag = ui_option.刷标签类型
-  addTextView('刷书签: ')
+  addTextView('书签: ')
   for i,v in pairs(tag) do 
     if i == 3 then
       addCheckBox(v, v, nil)
@@ -168,6 +171,9 @@ sui.show = function ()
       addCheckBox(v, v, nil, true)
     end
   end
+  newRow()
+  addTextView('主题(商店位置不一样):')
+  addRadioGroup('主题', ui_option.主题)
   newRow()
   addTextView('次数:')
   addEditText('更新次数', '333')
@@ -180,12 +186,8 @@ sui.show = function ()
   newRow()
   addButton('刷新UI')
   addTextView('  |  ')
-  addButton('刷图设置')
-  addButton('定时(未做)')
-  newRow()
-  addButton('刷初始(未做)')
-  addTextView('  |  ')
   addButton('清理背包')
+  addButton('刷图设置')
   ui.show(parentUid, false)
 
   -- load config
@@ -200,14 +202,14 @@ sui.showGrindSetting = function ()
   -- addButton('刷图测试', grindUid)
   local passAll = ui_option.战斗类型
   for i,v in pairs(passAll) do
-    -- if i == 1 or i == 3 then
-      -- addCheckBox(v, v, grindUid)
-    -- else
+    if i == 1 or i == 3 then
+      addCheckBox(v, v, grindUid)
+    else
       addCheckBox(v, v, grindUid)
       -- 暂时禁用
       -- todo
       setDisabled(v)
-    -- end
+    end
   end
   newRow(grindUid)
   addTextView('补充行动力:', grindUid)
@@ -252,25 +254,43 @@ sui.showBagSetting = function ()
   newRow(bagUid)
   addTextView('宠物背包', bagUid)
   newRow(bagUid)
+  -- 默认: B C D
   for i,v in pairs(ui_option.宠物级别) do
-    addCheckBox(v, v, bagUid)
+    if v:includes({'B', 'C', 'D'}) then
+      addCheckBox(v, v, bagUid, true)
+    else
+      addCheckBox(v, v, bagUid)
+    end
   end
   newRow(bagUid)
   addTextView('装备背包', bagUid)
   newRow(bagUid)
+  -- 默认：
   for i,v in pairs(ui_option.装备类型) do
-    addCheckBox(v, v, bagUid)
+    if v:includes({'一般', '高级', '稀有'}) then
+      addCheckBox(v, v, bagUid, true)
+    else
+      addCheckBox(v, v, bagUid)
+    end
   end
   newRow(bagUid)
   for i,v in pairs(ui_option.装备等级) do
-    addCheckBox(v, v, bagUid)
+    if v:includes({'28', '42', '57', '71', '72'}) then
+      addCheckBox(v, v, bagUid, true)
+    else
+      addCheckBox(v, v, bagUid)
+    end
     if i % 4 == 0 then
       newRow(bagUid)
     end
   end
   newRow(bagUid)
   for i,v in pairs(ui_option.装备强化等级) do
-    addCheckBox(v, v, bagUid)
+    if v:includes({'+0', '9'}) then
+      addCheckBox(v, v, bagUid, true)
+    else
+      addCheckBox(v, v, bagUid)
+    end
     if i % 4 == 0 then
       newRow(bagUid)
     end
@@ -279,14 +299,22 @@ sui.showBagSetting = function ()
   addTextView('神器背包', bagUid)
   newRow(bagUid)
   for i,v in pairs(ui_option.神器星级) do 
-    addCheckBox(v, v, bagUid)
+    if v:includes({'1', '2', '3'}) then
+      addCheckBox(v, v, bagUid, true)
+    else
+      addCheckBox(v, v, bagUid)
+    end
     if i % 7 == 0 then
       newRow(bagUid)
     end
   end
   newRow(bagUid)
   for i,v in pairs(ui_option.神器强化) do
-    addCheckBox(v, v, bagUid)
+    if v:includes({'+0', '10'}) then
+      addCheckBox(v, v, bagUid, true)
+    else
+      addCheckBox(v, v, bagUid)
+    end
     if i % 4 == 0 then
       newRow(bagUid)
     end
@@ -295,7 +323,11 @@ sui.showBagSetting = function ()
   addTextView('英雄等级', bagUid)
   newRow(bagUid)
   for i,v in pairs(ui_option.英雄等级) do 
-    addCheckBox(v, v, bagUid)
+    if v:includes({'1', '2', '3'}) then
+      addCheckBox(v, v, bagUid, true)
+    else
+      addCheckBox(v, v, bagUid)
+    end
     if i % 7 == 0 then
       newRow(bagUid)
     end
