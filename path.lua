@@ -211,7 +211,7 @@ path.刷书签 = function (rest)
         end)
       end
       end
-      msg = '刷新次数: '..i..'(神秘奖牌: '..g1..'*5, 誓约书签: '..g2..'*5, 友情书签: '..g3..'*5)'
+      msg = '刷新次数: '..i..'/'..refreshCount..'(神秘奖牌: '..g1..'*5, 誓约书签: '..g2..'*5, 友情书签: '..g3..'*5)'
       if not enoughResources then 
         log('资源耗尽!')
         slog('资源耗尽!')

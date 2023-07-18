@@ -4,6 +4,14 @@ time = systemTime
 root_path = getWorkPath() .. '/'
 -- 禁止热更新
 hotupdate_disabled = true
+-- log 日志显示在左下角
+-- true stoat 打印
+-- false print 打印
+logger_display_left_bottom = true
+-- 禁用测试
+disable_test = true
+-- 详细日志
+detail_log_message = false
 -- 截图延迟
 capture_interval = 0
 -- 游戏代理识图间隔
@@ -23,10 +31,6 @@ server_pkg_name = {
 current_server = "国服"
 -- wait 间隔
 wait_interval = .5
--- 禁用测试
-disable_test = true
--- 详细日志
-detail_log_message = false
 -- 是否异常退出
 is_exception_quit = false
 -- UI配置完毕
@@ -55,10 +59,6 @@ other_ssleep_interval = 1
 single_task_resttime = 5
 -- 开源说明手册地址
 open_resource_doc = 'https://boluokk.gitee.io/e7-helper'
--- log 日志显示在左下角
--- true stoat 打印
--- false print 打印
-logger_display_left_bottom = true
 -- 打印配置信息
 print_config_info = false
 require("point")
@@ -93,7 +93,7 @@ end)
 -- 分辨率 720x1280
 -- 或者   1280x720
 local disPlayDPI = getDisplayDpi()
-local displaySizeWidth, displaySizeHeight = getDisplaySize()
+displaySizeWidth, displaySizeHeight = getDisplaySize()
 if disPlayDPI ~= 320 or ((displaySizeHeight ~= 1280 and displaySizeHeight > 0) and 
                          (displaySizeHeight ~= 720 and displaySizeHeight > 0)) 
                      or ((displaySizeWidth ~= 720 and displaySizeWidth > 0) and 
