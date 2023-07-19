@@ -6,7 +6,7 @@
 
 #### QQ群: 206490280 
 
-#### 源码借鉴: [https://github.com/tkkcc/ArkLights](https://github.com/tkkcc/ArkLights)（一款明日方舟自动化工具）👍
+#### 感谢贡献: [https://github.com/tkkcc/ArkLights](https://github.com/tkkcc/ArkLights)（一款明日方舟自动化工具）👍
 
 #### 此APP工具源码: [https://gitee.com/boluokk/e7-helper](https://gitee.com/boluokk/e7-helper) （好用就给个star吧, 你的star将会是作者最大的帮助）👍
 

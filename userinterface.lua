@@ -69,7 +69,6 @@ dismiss = function (id) ui.dismiss(id) end
 suie.取消 = exit
 suie.启动 = function ()
   -- 是否配置了清理背包(必须配置, 不然会出问题卡死)
-  log('背包配置文件')
   if not sFileExist('bagConfig.txt') then log('请配置满背包处理!') suie.清理背包() return end
   suie.开启前()
   if print_config_info then
@@ -124,15 +123,15 @@ end
 -- 主页
 sui.show = function ()
   newLayout()
-  newRow()
+  -- newRow()
   -- 开源信息
-  addTextView('此脚本软件完全免费开源\n'..
-              '好用就给个star吧-_-, 这是给开发者最大的帮助\n'..
-              'QQ群：206490280 \n'..
-              'QQ频道号：24oyp5x92q \n'..
-              '开源地址：https://gitee.com/boluokk/e7-helper \n'..
-              '使用说明书：https://boluokk.gitee.io/e7-helper')
-  newRow()
+  -- addTextView('此脚本软件完全免费开源\n'..
+  --             '好用就给个star吧-_-, 这是给开发者最大的帮助\n'..
+  --             'QQ群：206490280 \n'..
+  --             'QQ频道号：24oyp5x92q \n'..
+  --             '开源地址：https://gitee.com/boluokk/e7-helper \n'..
+  --             '使用说明书：https://boluokk.gitee.io/e7-helper')
+  -- newRow()
   -- 服务器
   addTextView('服务器: ')
   local servers = ui_option.服务器
