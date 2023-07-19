@@ -8,10 +8,10 @@ hotupdate_disabled = true
 -- true stoat 打印
 -- false print 打印
 logger_display_left_bottom = true
--- 禁用测试
-disable_test = true
 -- 详细日志
 detail_log_message = false
+-- 禁用测试
+disable_test = true
 -- 截图延迟
 capture_interval = 0
 -- 游戏代理识图间隔
@@ -30,7 +30,7 @@ server_pkg_name = {
 -- 当前服务器
 current_server = "国服"
 -- wait 间隔
-wait_interval = .5
+wait_interval = .6
 -- 是否异常退出
 is_exception_quit = false
 -- UI配置完毕
@@ -56,7 +56,7 @@ check_game_identify_timeout = getMillisecond(20)
 -- 其他ssleep间隔
 other_ssleep_interval = 1
 -- 单任务休息时间
-single_task_resttime = 5
+single_task_rest_time = 5
 -- 开源说明手册地址
 open_resource_doc = 'https://boluokk.gitee.io/e7-helper'
 -- 打印配置信息

@@ -14,8 +14,9 @@ path.游戏首页 = function ()
     open(server_pkg_name[current_server]) 
   end
   setControlBarPosNew(0, 1)
-  local clickTarget = {'cmp_国服签到右下蓝底', 'cmp_国服签到右下蓝底2', 
-                       'cmp_国服公告X', 'cmp_国服登录第七史诗', 'cmp_国服放弃战斗', 'cmp_国服结束啊'}
+  local clickTarget = {'cmp_国服签到右下蓝底', 'cmp_国服签到右下蓝底2', 'cmp_国服公告X', 
+                       'cmp_国服登录第七史诗', 'cmp_国服放弃战斗', 'cmp_国服结束啊',
+                       'cmp_国服神秘商店取消',}
   if wait(function ()
     -- 服务器维护中
     if findOne('cmp_国服服务器维护中') then return 'exit' end
@@ -139,6 +140,8 @@ path.社团奖励 = function ()
   end
 end
 
+-- mumu12模拟器很奇怪, 有时候脚本会很执行的很慢。
+-- 蓝叠国服版尝试下?(蓝叠会出现一种已经点击了, 但是页面没有动。)
 path.刷书签 = function (rest)
   rest = rest or 0
   setNumberConfig("is_refresh_book_tag", 1)
@@ -169,13 +172,7 @@ path.刷书签 = function (rest)
       for i=1,4 do
       -- 可能会出现乱买, 相似度不够高?
       -- 第一排神秘会漏掉? todo 
-      local pos, countTarget  -- 532,48,675,723
-      wait(function ()
-        pos, countTarget = findOne(target, {rg = {538,30,677,720}})
-        if pos then
-          return 1
-        end
-      end, 0, .35)
+      local pos, countTarget = findOne(target, {rg = {540,70,669,718}, sim = .93})
       if pos then
         local newRg = {1147, pos[2] - 80, 1226, pos[2] + 80}
         untilTap('mul_国服神秘商店购买', {rg = newRg})
@@ -205,9 +202,12 @@ path.刷书签 = function (rest)
       -- 写死判定，可能会connection导致滑动失效
       if i == 2 and enoughResources then 
         wait(function ()
+          if findOne({'cmp_国服神秘商店第二个商品', 
+                      'cmp_国服神秘商店第三个商品', 
+                      'cmp_国服神秘商店第四个商品'}, {sim = .99}) then 
+            return 1 
+          end
           sswipe({858,578}, {858,150})
-          ssleep(1)
-          if findOne({'cmp_国服神秘商店第二个商品', 'cmp_国服神秘商店第三个商品', 'cmp_国服神秘商店第四个商品'}) then return 1 end
         end)
       end
       end
@@ -229,7 +229,7 @@ path.刷书签 = function (rest)
       -- 如果网络不好会导致两次点击, 改成 sim = 1
       untilTap('cmp_国服神秘商店立即更新', {sim = 1})
       untilTap('cmp_国服神秘商店购买确认')
-      untilAppear('cmp_国服神秘商店第一个商品') ssleep(.5)
+      untilAppear('cmp_国服神秘商店第一个商品', {sim = 1})
       setNumberConfig("exception_count", 1)
     end
     setNumberConfig("refresh_book_tag_count", i)
@@ -785,7 +785,7 @@ path.通用刷图模式1 = function (typeTarget, levelTarget, fightCount)
   other_ssleep_interval = 2
   if not wait(function ()
     if findTap('ocr_国服右下角', {keyword = {'选择队', '选择'}}) then return 1 end
-  end, .1, 8) then
+  end, .1, 5) then
     return 0
   end
   temp_other_ssleep_interval = temp_other_ssleep_interval

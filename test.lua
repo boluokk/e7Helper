@@ -17,7 +17,6 @@ test = function ()
   -- log(findOne('ocr_国服战斗开始', {keyword = '战斗开始'}))
   -- path.通用刷图模式1('mul_国服双足飞龙', '1', 2)
   -- log(findOne({'mul_国服神秘商店神秘奖牌', 'mul_国服神秘商店誓约书签', 'mul_国服神秘商店友情书签'}, {rg = {538,50,677,720}}))
-  -- print(current_task)
   -- log(findOne('cmp_国服邮件领取确认蓝底'))
   -- log(findOne('cmp_国服背包装备自动选择'))
   -- path.清理英雄背包()
@@ -26,7 +25,8 @@ test = function ()
   -- local key = {'英雄', '装备', '神器'}
   -- log(findTap('cmp_国服背包空间不足'))
   -- path.背包处理()
-  log(findOne({'cmp_国服背包空间不足', 'cmp_国服行动力不足' , 'cmp_国服战斗问号'}))
+  -- print(sAppIsRunning('国服'))
+  log(findOne('cmp_国服神秘商店取消'))
   exitScript()
 end
 if not disable_test then test() end
