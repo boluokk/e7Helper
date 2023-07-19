@@ -170,13 +170,12 @@ sui.show = function ()
       addCheckBox(v, v, nil, true)
     end
   end
-  newRow()
-  addTextView('主题(商店位置不一样):')
-  addRadioGroup('主题', ui_option.主题)
+  -- 不能修改主题
   newRow()
   addTextView('次数:')
   addEditText('更新次数', '333')
   addButton('开始刷书签')
+  addTextView('请将主题\n设置成默认的! ')
   newRow()
   addButton('使用说明')
   addTextView('  |  ')

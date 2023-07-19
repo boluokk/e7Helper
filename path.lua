@@ -146,7 +146,7 @@ path.刷书签 = function (rest)
   rest = rest or 0
   setNumberConfig("is_refresh_book_tag", 1)
   path.游戏首页()
-  local tapPoint = point['秘密商店'..current_task.主题]
+  local tapPoint = point['秘密商店0']
   wait(function ()
     stap(tapPoint)
     if not findOne('cmp_国服主页Rank') then return 1 end
