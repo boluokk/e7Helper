@@ -69,7 +69,7 @@ dismiss = function (id) ui.dismiss(id) end
 suie.取消 = exit
 suie.启动 = function ()
   -- 是否配置了清理背包(必须配置, 不然会出问题卡死)
-  if not sFileExist('bagConfig.txt') then log('请配置满背包处理!') suie.清理背包() return end
+  if not sFileExist('bagConfig.txt') then saveProfile('config.txt') log('请配置满背包处理!') suie.清理背包() return end
   suie.开启前()
   if print_config_info then
     print(current_task)
