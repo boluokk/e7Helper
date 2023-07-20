@@ -229,7 +229,7 @@ path.刷书签 = function (rest)
       -- 如果网络不好会导致两次点击, 改成 sim = 1
       untilTap('cmp_国服神秘商店立即更新', {sim = 1})
       untilTap('cmp_国服神秘商店购买确认')
-      untilAppear('cmp_国服神秘商店第一个商品', {sim = 1})
+      untilAppear('cmp_国服神秘商店第一个商品', {sim = .98})
       setNumberConfig("exception_count", 1)
     end
     setNumberConfig("refresh_book_tag_count", i)
