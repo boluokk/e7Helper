@@ -60,8 +60,9 @@ findOne = function (target, config)
 		end, 1, nil, true)
 	end
 	-- 维护公告关闭掉
-	if cmpColorEx(point['cmp_国服维护公告'], 1) == 1 then
-		tap(421,142)
+	local retX, retY = findMultiColor(310,67,972,227,point.国服维护公告[1],point.国服维护公告[2],0,.95)
+	if retX ~= -1 then
+		tap(retX, retY)
 		ssleep(1)
 		releaseCapture()
 		if cmpColorEx(point['cmp_国服邮件领取确认蓝底'], .95) == 1 then
@@ -180,15 +181,6 @@ end
 string.split = function (str, sStr)
 	local r = splitStr(str, sStr)
 	if r then return r end
-end
-
-filterImgSuffix = function (str)
-	local res = {}
-	for k,v in pairs(str) do
-		-- log(k)
-		res[string.split(k, '_')[2]] = v
-	end
-	return res
 end
 
 -- 显示多久 持续性，会到timeout才会退出]
@@ -1259,7 +1251,10 @@ stoast = function (message, x, y, messageSize)
 	end
 end
 
-exit = function () exitScript() end
+exit = function () 
+	-- initLocalState() 
+	exitScript() 
+end
 
 reScript = function () restartScript() end
 
@@ -1541,3 +1536,20 @@ end
 
 -- get UI real value
 getUIRealValue = function (optionName, indexName) return ui_option[optionName][current_task[indexName] + 1] end
+
+-- 初始化本地数据
+initLocalState = function (datas, state)
+	if not dates then
+		setNumberConfig("scriptStatus", 0)
+    setNumberConfig("current_task_index", 0)
+    setNumberConfig("is_refresh_book_tag", 0)
+    setNumberConfig("refresh_book_tag_count", 0)
+    setNumberConfig("g1", 0)
+    setNumberConfig("g2", 0)
+    setNumberConfig("g3", 0)
+    -- 升3星狗粮
+    setNumberConfig("upgrade_3x_hero", 0)
+		-- 刷图次数
+    setNumberConfig("fight_count", 0)
+	end
+end

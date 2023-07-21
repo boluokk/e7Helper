@@ -120,18 +120,19 @@ suie.背包配置保存 = function ()
   saveProfile('bagConfig.txt')
   suie.背包配置取消()
 end
+suie.升3星狗粮开始 = function ()
+  suie.开启前()
+  path.升3星狗粮()
+end
 -- 主页
 sui.show = function ()
   newLayout()
-  -- newRow()
+  newRow()
   -- 开源信息
-  -- addTextView('此脚本软件完全免费开源\n'..
-  --             '好用就给个star吧-_-, 这是给开发者最大的帮助\n'..
-  --             'QQ群：206490280 \n'..
-  --             'QQ频道号：24oyp5x92q \n'..
-  --             '开源地址：https://gitee.com/boluokk/e7-helper \n'..
-  --             '使用说明书：https://boluokk.gitee.io/e7-helper')
-  -- newRow()
+  addTextView('免费开源，有问题或加群（详情看下方使用说明）\n'..
+              'QQ群:206490280      '..
+              'QQ频道号:24oyp5x92q')
+  newRow()
   -- 服务器
   addTextView('服务器: ')
   local servers = ui_option.服务器
@@ -175,7 +176,15 @@ sui.show = function ()
   addTextView('次数:')
   addEditText('更新次数', '333')
   addButton('开始刷书签')
-  addTextView('请将主题\n设置成默认的! ')
+  addTextView('主题为默认! ')
+  newRow()
+  addTextView('升3星狗粮:')
+  addRadioGroup('升3星狗粮类型', ui_option.升2星狗粮类型)
+  newRow()
+  addEditText('升3星狗粮个数','100')
+  addTextView('个')
+  addButton('升3星狗粮开始')
+  addTextView('传送前请先锁定!')
   newRow()
   addButton('使用说明')
   addTextView('  |  ')

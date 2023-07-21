@@ -77,13 +77,9 @@ setStopCallBack(function(error)
     sStopApp(current_server)
     reScript()
   else
-    setNumberConfig("scriptStatus", 0)
-    setNumberConfig("current_task_index", 0)
-    setNumberConfig("is_refresh_book_tag", 0)
-    setNumberConfig("refresh_book_tag_count", 0)
-    setNumberConfig("g1", 0)
-    setNumberConfig("g2", 0)
-    setNumberConfig("g3", 0)
+    log('exit ok')
+    slog('exit ok')
+    initLocalState()
     console.show()
   end
 end)
@@ -108,6 +104,7 @@ local scriptStatus = sgetNumberConfig("scriptStatus", 0)
 -- 热更新开始
 if scriptStatus == 0 then
   console.clearLog()
+  initLocalState()
   slog('<- start time')
   if not hotupdate_disabled then hotUpdate() end
   sui.show()
@@ -126,8 +123,9 @@ else
   -- current_task = read('config.txt', true)
   current_task = uiConfigUnion(fileNames)
   if is_refresh_book_tag == 1 then
-    path.游戏首页()
     path.刷书签(sgetNumberConfig("refresh_book_tag_count", 0))
+  elseif is_refresh_book_tag == 2 then
+    path.升3星狗粮()
   else
     path.游戏开始()
   end

@@ -11,7 +11,7 @@
 #### 此APP工具源码: [https://gitee.com/boluokk/e7-helper](https://gitee.com/boluokk/e7-helper) （好用就给个star吧, 你的star将会是作者最大的帮助）👍
 
 ### 最近更新: 
-- 去除选择主题模式，修复自定义主题导致商店不识别bug
+- 更新升级3星狗粮
 
 ### 设备兼容
 
