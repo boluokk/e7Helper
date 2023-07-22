@@ -66,7 +66,7 @@ setEnable = function ()
   ui.setEnable(id,true)
 end
 dismiss = function (id) ui.dismiss(id) end
-suie.取消 = exit
+suie.退出 = exit
 suie.启动 = function ()
   -- 是否配置了清理背包(必须配置, 不然会出问题卡死)
   if not sFileExist('bagConfig.txt') then saveProfile('config.txt') log('请配置满背包处理!') suie.清理背包() return end
@@ -124,12 +124,16 @@ suie.升3星狗粮开始 = function ()
   suie.开启前()
   path.升3星狗粮()
 end
+suie.购买企鹅 = function ()
+  suie.开启前()
+  path.购买企鹅()
+end
 -- 主页
 sui.show = function ()
   newLayout()
   newRow()
   -- 开源信息
-  addTextView('免费开源，有问题或加群（详情看下方使用说明）\n'..
+  addTextView('免费开源，有问题(看下方使用说明 or 加群)\n'..
               'QQ群:206490280      '..
               'QQ频道号:24oyp5x92q')
   newRow()
@@ -186,10 +190,12 @@ sui.show = function ()
   addButton('升3星狗粮开始')
   addTextView('传送前请先锁定!')
   newRow()
+  addButton('购买企鹅')
+  newRow()
   addButton('使用说明')
   addTextView('  |  ')
   addButton('启动')
-  addButton('取消')
+  addButton('退出')
   newRow()
   addButton('刷新UI')
   addTextView('  |  ')
@@ -254,6 +260,10 @@ end
 sui.hiddenNotMainUI = function (hiddenID)
   dismiss(hiddenID)
   sui.show()
+end
+-- 其他功能
+sui.showOtherFunc = function ()
+  
 end
 -- 背包清理
 sui.showBagSetting = function ()

@@ -320,9 +320,14 @@ path.刷竞技场 = function ()
 		end)
 		-- 识别票数
 		local ticketFlat = untilAppear('mul_国服竞技场旗帜位置', {rg = {275,8,1042,67}})
-		local tmpV, ticket = untilAppear({'mul_国服竞技场票数0', 'mul_国服竞技场票数1', 'mul_国服竞技场票数2',
-		'mul_国服竞技场票数3', 'mul_国服竞技场票数4', 'mul_国服竞技场票数5'},
-		{rg = {ticketFlat[1], 5, ticketFlat[1] + 80 , 60}})
+		local tmpV, ticket
+		wait(function ()
+			tmpV, ticket = findOne({'mul_国服竞技场票数0', 'mul_国服竞技场票数1', 'mul_国服竞技场票数2',
+																	'mul_国服竞技场票数3', 'mul_国服竞技场票数4', 'mul_国服竞技场票数5'},
+																	{rg = {ticketFlat[1], 5, ticketFlat[1] + 80 , 60}})
+			if ticket then return 1 end
+		end, .5, 5)
+		if not ticket then ticket = 'mul_国服竞技场票数5' end
 		ticket = getArenaPoints(ticket)
 		log('所剩票数: '..ticket)
 		if ticket == 0 then
@@ -1409,4 +1414,28 @@ path.打开右侧栏 = function (pos)
 		stap(point[pos])
 	end)
 	return 1
+end
+
+path.购买企鹅 = function ()
+	path.游戏首页()
+	wait(function ()
+		if findOne('327|239|5B80C4,316|240|BF898F,335|238|4CEAFF') then
+			return 1
+		end
+		stap({247,214})
+	end)
+	-- 开始购买
+	-- 不再显示点击
+	local noTipTap = false
+	wait(function ()
+		if findOne('612|638|F4A300,680|637|FBA900') then
+			log('红叶消耗完')
+			slog('红叶消耗完')
+			return 1
+		end
+		if not noTipTap and findTap('814|549|0E4810,833|551|0F4C12,816|562|1CCF5E,830|561|149F35') then
+			noTipTap = true
+		end
+		stap({903,280})
+	end, .5, nil, true)
 end
