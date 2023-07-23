@@ -3,7 +3,7 @@ time = systemTime
 -- apk level 限制
 is_apk_old = function() return getApkVerInt() < 0 end
 apk_old_warning = "怎么还有人用" .. getApkVerInt()
-release_date = '07.23 22:09'
+release_date = "07.23 22:15"
 -- 获取workPath
 root_path = getWorkPath() .. '/'
 -- 禁止热更新
@@ -87,10 +87,11 @@ setStopCallBack(function(error)
 end)
 
 setUserEventCallBack(function (type)
-  log(type)
-  -- for i,v in pairs(fileNames) do sdelfile(v) end
-  -- initLocalState()
-  -- reScript()
+  slog('重置脚本')
+  slog(type)
+  initLocalState()
+  for i,v in pairs(fileNames) do sdelfile(v) end
+  reScript()
 end)
 
 -- 分辨率提示

@@ -68,7 +68,7 @@ def saveAndPush():
         for line in lines:
             if re.match('-- hotupdate_disabled = true', line):
                 line = 'hotupdate_disabled = true\n'
-            if re.match('release_date = ".*"', line):
+            if re.match('release_date = .*', line):
                 line = 'release_date = "' + \
                        str(datetime.now().strftime("%m.%d %H:%M")) + '"\n'
             ss += line
