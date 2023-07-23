@@ -1,10 +1,7 @@
 
 test = function ()
   current_task = uiConfigUnion(fileNames)
-  -- path.购买企鹅()
-  -- log(findOne('mul_国服短选择队伍'))
-  -- findTap('mul_国服短选择队伍')
-  -- stap('mul_国服短选择队伍')
+  log(findOne('mul_国服是否可自动挂机', {rg = {563,528,685,584}, sim = .9}))
   exit()
 end
 if not disable_test then test() end

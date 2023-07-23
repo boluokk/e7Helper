@@ -1251,10 +1251,7 @@ stoast = function (message, x, y, messageSize)
 	end
 end
 
-exit = function () 
-	-- initLocalState() 
-	exitScript() 
-end
+exit = function () exitScript() end
 
 reScript = function () restartScript() end
 
@@ -1552,4 +1549,16 @@ initLocalState = function (datas, state)
 		-- 刷图次数
     setNumberConfig("fight_count", 0)
 	end
+end
+
+
+consoleInit = function()
+  console.clearLog()
+	local screen = getScreen()
+  console.setPos(round(screen.height * 0.05), round(screen.height * 0.05),
+                 round(screen.height * 0.9), round(screen.height * 0.9))
+  local resolution = screen.width .. 'x' .. screen.height
+  local title = getApkVerInt() .. ' ' .. release_date .. '  ' .. resolution
+  console.setTitle(is_apk_old() and apk_old_warning or title)
+  console.dismiss()
 end

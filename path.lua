@@ -809,10 +809,11 @@ path.通用刷图模式1 = function (typeTarget, levelTarget, fightCount)
 		return 0
 	end
 
-	untilAppear('ocr_国服右下角', {keyword = {'战斗开始'}})
+	untilAppear('ocr_国服右下角', {keyword = {'战斗开始'}})	ssleep(.5)
 	local greenPos
 	if not wait(function ()
-		greenPos = findOne('mul_国服是否可自动挂机', {rg = {495,489,776,608}, sim = .9})
+		greenPos = findOne('mul_国服是否可自动挂机', 
+												{rg = {563,528,685,584}, sim = .9})
 		if greenPos then return 1 end
 	end, .1, 1) then
 		log('未开启自动挂机')
@@ -820,13 +821,13 @@ path.通用刷图模式1 = function (typeTarget, levelTarget, fightCount)
 		return 0
 	else
 		wait(function ()
-			if findOne('mul_国服重复战斗绿色', {rg = {495,489,776,608}, sim = .9}) then return 1 end
-			ssleep(1)
+			if findOne('mul_国服重复战斗绿色', 
+								{rg = {563,528,685,584}, sim = .9}) then 
+				return 1 
+			end
 			stap(greenPos)
 		end)
 	end
-
-	-- untilTap('ocr_国服右下角', {keyword = {'战斗开始'}})
 
 	local pos, noAct
 	if wait(function ()

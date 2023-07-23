@@ -1,5 +1,9 @@
 -- 系统时间
 time = systemTime
+-- apk level 限制
+is_apk_old = function() return getApkVerInt() < 0 end
+apk_old_warning = "怎么还有人用" .. getApkVerInt()
+release_date = '07.23 22:09'
 -- 获取workPath
 root_path = getWorkPath() .. '/'
 -- 禁止热更新
@@ -66,8 +70,6 @@ require("util")
 require("userinterface")
 -- 测试
 require("test")
-console.dismiss()
-
 -- 其他异常处理 
 -- OOM
 setStopCallBack(function(error)
@@ -77,11 +79,18 @@ setStopCallBack(function(error)
     sStopApp(current_server)
     reScript()
   else
-    log('exit ok')
-    slog('exit ok')
+    log('exit')
+    slog('exit')
     initLocalState()
     console.show()
   end
+end)
+
+setUserEventCallBack(function (type)
+  log(type)
+  -- for i,v in pairs(fileNames) do sdelfile(v) end
+  -- initLocalState()
+  -- reScript()
 end)
 
 -- 分辨率提示
@@ -103,7 +112,7 @@ end
 local scriptStatus = sgetNumberConfig("scriptStatus", 0)
 -- 热更新开始
 if scriptStatus == 0 then
-  console.clearLog()
+  consoleInit()
   initLocalState()
   slog('<- start time')
   if not hotupdate_disabled then hotUpdate() end
