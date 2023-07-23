@@ -30,7 +30,7 @@ server_pkg_name = {
 -- 当前服务器
 current_server = "国服"
 -- wait 间隔
-wait_interval = .6
+wait_interval = .7
 -- 是否异常退出
 is_exception_quit = false
 -- UI配置完毕

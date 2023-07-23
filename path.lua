@@ -15,8 +15,8 @@ path.游戏首页 = function ()
 	end
 	setControlBarPosNew(0, 1)
 	local clickTarget = {'cmp_国服签到右下蓝底', 'cmp_国服签到右下蓝底2', 'cmp_国服公告X',
-	'cmp_国服登录第七史诗', 'cmp_国服放弃战斗', 'cmp_国服结束啊',
-	'cmp_国服神秘商店取消',}
+											 'cmp_国服登录第七史诗', 'cmp_国服放弃战斗', 'cmp_国服结束啊',
+											 'cmp_国服神秘商店取消',}
 	if wait(function ()
 		-- 服务器维护中
 		if findOne('cmp_国服服务器维护中') then return 'exit' end
@@ -427,6 +427,7 @@ path.战斗代理 = function (isRepeat)
 	if not isRepeat then
 		wait(function ()
 			-- 部分会有一个结束前置页, 直接点击掉
+			log('代理中.')
 			stap({615,23})
 			if findTap({'cmp_国服战斗完成竞技场确定', 'cmp_国服战斗完成确定'}, {tapInterval = 1}) then return 1 end
 		end, game_running_capture_interval, 10 * 60)
@@ -435,6 +436,7 @@ path.战斗代理 = function (isRepeat)
 		local target = {'cmp_国服背包空间不足', 'cmp_国服行动力不足', 'ocr_国服右下角', 'cmp_国服战斗问号'}
 		local pos, targetV
 		wait(function ()
+			log('代理中..')
 			if findOne('ocr_国服重复战斗完成', {keyword = {'重复战斗已结束'}})
 				and findOne('ocr_国服右下角', {keyword = {'确认'}}) then
 				wait(function ()
@@ -796,14 +798,16 @@ path.通用刷图模式1 = function (typeTarget, levelTarget, fightCount)
 
 	-- 0 表示此图并未打过
 	local selectGroup
-	local temp_other_ssleep_interval = other_ssleep_interval
-	other_ssleep_interval = 2
 	if not wait(function ()
-		if findTap('ocr_国服右下角', {keyword = {'选择队', '选择'}}) then return 1 end
-	end, .1, 5) then
-	return 0
+		if findOne('mul_国服短选择队伍') then
+			stap({1151,660})
+			return 1
+		end
+	end, .5, 3) then
+		log('未开启关卡')
+		slog('未开启关卡')
+		return 0
 	end
-	temp_other_ssleep_interval = temp_other_ssleep_interval
 
 	untilAppear('ocr_国服右下角', {keyword = {'战斗开始'}})
 	local greenPos
