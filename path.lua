@@ -15,7 +15,7 @@ path.游戏首页 = function ()
 	end
 	setControlBarPosNew(0, 1)
 	local clickTarget = {'cmp_国服签到右下蓝底', 'cmp_国服签到右下蓝底2', 'cmp_国服公告X',
-											 'cmp_国服登录第七史诗', 'cmp_国服放弃战斗', 'cmp_国服结束啊',
+											 'cmp_国服登录第七史诗', 'cmp_国服放弃战斗', 'cmp_国服结束',
 											 'cmp_国服神秘商店取消',}
 	if wait(function ()
 		-- 服务器维护中
@@ -46,10 +46,10 @@ path.任务队列 = function ()
 			-- 0 表示异常
 			-- 1 或者 nil 表示 ok
 			-- 2 表示重做
-			if path[v]() == 2 then path.回到主页() path[v]() end
-			slog(v..'过程已完成..')
+			if path[v]() == 2 then path.游戏首页() path[v]() end
+			slog(v)
 			setNumberConfig("exception_count", 1)
-			path.回到主页()
+			path.游戏首页()
 		end
 		setNumberConfig('current_task_index', i)
 	end
@@ -142,6 +142,7 @@ end
 
 -- mumu12模拟器很奇怪, 有时候脚本会很执行的很慢。
 -- 蓝叠国服版尝试下?(蓝叠会出现一种已经点击了, 但是页面没有动。)
+-- 最终mumu6最流畅
 path.刷书签 = function (rest)
 	rest = rest or 0
 	setNumberConfig("is_refresh_book_tag", 1)
@@ -172,7 +173,7 @@ path.刷书签 = function (rest)
 			for i=1,4 do
 				-- 可能会出现乱买, 相似度不够高?
 				-- 第一排神秘会漏掉? todo
-				local pos, countTarget = findOne(target, {rg = {540,70,669,718}, sim = .93})
+				local pos, countTarget = findOne(target, {rg = {540,70,669,718}})
 				if pos then
 					local newRg = {1147, pos[2] - 80, 1226, pos[2] + 80}
 					untilTap('mul_国服神秘商店购买', {rg = newRg})
@@ -249,22 +250,20 @@ path.刷书签 = function (rest)
 	slog(msg, nil, true)
 end
 
-path.回到主页 = function ()
-	local t
-	wait(function ()
-		if findOne('cmp_国服主页Rank') then
-			if not t then t = time() end
-			if t and time() - t > 1000 then return 1 end
-			return
-		end
-		-- findTap({'cmp_国服派遣任务重新进行'}, {tapInterval = 0})
-		if t then t = time() end
-		-- stap(point.退出)
-		back()
-	end, .6)
+path.刷竞技场 = function ()
+	local type = current_task.竞技场次序
+	if type == 0 then
+		path.竞技场玩家()
+	elseif type == 1 then
+		path.竞技场NPC()
+	elseif type == 2 then
+		path.竞技场NPC()
+		path.游戏首页()
+		path.竞技场玩家()
+	end
 end
 
-path.刷竞技场 = function ()
+path.竞技场玩家 = function ()
 	wait(function ()
 		stap(point.竞技场)
 		ssleep(1)
@@ -274,7 +273,9 @@ path.刷竞技场 = function ()
 	local r1, r2
 	wait(function ()
 		stap({386,17})
-		r1, r2 = findOne({'cmp_国服竞技场配置防御队', 'cmp_国服竞技场每周结算时间', 'cmp_国服竞技场每周排名奖励'})
+		r1, r2 = findOne({'cmp_国服竞技场配置防御队', 
+											'cmp_国服竞技场每周结算时间', 
+											'cmp_国服竞技场每周排名奖励'})
 		if r1 then return 1 end
 	end)
 	if r2 == 'cmp_国服竞技场每周结算时间' then
@@ -300,60 +301,24 @@ path.刷竞技场 = function ()
 	-- 交战对手切换
 	wait(function ()
 		stap({1108,116})
-		if findOne({'mul_国服竞技场挑战', 'mul_国服竞技场再次挑战', 'mul_国服竞技场已挑战过对手'}, {rg = {879,146,990,686}}) then
-			ssleep(1) return 1
+		if findOne({'mul_国服竞技场挑战', 
+								'mul_国服竞技场再次挑战', 
+								'mul_国服竞技场已挑战过对手'}, 
+								{rg = {879,146,990,686}}) then
+			ssleep(1)
+			return 1
 		end
 	end, .5)
-	
 	-- 刷新对手到达次数
-	local refreshCount = current_task['交战剩余次数']
-	-- 叶子购买票
-	local buyTicket = current_task['叶子买票']
+	local refreshCount = 30 - current_task['交战剩余次数']
 	-- 购买切换挑战对手次数，金币
 	local buyChangeCount = true
 	wait(function ()
-		-- 升级可能会卡在这里, 不在下面 path.战斗代理 里面处理, 会导致其他战斗代理出问题
 		wait(function ()
 			findTap('cmp_国服竞技场挑战升级')
 			stap({323,27})
 			if findOne('mul_国服竞技场旗帜位置') then return 1 end
 		end)
-		-- 识别票数
-		local ticketFlat = untilAppear('mul_国服竞技场旗帜位置', {rg = {275,8,1042,67}})
-		local tmpV, ticket
-		wait(function ()
-			tmpV, ticket = findOne({'mul_国服竞技场票数0', 'mul_国服竞技场票数1', 'mul_国服竞技场票数2',
-																	'mul_国服竞技场票数3', 'mul_国服竞技场票数4', 'mul_国服竞技场票数5'},
-																	{rg = {ticketFlat[1], 5, ticketFlat[1] + 80 , 60}})
-			if ticket then return 1 end
-		end, .5, 5)
-		if not ticket then ticket = 'mul_国服竞技场票数5' end
-		ticket = getArenaPoints(ticket)
-		log('所剩票数: '..ticket)
-		if ticket == 0 then
-			log('票数耗尽')
-			-- 是否使用叶子兑换5张票
-			-- 是否使用砖石兑换5张票 暂不支持
-			if buyTicket then
-				wait(function ()
-					stap({699,32})
-					if findOne('cmp_国服竞技场购买票页面') then return 1 end
-				end)
-				local tmp, ticketType = untilAppear({'cmp_国服竞技场叶子购买票', 'cmp_国服竞技场砖石购买票'})
-				if ticketType == 'cmp_国服竞技场叶子购买票' then
-					log('购票')
-					untilTap('cmp_国服竞技场购买票')
-					-- 金币是否够用
-					local tmp, v = untilAppear({'cmp_国服神秘商店购买资源不足', 'cmp_国服竞技场配置防御队'})
-					if v == 'cmp_国服神秘商店购买资源不足' then log('资源不足') return 1 end
-				end
-				if ticketType == 'cmp_国服竞技场砖石购买票' then log('取消购票') untilTap('cmp_国服竞技场取消购票') return 1 end
-				return
-			else
-				log('不购票')
-				return 1
-			end
-		end
 		-- 敌人积分
 		local enemyPointsInfo = untilAppear('ocr_国服竞技场敌人积分')
 		-- 过滤非敌人积分; 敌人积分转换成数字
@@ -376,7 +341,7 @@ path.刷竞技场 = function ()
 				if result.text:includes({'剩余时间', '剩余', '时间'}) then
 					local availableRefreashCount = math.floor(getArenaPoints(untilAppear('ocr_国服竞技场挑战对手剩余刷新次数')[1].text) / 100)
 					if refreshCount == availableRefreashCount or availableRefreashCount == 0 then
-						log('对手更换次数已上限!')
+						slog('对手更换次数已上限!')
 						untilTap('cmp_国服竞技场取消更换对手')
 						return 1
 					end
@@ -395,17 +360,134 @@ path.刷竞技场 = function ()
 		finalPointsInfo = finalPointsInfo[1]
 		untilTap('mul_国服竞技场挑战', {rg = {886, finalPointsInfo.t - 80, 990, finalPointsInfo.b + 80}})
 		untilTap('cmp_国服竞技场战斗开始')
+		if path.竞技场购票() == 1 then
+			return 1
+		end
 		path.战斗代理()
 	end, .5, nil, true)
 end
 
+path.竞技场NPC = function ()
+	wait(function ()
+		stap(point.竞技场)
+		ssleep(1)
+		if not findOne('cmp_国服主页Rank') then return 1 end
+	end)
+	wait(function ()
+		if not findOne('cmp_国服竞技场') then
+			return 1
+		end
+		stap({999,339})
+	end)
+	local p, v
+	wait(function ()
+		p, v = findOne({'cmp_国服JJC左下剑', 
+								 'cmp_国服竞技场每周排名奖励'})
+		if v == 'cmp_国服JJC左下剑' then
+			return 1
+		end
+		if v == 'cmp_国服竞技场每周排名奖励' then
+			slog('竞技场获取每周排名奖励')
+			local rankIndex = current_task['竞技场每周奖励'] or 0
+			local pos = point.国服竞技场每周奖励[rankIndex + 1]
+			wait(function ()
+				stap(pos)
+				if findOne(point.国服竞技场每周奖励判定[rankIndex + 1]) then return 1 end
+			end)
+			untilTap('cmp_国服竞技场领取每周奖励')
+		end
+	end)
+	wait(function ()
+		if findOne('cmp_国服NPC交战对手') then
+			return 1
+		end
+		stap({1048,216})
+	end)
+
+	local pos
+	local isSwipe = 1
+	while 'qq群206490280' do
+		wait(function ()
+			findTap('cmp_国服竞技场挑战升级')
+			stap({323,27})
+			if findOne('mul_国服竞技场旗帜位置') then ssleep(1) return 1 end
+		end)
+		pos = findOne('mul_国服NPC挑战', {rg = {855,141,996,721}})
+		if not pos and isSwipe == 2 then break end
+		if not pos then
+			isSwipe = isSwipe + 1
+			wait(function ()
+				sswipe({846,498}, {846,206})
+				ssleep(1.5)
+				if findOne('780|683|FFFFFF,774|674|FFFFFF,774|690|FADD32') then
+					return 1				
+				end
+			end)
+		else
+			-- 开始刷NPC
+			wait(function ()
+				stap(pos)
+				if not findOne('cmp_国服JJC左下剑') then return 1 end
+			end)
+			untilTap('cmp_国服竞技场战斗开始')
+			-- 购票
+			if path.竞技场购票() == 1 then
+				break
+			end
+			path.战斗代理()
+			isSwipe = 1
+		end
+	end
+	slog('竞技场NPC完成')
+end
+
+path.竞技场购票 = function ()
+	-- 叶子购买票
+	local buyTicket = current_task['叶子买票']
+	local t,v
+	wait (function ()
+		stap({615,23})
+		t, v = findOne({'cmp_国服竞技场购买票页面', 'cmp_国服Auto'})
+		if v then
+			return 1
+		end
+	end)
+	-- 是否使用叶子兑换5张票
+	-- 是否使用砖石兑换5张票 暂不支持
+	if v == 'cmp_国服竞技场购买票页面' and buyTicket then
+		local tmp, ticketType = untilAppear({'cmp_国服竞技场叶子购买票', 
+																					'cmp_国服竞技场砖石购买票'})
+		if ticketType == 'cmp_国服竞技场叶子购买票' then
+			log('购票')
+			untilTap('cmp_国服竞技场购买票')
+			-- 金币是否够用
+			local tmp, v = untilAppear({'cmp_国服神秘商店购买资源不足',
+																	'cmp_国服竞技场下战斗开始'})
+			if v == 'cmp_国服神秘商店购买资源不足' then log('资源不足') return 1 end
+		end
+		if ticketType == 'cmp_国服竞技场砖石购买票' then log('取消购票') untilTap('cmp_国服竞技场取消购票') return 1 end
+		untilTap('cmp_国服竞技场战斗开始')	
+	end
+
+	if v == 'cmp_国服竞技场购买票页面' and not buyTicket then
+		log('不购票')
+		return 1
+	end
+end
+
 -- open2x 开启2倍数
 -- petSkill 神兽技能
-path.战斗代理 = function (isRepeat)
+path.战斗代理 = function (isRepeat, isAgent)
 	log('战斗开始')
 	-- 开启auto
 	if not isRepeat then
-		untilAppear('cmp_国服Auto')
+		-- untilAppear('cmp_国服Auto')
+		wait(function ()
+			if findOne('cmp_国服Auto') then
+				return 1
+			end
+			stap({638,31})
+		end)
 		wait(function ()
 			stap('cmp_国服Auto')
 			ssleep(1)
@@ -428,17 +510,25 @@ path.战斗代理 = function (isRepeat)
 		wait(function ()
 			-- 部分会有一个结束前置页, 直接点击掉
 			log('代理中.')
+			-- NPC对话点击 
 			stap({615,23})
-			if findTap({'cmp_国服战斗完成竞技场确定', 'cmp_国服战斗完成确定'}, {tapInterval = 1}) then return 1 end
+			if findTap({'cmp_国服战斗完成竞技场确定', 
+									'cmp_国服战斗完成确定'}, {tapInterval = 1}) then 
+				return 1
+			end
 		end, game_running_capture_interval, 10 * 60)
 	else
 		local targetKey = {'战斗开始', '确认', '重新进行'}
-		local target = {'cmp_国服背包空间不足', 'cmp_国服行动力不足', 'ocr_国服右下角', 'cmp_国服战斗问号'}
+		local target = {'cmp_国服背包空间不足', 'cmp_国服行动力不足', 
+										'ocr_国服右下角', 'cmp_国服战斗问号'}
 		local pos, targetV
 		wait(function ()
 			log('代理中..')
-			if findOne('ocr_国服重复战斗完成', {keyword = {'重复战斗已结束'}})
-				and findOne('ocr_国服右下角', {keyword = {'确认'}}) then
+			-- 非托管需要手动点击,才能到达结束页面
+			if not isAgent then stap({483,15}) end
+			if ((isAgent and findOne('ocr_国服重复战斗完成', {keyword = {'重复战斗已结束'}})) or
+				 not isAgent) and 
+				 findOne('ocr_国服右下角', {keyword = {'确认'}}) then
 				wait(function ()
 					pos, targetV = findOne(target, {keyword = targetKey})
 					if not pos then return end
@@ -810,16 +900,17 @@ path.通用刷图模式1 = function (typeTarget, levelTarget, fightCount)
 	end
 
 	untilAppear('ocr_国服右下角', {keyword = {'战斗开始'}})	ssleep(.5)
+	-- 这里如果有的话,就处理
 	local greenPos
+	local isAgent
 	if not wait(function ()
-		greenPos = findOne('mul_国服是否可自动挂机', 
-												{rg = {563,528,685,584}, sim = .9})
+		greenPos = findOne('mul_国服是否可自动挂机', {rg = {563,528,685,584}, sim = .9})
 		if greenPos then return 1 end
 	end, .1, 1) then
-		log('未开启自动挂机')
-		slog('未开启自动挂机')
-		return 0
+		log('未找到托管')
+		slog('未找到托管')
 	else
+		isAgent = 1
 		wait(function ()
 			if findOne('mul_国服重复战斗绿色', 
 								{rg = {563,528,685,584}, sim = .9}) then 
@@ -855,7 +946,7 @@ path.通用刷图模式1 = function (typeTarget, levelTarget, fightCount)
 	while currentCount <= fightCount do
 		
 		if noAction ~= 'cmp_国服背包空间不足' then
-			path.战斗代理(true)
+			path.战斗代理(true, isAgent)
 			log('完成次数: '..currentCount)
 		end
 		
@@ -1443,4 +1534,15 @@ path.购买企鹅 = function ()
 		end
 		stap({903,280})
 	end, .5, nil, true)
+end
+
+path.游戏社区 = function ()
+	if not findOne({'cmp_国服活动小红点'}) then log('无需游戏社区') return 1 end
+	wait(function ()
+		stap(point.活动)
+		ssleep(1)
+		if not findOne('cmp_国服主页Rank') then return 1 end
+	end)
+	-- 浏览帖子 + 点赞
+	-- 签到
 end

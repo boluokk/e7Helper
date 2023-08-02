@@ -4,7 +4,6 @@
 颜色多图：mul_开头
 识字：ocr_开头
 ]]
-require('path')
 
 findNode = function(selector) return nodeLib.findOne(selector, true) end
 
@@ -53,6 +52,9 @@ findOne = function (target, config)
 		wait(function ()
 			log('connection..')
 			-- 重置wait()超时时间
+			-- 默认超时时间
+			waitTimeout = time()
+			-- 设置的超时时间
 			if TIMEOUT then
 				TIMEOUT = time() + 1000 * TIMEOUTSECOND
 			end
@@ -270,7 +272,7 @@ wait = function (func, interval, TIMEOUT, disableRestartGame)
 		TIMEOUT = time() + 1000 * TIMEOUT
 	end
 	
-	local waitTimeout = time()
+	waitTimeout = time()
 	while "q:1352955539" do
 		local r = func()
 		if r then TIMEOUTSECOND = nil return r end
@@ -282,7 +284,7 @@ wait = function (func, interval, TIMEOUT, disableRestartGame)
 									 and time() - waitTimeout > check_game_identify_timeout then
 			log('超时重试')
 			setNumberConfig("scriptStatus", 3)
-			path.回到主页()
+			path.游戏首页()
 			reScript()
 		end
 	end

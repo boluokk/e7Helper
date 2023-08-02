@@ -28,6 +28,9 @@ md5 = hashlib.md5()
 # 会自动将文件复制到你的懒人精灵下(自动创建项目)
 def copy():
     mkDir(fileMapping, projectPath)
+    print('复制成功!')
+    print('即将打开项目文件夹..')
+    os.startfile(projectPath)
 
 
 # 创建目录

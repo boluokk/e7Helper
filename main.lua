@@ -3,7 +3,7 @@ time = systemTime
 -- apk level 限制
 is_apk_old = function() return getApkVerInt() < 0 end
 apk_old_warning = "怎么还有人用" .. getApkVerInt()
-release_date = "07.23 22:19"
+release_date = "08.02 22:01"
 -- 获取workPath
 root_path = getWorkPath() .. '/'
 -- 禁止热更新
@@ -12,7 +12,7 @@ hotupdate_disabled = true
 -- true stoat 打印
 -- false print 打印
 logger_display_left_bottom = true
--- 详细日志
+-- 打印当前执行到哪里了(会输出某个图色名)
 detail_log_message = false
 -- 禁用测试
 disable_test = true
@@ -66,9 +66,9 @@ open_resource_doc = 'https://boluokk.gitee.io/e7-helper'
 -- 打印配置信息
 print_config_info = false
 require("point")
+require('path')
 require("util")
 require("userinterface")
--- 测试
 require("test")
 -- 其他异常处理 
 -- OOM
