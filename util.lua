@@ -13,6 +13,27 @@ findByIndex = function (selector) return nodeLib.findByIndex(selector) end
 
 allClick = function (selector) nodeLib.matchAllAndClick(point[selector]) end
 
+getTargetName = function (str)
+	if point['cmp_'..str] then return 'cmp_'..str end
+	if point['mul_'..str] then return 'mul_'..str end
+	if point['ocr_'..str] then return 'ocr_'..str end
+	if point['img_'..str] then return 'img_'..str end
+	return str
+end
+
+findTapOnce = function (target, config)
+	local r,w = findOne(target, config)
+	if not config then config = {} end
+	if r then
+		if type(r[1]) == 'table' then
+			stap({r[1].l, r[1].t}, config.tapInterval)
+		else
+			stap(r, config.tapInterval)
+		end
+		return w
+	end
+end
+
 findOne = function (target, config)
 	if not target then return end
 	if type(target) ~= "table" then target = {target} end
@@ -21,6 +42,7 @@ findOne = function (target, config)
 	config.rg = config.rg or {0, 0, 0, 0}
 	config.imgEnd = config.imgEnd or '.png'
 	config.dir = config.dir or 0
+	originTar = ''
 	
 	if type(config.keyword) == 'string' then config.keyword = {config.keyword} end
 	
@@ -78,24 +100,26 @@ findOne = function (target, config)
 	for i=1,#target do
 		tar = target[i]
 		if tar == "" then return end
-		if detail_log_message then log(tar) end
+		originTar = tar
+		tar = getTargetName(tar)
+		if detail_log_message then log(originTar) end
 		if tar:find('img_') then
 			ret,x,y = findPicEx(config.rg[1], config.rg[2], config.rg[3], config.rg[4], tar..config.imgEnd, config.sim)
-			if x ~= -1 then return {x, y}, tar end
+			if x ~= -1 then return {x, y}, originTar end
 		end
 		
 		if tar:find('cmp_') then
 			local r = cmpColorEx(point[tar], config.sim)
 			if r == 1 then
 				local p = string.split(point[tar], '|')
-				return {tonumber(p[1]), tonumber(p[2])}, tar
+				return {tonumber(p[1]), tonumber(p[2])}, originTar
 			end
 		end
 		
 		if tar:find('mul_') then
 			local x=-1 y=-1
 			x,y=findMultiColor(config.rg[1], config.rg[2], config.rg[3], config.rg[4], point[tar][1], point[tar][2], config.dir, config.sim)
-			if x~=-1 then return {x, y}, tar end
+			if x~=-1 then return {x, y}, originTar end
 		end
 		
 		if tar:find('ocr_') then
@@ -104,11 +128,11 @@ findOne = function (target, config)
 				if config.keyword then
 					for i=1,#config.keyword do
 						for j=1,#res do
-							if res[j]['text']:find(config.keyword[i]) then return {res[j]}, tar end
+							if res[j]['text']:find(config.keyword[i]) then return {res[j]}, originTar end
 						end
 					end
 				else
-					return res, tar
+					return res, originTar
 				end
 			end
 		end
@@ -117,13 +141,14 @@ findOne = function (target, config)
 			local r = cmpColorEx(tar, config.sim)
 			if r == 1 then
 				local p = string.split(tar, '|')
-				return {tonumber(p[1]), tonumber(p[2])}, tar
+				return {tonumber(p[1]), tonumber(p[2])}, originTar
 			end
 		end
 		
 	end
 	
 end
+
 
 findTap = function (target, config)
 	local r,w = findOne(target, config)
@@ -258,7 +283,7 @@ stap = function (pos, interval, disableTapCheck)
 	if not disableTapCheck then ssleep(interval) findOne('') end
 	-- log(pos)
 	if type(pos) == "table" then tap(pos[1], pos[2]) end
-	if type(pos) == "string" then local p = string.split(point[pos], '|') tap(tonumber(p[1]), tonumber(p[2])) end
+	if type(pos) == "string" then pos = getTargetName(pos) local p = string.split(point[pos], '|') tap(tonumber(p[1]), tonumber(p[2])) end
 end
 
 -- 识别颜色时间超时
@@ -1301,8 +1326,7 @@ hotUpdate = function ()
 	local scriptMsg, state = hotUpdateProcess(scriptFileUrl, {"scriptMD5", getStringConfig("scriptMD5")}, ".lr")
 	
 	if scriptMsg then
-		slog(scriptMsg)
-		toast(scriptMsg)
+		log('版本md5: '..scriptMsg)
 	end
 	
 	if state == 0 then reScript() end
@@ -1543,6 +1567,7 @@ initLocalState = function (datas, state)
     setNumberConfig("current_task_index", 0)
     setNumberConfig("is_refresh_book_tag", 0)
     setNumberConfig("refresh_book_tag_count", 0)
+    setNumberConfig("current_pass", 1)
     setNumberConfig("g1", 0)
     setNumberConfig("g2", 0)
     setNumberConfig("g3", 0)

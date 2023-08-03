@@ -182,7 +182,6 @@ sui.show = function ()
   addTextView('次数:')
   addEditText('更新次数', '333')
   addButton('开始刷书签')
-  addTextView('主题为默认! ')
   newRow()
   addTextView('升3星狗粮:')
   addRadioGroup('升3星狗粮类型', ui_option.升2星狗粮类型)
@@ -217,13 +216,17 @@ sui.showGrindSetting = function ()
   -- addButton('刷图测试', grindUid)
   local passAll = ui_option.战斗类型
   for i,v in pairs(passAll) do
-    if i == 1 or i == 3 then
+    local cur = i..''
+    if cur:includes({1,3,5,6}) then
       addCheckBox(v, v, grindUid)
     else
       addCheckBox(v, v, grindUid)
       -- 暂时禁用
       -- todo
       setDisabled(v)
+    end
+    if i % 4 == 0 then
+      newRow(grindUid)
     end
   end
   newRow(grindUid)
@@ -250,6 +253,11 @@ sui.showGrindSetting = function ()
   newRow(grindUid)
   addTextView('深渊：', grindUid)
   newRow(grindUid)
+  newRow(grindUid)
+  addTextView('后记：', grindUid)
+  addEditText('后记次数', '100', grindUid)
+  addTextView('次', grindUid)
+  newRow(grindUid)
   addButton('刷图配置保存', grindUid)
   addButton('刷图配置取消', grindUid)
   ui.show(grindUid, false)
@@ -265,7 +273,6 @@ sui.hiddenNotMainUI = function (hiddenID)
 end
 -- 其他功能
 sui.showOtherFunc = function ()
-  
 end
 -- 背包清理
 sui.showBagSetting = function ()

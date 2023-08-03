@@ -3,7 +3,8 @@ time = systemTime
 -- apk level 限制
 is_apk_old = function() return getApkVerInt() < 0 end
 apk_old_warning = "怎么还有人用" .. getApkVerInt()
-release_date = "08.02 22:01"
+release_date = "2023.08.04-01:04"
+release_content = '修复bug, 添加后记'
 -- 获取workPath
 root_path = getWorkPath() .. '/'
 -- 禁止热更新
@@ -108,6 +109,8 @@ if scriptStatus == 0 then
   consoleInit()
   initLocalState()
   slog('<- start time')
+  slog('最新更新时间: '..release_date)
+  slog('更新内容: '..(release_content or '暂无'))
   if not hotupdate_disabled then hotUpdate() end
   sui.show()
 else
