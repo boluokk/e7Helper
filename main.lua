@@ -3,8 +3,8 @@ time = systemTime
 -- apk level 限制
 is_apk_old = function() return getApkVerInt() < 0 end
 apk_old_warning = "怎么还有人用" .. getApkVerInt()
-release_date = "2023.08.04-01:04"
-release_content = '修复bug, 添加后记'
+release_date = "2023.08.04 14:44"
+release_content = '修复讨伐龙+后记bug'
 -- 获取workPath
 root_path = getWorkPath() .. '/'
 -- 禁止热更新

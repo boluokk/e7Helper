@@ -73,7 +73,7 @@ def saveAndPush():
                 line = 'hotupdate_disabled = true\n'
             if re.match('release_date = .*', line):
                 line = 'release_date = "' + \
-                       str(datetime.now().strftime("%Y.%m.%d-%H:%M")) + '"\n'
+                       str(datetime.now().strftime("%Y.%m.%d %H:%M")) + '"\n'
             ss += line
     with open(mainLuaPath, "w", encoding='GB18030') as f:
         f.write(ss)
@@ -138,7 +138,7 @@ def saveAndPush():
     print('更新脚本文件成功!')
     # 上传脚本文件
     os.system('git add .')
-    inputText = '\"{} {}\"'.format(datetime.now().strftime("%Y.%m.%d-%H:%M"), inputText)
+    inputText = '\"{} {}\"'.format(datetime.now().strftime("%Y.%m.%d %H:%M"), inputText)
     os.system('git commit -m {}'.format(inputText))
     os.system('git push')
     print('push 成功!')

@@ -8,7 +8,7 @@
 </p>
 
 ![](https://img.shields.io/badge/script_size-32KB-blue)
-![](https://img.shields.io/badge/downloads-1k+-green)
+![](https://img.shields.io/badge/downloads-2k+-green)
 ![](https://img.shields.io/badge/repo_size-3.54MB-orange)
 ![](https://img.shields.io/badge/total_line-3k+-purple)
 
@@ -32,5 +32,3 @@
 1、在懒人IDE中打包脚本文件
 2、运行 start.py 中的 saveAndPush()函数
 ```
-
-[//]: # (4、开发教程)
