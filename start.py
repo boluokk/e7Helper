@@ -73,7 +73,7 @@ def saveAndPush():
                 line = 'hotupdate_disabled = true\n'
             if re.match('release_date = .*', line):
                 line = 'release_date = "' + \
-                       str(datetime.now().strftime("%Y.%m.%d %H:%M")) + '"\n'
+                       str(datetime.now().strftime("%m.%d %H:%M")) + '"\n'
             ss += line
     with open(mainLuaPath, "w", encoding='GB18030') as f:
         f.write(ss)
