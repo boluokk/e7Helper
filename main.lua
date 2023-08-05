@@ -1,10 +1,12 @@
 -- 系统时间
 time = systemTime
+update_source = 'https://gitee.com/boluokk/e7-helper/raw/master/release/'
+update_source_fallback = update_source
 -- apk level 限制
 is_apk_old = function() return getApkVerInt() < 0 end
 apk_old_warning = "怎么还有人用" .. getApkVerInt()
-release_date = "08.04 14:54"
-release_content = '修复讨伐龙+后记bug'
+release_date = "08.06 00:23"
+release_content = '\n1.修复热更问题\n2.修改刷标签识别次数为2\n3.添加活动'
 -- 获取workPath
 root_path = getWorkPath() .. '/'
 -- 禁止热更新
@@ -71,8 +73,23 @@ require('path')
 require("util")
 require("userinterface")
 require("test")
--- 其他异常处理 
--- OOM
+-- 分辨率提示
+-- DPI 320
+-- 分辨率 720x1280
+-- 或者   1280x720
+local disPlayDPI = 320
+displaySizeWidth, displaySizeHeight = getDisplaySize()
+if disPlayDPI ~= 320 or ((displaySizeHeight ~= 1280 and displaySizeHeight > 0) and 
+                         (displaySizeHeight ~= 720 and displaySizeHeight > 0)) 
+                     or ((displaySizeWidth ~= 720 and displaySizeWidth > 0) and 
+                         (displaySizeWidth ~= 1280 and displaySizeWidth > 0)) then
+  wait(function ()
+    toast("当前分辨率："..displaySizeWidth.."x"..displaySizeHeight.."\tDPI："..disPlayDPI.."\n"..
+          "请手动配置成(模拟器或者虚拟机设置中)：\n分辨率: 720x1280或者1280x720 \nDPI：320\n之后重启脚本")
+  end, 1, 99999999 * 60)
+end
+
+-- 异常处理
 setStopCallBack(function(error)
   if error then
     log("异常退出")
@@ -87,22 +104,6 @@ setStopCallBack(function(error)
   end
 end)
 
--- 分辨率提示
--- DPI 320
--- 分辨率 720x1280
--- 或者   1280x720
-local disPlayDPI = getDisplayDpi()
-displaySizeWidth, displaySizeHeight = getDisplaySize()
-if disPlayDPI ~= 320 or ((displaySizeHeight ~= 1280 and displaySizeHeight > 0) and 
-                         (displaySizeHeight ~= 720 and displaySizeHeight > 0)) 
-                     or ((displaySizeWidth ~= 720 and displaySizeWidth > 0) and 
-                         (displaySizeWidth ~= 1280 and displaySizeWidth > 0)) then
-  wait(function ()
-    toast("当前分辨率："..displaySizeWidth.."x"..displaySizeHeight.."\tDPI："..disPlayDPI.."\n"..
-          "请手动配置成(模拟器或者虚拟机设置中)：\n分辨率: 720x1280或者1280x720 \nDPI：320\n之后重启脚本")
-  end, 1, 99999999 * 60)
-end
-
 local scriptStatus = sgetNumberConfig("scriptStatus", 0)
 -- 热更新开始
 if scriptStatus == 0 then
@@ -114,6 +115,7 @@ if scriptStatus == 0 then
   if not hotupdate_disabled then hotUpdate() end
   sui.show()
 else
+
   setNumberConfig("scriptStatus", 0)
   -- 多次异常关闭脚本
   -- 退出游戏还是重启游戏?

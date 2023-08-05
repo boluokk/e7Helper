@@ -13,6 +13,15 @@ findByIndex = function (selector) return nodeLib.findByIndex(selector) end
 
 allClick = function (selector) nodeLib.matchAllAndClick(point[selector]) end
 
+saveConfig = setStringConfig
+
+loadConfig = function(k, v)
+  v = v or ''
+  local y = getStringConfig(k)
+  if not y or #y == 0 then y = v end
+  return y
+end
+
 getTargetName = function (str)
 	if point['cmp_'..str] then return 'cmp_'..str end
 	if point['mul_'..str] then return 'mul_'..str end
@@ -340,15 +349,6 @@ slog = function (msg, level, clear)
 	console.println(level, msg)
 end
 
-setLC = function (name, data)
-	if type(data) ~= "string" then data = jsonLib.encode(data) end
-	setStringConfig(name, data)
-end
-
-getLC = function (name)
-	local data = getStringConfig(name)
-	if data then jsonLib.decode(data) end
-end
 
 sswipe = function (s, e)
 	touchDown(1, s[1], s[2])
@@ -956,36 +956,6 @@ closeWin = function (w)
 	ui.dismiss(w)
 end
 
--- 更新提示
-uploadScriptTip = function (data)
-	ISRUN = true
-	ui.newLayout("更新", 600)
-	ui.addTextView("更新","QQGroupTip","QQ交流群：")
-	ui.addTextView("更新","QQGroup","741063351")
-	ui.setTextColor("QQGroup","#FFFF0000")
-	ui.newRow("更新","row2")
-	ui.addTextView("更新","messageTip","更新内容：")
-	ui.newRow("更新","row1")
-	ui.addTextView("更新","message", data)
-	ui.newRow("更新","row3")
-	ui.addButton("更新","iknow","知道了 10s")
-	
-	ui.setTextSize("message", 10)
-	ui.setTextColor("messageTip","#FFFF730B")
-	ui.setTitleBackground("更新","#FFFF0000")
-	ui.setFullScreen("iknow")
-	ui.show("更新", false)
-	ui.setOnClick("iknow","closeWin('更新')")
-	
-	for i=1,10 do
-		if not ISRUN then break end
-		ssleep(1)
-		ui.setButton("iknow","知道了 "..10-i.."s", -1)
-	end
-	
-	closeWin('更新')
-end
-
 -- 更新app
 uploadAppTip = function (message)
 	ISRUN = true
@@ -1282,7 +1252,6 @@ exit = function () exitScript() end
 
 reScript = function () restartScript() end
 
--- 热更
 -- 获取字符串的长度（任何单个字符长度都为1）
 -- 解决中文长度问题
 getStringLength = function(inputstr)
@@ -1314,84 +1283,53 @@ getStringLength = function(inputstr)
 	return length
 end
 
-hotUpdate = function ()
-	local path = 'https://gitee.com/boluokk/e7-helper/raw/master/release/'
-	-- UI图资源文件
-	local staticFileUrl = path.."files"
-	-- 脚本文件
-	local scriptFileUrl = path.."script"
-	
-	stoast("正在检查更新...")
-	-- local fileMsg = hotUpdateProcess(staticFileUrl, {"filesMD5", getStringConfig("filesMD5")}, ".zip")
-	local scriptMsg, state = hotUpdateProcess(scriptFileUrl, {"scriptMD5", getStringConfig("scriptMD5")}, ".lr")
-	
-	if scriptMsg then
-		log('版本md5: '..scriptMsg)
-	end
-	
-	if state == 0 then reScript() end
-end
 
--- 第一次初始化
--- md5码不一致
--- md5一致 X
-hotUpdateProcess = function (url, validFileMd5, fileSuffix)
-	local newAppInfo = shttpGet(url..".lr.md5", true)
-	local stringkey = validFileMd5[1]
-	if not newAppInfo then log("校验下载异常，请重试") exit() end
-	-- 未初始化
-	if validFileMd5[2] == "" or validFileMd5[2] ~= newAppInfo then
-		stoast("更新中..")
-		local fileName, splitFileName = sdownloadFile(url..fileSuffix)
-		if fileName then
-			resolveZipFile(splitFileName)
-			setLC(stringkey, newAppInfo)
-			return newAppInfo, 0
-		else
-			log("文件下载异常，请重试") ssleep(1) exit()
-		end
-	end
-	log("已经最新版本")
-	return newAppInfo, 1
-end
-
--- 成功返回
--- 文件名称、文件名文件类型数组
-sdownloadFile = function (url)
-	-- update.zip
-	local fileName = url:match("[%w_]+%.[%w]+$")
-	-- {"update", "zip"}
-	local splitFileName = fileName:split(".")
-	if downloadFile(url, root_path..fileName, downloadFileProgressTip) == 0 then return fileName, splitFileName end
-end
-
--- 下载提示
-downloadFileProgressTip = function(pos) stoast("下载进度："..pos) end
-
--- 解压文件
--- fileNameArray：{"update", "zip"}
-resolveZipFile = function (fileNameArray)
-	local fileName = fileNameArray[1]
-	local fileType = fileNameArray[2]
-	if fileType == "zip" then -- 解压文件
-		if sFileExist("/"..fileName) then sdelfile("/"..fileName) end
-		stoast("开始解压文件..")
-		unZip(root_path..fileName.."."..fileType, root_path..fileName)
-		stoast("解压完成")
-	elseif fileType == "lr" then -- 重新安装文件
-		installLrPkg(root_path..fileName.."."..fileType)
-		stoast("安装脚本文件完成")
-	end
+hotUpdate = function()
+  stoast("正在检查更新...")
+  if hotupdate_disabled then return end
+  local url = update_source .. '/script.lr'
+  if beta_mode then url = url .. '.beta' end 	-- 调试更新源
+  local md5url = url .. '.md5'
+  local path = getWorkPath() .. '/newScript.lr'
+  local md5path = path .. '.md5'
+  if downloadFile(md5url, md5path) == -1 then
+    stoast("下载校验数据失败")
+    ssleep(3)
+    return
+  end
+  local f = io.open(md5path, 'r')
+  local expectmd5 = f:read() or '1'
+  f:close()
+  if #expectmd5 ~= #'b966ddd58fd64b2f963a0c6b61b463ce' and update_source ~= update_source_fallback then
+    log(2405)
+    update_source = update_source_fallback
+    return hotUpdate()
+  end
+  if expectmd5 == loadConfig("lr_md5", "2") then
+    stoast("已经是最新版")
+    return
+  end
+  -- log(3, expectmd5, loadConfig("lr_md5", "2"))
+  if downloadFile(url, path) == -1 then
+    stoast("下载最新脚本失败")
+    ssleep(3)
+    return
+  end
+  if fileMD5(path) ~= expectmd5 then
+    stoast("脚本校验失败")
+    ssleep(3)
+    return
+  end
+  installLrPkg(path)
+  saveConfig("lr_md5", expectmd5)
+  sleep(1000)
+  -- log(5, expectmd5, loadConfig("lr_md5", "2"))
+  log("已更新至最新")
+  return reScript()
 end
 
 sdelfile = function (path) delfile(root_path..path) end
 
-shttpGet = function (url, disableDecode)
-	local ret, code = httpGet(url)
-	if code ~= 200 then return end
-	if disableDecode then return ret end
-	return jsonLib.decode(ret)
-end
 
 -- swip for operator
 swipo = function(left, nodelay)
