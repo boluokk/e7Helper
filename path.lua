@@ -246,7 +246,7 @@ path.刷书签 = function (rest)
 			-- 如果网络不好会导致两次点击, 改成 sim = 1
 			untilTap('国服神秘商店立即更新', {sim = 1})
 			untilTap('国服神秘商店购买确认')
-			untilAppear('国服神秘商店第一个商品', {sim = .98})
+			untilAppear('国服神秘商店第一个商品', {sim = .98}) ssleep(.5)
 			setNumberConfig("exception_count", 1)
 		end
 		setNumberConfig("refresh_book_tag_count", i)
@@ -847,28 +847,8 @@ path.刷图开启 = function ()
 	end
 end
 
-path.战斗跑图1 = function (typeTarget, levelTarget, fightCount, isActivity)
-	-- local p
-	-- local key = {'阶段', '祭坛', '区域', '讨伐'}
-	-- 关卡
-	if typeTarget then
-		for i=1,3 do
-			if wait(function ()
-				if findTap(typeTarget, {rg = point.国服战斗类型区域, sim = .9}) then return 1 end
-				swipeEndStop({834,686}, {834,300}, .3)
-				ssleep(1)
-			end, 1, 5) then
-				break
-			else
-				sswipe({835,300}, {835,2000})
-				ssleep(1)
-			end
-			if i == 3 then slog('关卡可能未到开启时间') return 0 end
-		end
-	end
-	untilAppear('国服短选择队伍', {rg = {988,600,1278,717}})
-
-	-- 确定滑动到最上层
+path.战斗滑图 = function (levelTarget)
+		-- 确定滑动到最上层
 	wait(function ()
 		sswipe({835,100}, {835,3000})
 		ssleep(1)
@@ -916,20 +896,46 @@ path.战斗跑图1 = function (typeTarget, levelTarget, fightCount, isActivity)
 				end, .3, 5)
 			end
 		end)
-	end, .5, 3) then
+	end, .5, 5) then
 		log('未开启关卡')
 		slog('未开启关卡')
 		return 0
 	end
+end
 
-	path.通用刷图模式1(fightCount, isActivity)
+path.战斗跑图1 = function (typeTarget, levelTarget, fightCount, isActivity)
+	-- local p
+	-- local key = {'阶段', '祭坛', '区域', '讨伐'}
+	-- 关卡
+	if typeTarget then
+		for i=1,3 do
+			if wait(function ()
+				if findTap(typeTarget, {rg = point.国服战斗类型区域, sim = .9}) then return 1 end
+				swipeEndStop({834,686}, {834,300}, .3)
+				ssleep(1)
+			end, 1, 5) then
+				break
+			else
+				sswipe({835,300}, {835,2000})
+				ssleep(1)
+			end
+			if i == 3 then slog('关卡可能未到开启时间') return 0 end
+		end
+	end
+	untilAppear('国服短选择队伍', {rg = {988,600,1278,717}})
+
+	if path.战斗滑图(levelTarget) == 0 then
+		return 0
+	end
+
+	path.通用刷图模式1(fightCount, isActivity, levelTarget)
 end
 
 -- 跑图模式1
 -- 讨伐 精灵祭坛
 -- 834,686 834,147
 -- fightCount: 10
-path.通用刷图模式1 = function (fightCount, isActivity)
+path.通用刷图模式1 = function (fightCount, isActivity, levelTarget)
 	local rightBottomRegion = isActivity and '国服右下角活动' or '国服右下角'
 	untilAppear(rightBottomRegion, {keyword = {'战斗开始'}})	ssleep(.5)
 	-- 这里如果有的话,就处理
@@ -958,12 +964,10 @@ path.通用刷图模式1 = function (fightCount, isActivity)
 
 	local currentCount = sgetNumberConfig('fight_count', 1)
 	while currentCount <= fightCount do
-		
 		if noAction ~= '国服背包空间不足' then
 			path.战斗代理(1, isAgent, currentCount, isActivity)
 			log('完成次数: '..currentCount)
 		end
-		
 		local retCode = wait(function ()
 			-- 疲劳问题
 			wait(function ()
@@ -987,27 +991,46 @@ path.通用刷图模式1 = function (fightCount, isActivity)
 			end
 			-- 判定背包类型
 			if noAction == '国服背包空间不足' then
-				-- 是否是后记
+				-- 是否是后记：后记比较特殊, 背包清理后会到准备战斗页面
 				path.背包处理(function ()
-					path.跳转(rightBottomRegion, {keyword = {'战斗开始', '战斗', '开始', '准备战斗', '选择队伍'}}) 
+						wait(function ()
+							stap({487,18})
+							return findOne('国服返回箭头')
+						end)
+						if levelTarget == '后记' then
+							-- 第一次不会到未记载的故事
+							local rvb, res = untilAppear({'国服未记载的故事', '国服左上准备战斗'})
+							if res == '国服未记载的故事' then
+								wait(function ()
+									findTapOnce('后记准备战斗')
+									return wait(function ()
+										if not findOne('后记准备战斗') then return 1 end
+									end, .5, 5)
+								end)
+							end
+						else
+							local rvb, res = untilAppear({'国服级别光圈', '国服左上准备战斗'})
+							if res == '国服级别光圈' then
+								path.战斗滑图(levelTarget)
+							end
+						end
 				end)
 				-- 再次点击，可能还会出现背包问题
 				-- 一二倍数: return 1
 				-- 行动、背包空间不足: 直接return 0
+				local pos
 				local resultCode = wait(function ()
-					if findOne(rightBottomRegion, {keyword = '战斗开始', '准备战斗', '选择队伍'}) then
-						tmp, noAction = findOne(staticTarget)
-						if noAction == '国服二倍速' or noAction == '国服一倍速' then return 1 end
-						if noAction == '国服行动力不足' or noAction == '国服背包空间不足' then return 0 end
-						stap({1150,659})
-					end
+					pos = findOne(rightBottomRegion, {keyword = {'战斗开始', '准备战斗', '选择队伍'}})
+					if pos then stap({pos[1].l, pos[1].t}) ssleep(1) end
+					tmp, noAction = findOne(staticTarget)
+					if noAction == '国服二倍速' or noAction == '国服一倍速' then return 1 end
+					if noAction == '国服行动力不足' or noAction == '国服背包空间不足' then return 0 end
 				end)
 				if resultCode == 1 then return 1 end
 				if resultCode == 0 then return end
 			end
 			return 1
 		end, 1, 5 * 60)
-		
 		if retCode == 0 then
 			return 0
 		end
@@ -1062,7 +1085,7 @@ path.托管处理 = function (isActivity)
 	-- 活动的位置可能不一样
 	local trg = isActivity or {563,528,685,584}
 	if not wait(function ()
-		greenPos = findOne('国服是否可自动挂机', {rg = trg, sim = .9})
+		greenPos = findOne('国服是否可自动挂机', {rg = trg, sim = .85})
 		if greenPos then return 1 end
 	end, .1, 1) then
 		log('未找到托管')
@@ -1159,7 +1182,10 @@ path.宠物背包清理 = function ()
 end
 
 path.清理装备背包 = function ()
-	untilAppear('国服背包主页')
+	wait(function ()
+		stap({341,88})
+		return findOne('国服背包主页')
+	end)
 	wait(function ()
 		if findOne('国服背包全部') then
 			return 1
@@ -1398,11 +1424,9 @@ end
 
 path.跳转 = function (target, config)
 	wait(function ()
-		if not longAppearMomentDisAppear(target, config, nil, 1) then
-			return 1
-		end
+		if not longAppearMomentDisAppear(target, config, nil, 1) then return 1 end
 		back()
-	end, 1, 5 * 60)
+	end, 2, 5 * 60)
 end
 
 -- backFunc: 返回函数
@@ -1612,7 +1636,7 @@ path.后记 = function ()
 	end)
 
 	local fightCount = current_task.后记次数
-	return path.通用刷图模式1(fightCount)
+	return path.通用刷图模式1(fightCount, nil, '后记')
 end
 
 path.活动 = function ()
