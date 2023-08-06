@@ -870,13 +870,10 @@ path.战斗跑图1 = function (typeTarget, levelTarget, fightCount, isActivity)
 
 	-- 确定滑动到最上层
 	wait(function ()
-		if findOne('国服战斗级别', {keyword = {'1阶', '初级', '区域1',
-																					'段', '阶', '区域', '区'}}) then return 1 end
 		sswipe({835,100}, {835,3000})
-		ssleep(.5)
-		p = findOne('国服级别光圈')
-		-- if p then point.ocr_国服战斗级别 = {p[1] - 130, p[2] - 100, p[1] + 130, p[2]} p = {p[1], p[2] + 50} end
-	end)
+		ssleep(1)
+		return findOne('关卡顶部')
+	end, 0)
 	-- 遍历级别
 	local newTextVal
 	-- 新值重复次数
