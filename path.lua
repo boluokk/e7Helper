@@ -20,7 +20,9 @@ path.游戏首页 = function ()
 	if wait(function ()
 		-- 服务器维护中
 		if findOne('国服服务器维护中') then return 'exit' end
-		if not longAppearMomentDisAppear('国服主页Rank', nil, nil, 1) then return 1 end
+		if findOne('国服主页Rank') and not longAppearMomentDisAppear('国服主页Rank', nil, nil, 1) then
+			return 1
+		end
 		if not findTap(clickTarget) then
 			if not isBack then
 				stap(point.回退)
@@ -28,7 +30,7 @@ path.游戏首页 = function ()
 				back()
 			end
 		end
-	end, 1, 7 * 60) == 'exit' then
+	end, .5, 7 * 60) == 'exit' then
 		slog('服务器维护中...')
 		exit()
 	end
@@ -151,8 +153,8 @@ path.刷书签 = function (rest)
 	wait(function ()
 		stap(tapPoint1)
 		stap(tapPoint2)
-				ssleep(1)
-			if not findOne('国服主页Rank') then return 1 end
+		ssleep(1)
+		if not findOne('国服主页Rank') then return 1 end
 	end)
 	log('进入神秘商店')
 	untilAppear('国服神秘商店立即更新')
@@ -868,11 +870,12 @@ path.战斗跑图1 = function (typeTarget, levelTarget, fightCount, isActivity)
 
 	-- 确定滑动到最上层
 	wait(function ()
-		if findOne('国服战斗级别', {keyword = {'1阶', '初级', '区域1', '段', '阶'}}) then return 1 end
+		if findOne('国服战斗级别', {keyword = {'1阶', '初级', '区域1',
+																					'段', '阶', '区域', '区'}}) then return 1 end
 		sswipe({835,100}, {835,3000})
 		ssleep(.5)
 		p = findOne('国服级别光圈')
-		if p then point.ocr_国服战斗级别 = {p[1] - 100, p[2] - 100, p[1] + 100, p[2]} p = {p[1], p[2] + 50} end
+		if p then point.ocr_国服战斗级别 = {p[1] - 130, p[2] - 100, p[1] + 130, p[2]} p = {p[1], p[2] + 50} end
 	end)
 	-- 遍历级别
 	local newTextVal
@@ -880,7 +883,7 @@ path.战斗跑图1 = function (typeTarget, levelTarget, fightCount, isActivity)
 	local newTextValReCount = 0
 	local curTextVal
 	wait(function ()
-		wait(function () curTextVal = findOne('国服战斗级别', {keyword = key}) end, 0, .5)
+		wait(function () curTextVal = findOne('国服战斗级别', {keyword = key}) end, 0, .3)
 		if curTextVal then curTextVal = curTextVal[1].text end
 		if curTextVal and curTextVal:find(levelTarget) then return 1 end
 		if not newTextVal then
@@ -903,7 +906,7 @@ path.战斗跑图1 = function (typeTarget, levelTarget, fightCount, isActivity)
 		stap(p)
 		ssleep(1)
 		p = findOne('国服级别光圈')
-		if p then point.ocr_国服战斗级别 = {p[1] - 100, p[2] - 130, p[1] + 100, p[2]} p = {p[1], p[2] + 50} end
+		if p then point.ocr_国服战斗级别 = {p[1] - 130, p[2] - 100, p[1] + 130, p[2]} p = {p[1], p[2] + 50} end
 	end, .5, 5 * 60)
 
 	-- 0 表示此图并未打过

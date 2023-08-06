@@ -5,8 +5,8 @@ update_source_fallback = update_source
 -- apk level 限制
 is_apk_old = function() return getApkVerInt() < 0 end
 apk_old_warning = "怎么还有人用" .. getApkVerInt()
-release_date = "08.06 00:23"
-release_content = '\n1.修复热更问题\n2.修改刷标签识别次数为2\n3.添加活动'
+release_date = "08.06 12:49"
+release_content = '\n1.修复祭坛'
 -- 获取workPath
 root_path = getWorkPath() .. '/'
 -- 禁止热更新
@@ -16,7 +16,7 @@ hotupdate_disabled = true
 -- false print 打印
 logger_display_left_bottom = true
 -- 打印当前执行到哪里了(会输出某个图色名)
-detail_log_message = false
+detail_log_message = not logger_display_left_bottom
 -- 禁用测试
 disable_test = true
 -- 截图延迟
@@ -115,7 +115,6 @@ if scriptStatus == 0 then
   if not hotupdate_disabled then hotUpdate() end
   sui.show()
 else
-
   setNumberConfig("scriptStatus", 0)
   -- 多次异常关闭脚本
   -- 退出游戏还是重启游戏?
