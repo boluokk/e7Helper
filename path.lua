@@ -848,8 +848,8 @@ path.刷图开启 = function ()
 end
 
 path.战斗跑图1 = function (typeTarget, levelTarget, fightCount, isActivity)
-	local p
-	local key = {'阶段', '祭坛', '区域', '讨伐'}
+	-- local p
+	-- local key = {'阶段', '祭坛', '区域', '讨伐'}
 	-- 关卡
 	if typeTarget then
 		for i=1,3 do
@@ -875,7 +875,7 @@ path.战斗跑图1 = function (typeTarget, levelTarget, fightCount, isActivity)
 		sswipe({835,100}, {835,3000})
 		ssleep(.5)
 		p = findOne('国服级别光圈')
-		if p then point.ocr_国服战斗级别 = {p[1] - 130, p[2] - 100, p[1] + 130, p[2]} p = {p[1], p[2] + 50} end
+		-- if p then point.ocr_国服战斗级别 = {p[1] - 130, p[2] - 100, p[1] + 130, p[2]} p = {p[1], p[2] + 50} end
 	end)
 	-- 遍历级别
 	local newTextVal
@@ -883,8 +883,10 @@ path.战斗跑图1 = function (typeTarget, levelTarget, fightCount, isActivity)
 	local newTextValReCount = 0
 	local curTextVal
 	wait(function ()
-		wait(function () curTextVal = findOne('国服战斗级别', {keyword = key}) end, 0, .3)
-		if curTextVal then curTextVal = curTextVal[1].text end
+		wait(function ()
+			curTextVal = findOne('国服战斗级别')
+			if curTextVal then curTextVal = curTextVal[1].text return 1 end
+		end, .05, .3)
 		if curTextVal and curTextVal:find(levelTarget) then return 1 end
 		if not newTextVal then
 			newTextVal = curTextVal
@@ -903,11 +905,9 @@ path.战斗跑图1 = function (typeTarget, levelTarget, fightCount, isActivity)
 				newTextValReCount = 0
 			end
 		end
-		stap(p)
-		ssleep(1)
 		p = findOne('国服级别光圈')
-		if p then point.ocr_国服战斗级别 = {p[1] - 130, p[2] - 100, p[1] + 130, p[2]} p = {p[1], p[2] + 50} end
-	end, .5, 5 * 60)
+		if p then p = {p[1], p[2] + 50} stap(p) ssleep(1) end
+	end, 0, 5 * 60)
 
 	-- 0 表示此图并未打过
 	local selectGroup
