@@ -43,6 +43,18 @@ findTapOnce = function (target, config)
 	end
 end
 
+-- 重置等待时间 
+reWaitTime = function ()
+	log('re_wait_time')
+	-- 重置wait()超时时间
+	-- 默认超时时间
+	waitTimeout = time()
+	-- 设置的超时时间
+	if TIMEOUT then
+		TIMEOUT = time() + 1000 * TIMEOUTSECOND
+	end
+end
+
 findOne = function (target, config)
 	if not target then return end
 	if type(target) ~= "table" then target = {target} end
@@ -64,7 +76,7 @@ findOne = function (target, config)
 			log("程序未运行。")
 			open(server_pkg_name[current_server])
 		end
-		if not sAppIsFront(current_server)  then
+		if not sAppIsFront(current_server) then
 			open(server_pkg_name[current_server])
 		end
 		app_is_run = time()
@@ -76,19 +88,19 @@ findOne = function (target, config)
 	
 	-- 特殊问题讨伐时间到了会弹出
 	-- findTap({'cmp_国服派遣任务重新进行'}, {tapInterval = 0, sim = 1})
-	if cmpColorEx(point['cmp_国服派遣任务重新进行'], 1) == 1 then ssleep(3) stap('cmp_国服派遣任务重新进行') end
+	if cmpColorEx(point['cmp_国服派遣任务重新进行'], 1) == 1 then 
+		ssleep(1)
+		-- 取消掉
+		tap(639, 582)
+		reWaitTime()
+		return
+	end
 	-- 提交神经网络
 	if cmpColorEx(point['cmp_国服Connection'], 1) == 1 then
 		releaseCapture()
 		wait(function ()
 			log('connection..')
-			-- 重置wait()超时时间
-			-- 默认超时时间
-			waitTimeout = time()
-			-- 设置的超时时间
-			if TIMEOUT then
-				TIMEOUT = time() + 1000 * TIMEOUTSECOND
-			end
+			reWaitTime()
 			if cmpColorEx(point['cmp_国服Connection'], 1) == 0 then keepCapture() return true end
 		end, 1, nil, true)
 	end
@@ -100,6 +112,7 @@ findOne = function (target, config)
 		releaseCapture()
 		if cmpColorEx(point['cmp_国服邮件领取确认蓝底'], .95) == 1 then
 			tap(743,442)
+			reWaitTime()
 			return
 		end
 	end
