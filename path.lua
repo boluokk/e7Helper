@@ -174,7 +174,7 @@ path.刷书签 = function (rest)
 	local msg
 	for i=1,refreshCount do
 		if i > rest then
-			for i=1,2 do
+			for i=1,4 do
 				-- 可能会出现乱买, 相似度不够高?
 				-- 第一排神秘会漏掉? todo
 				local pos, countTarget = findOne(target, {rg = {540,70,669,718}})
@@ -217,7 +217,7 @@ path.刷书签 = function (rest)
 					end
 				end)
 				-- 写死判定，可能会connection导致滑动失效
-				if i == 1 and enoughResources then
+				if i == 2 and enoughResources then
 					wait(function ()
 						if findOne({'国服神秘商店第二个商品',
 												'国服神秘商店第三个商品',
