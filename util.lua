@@ -86,12 +86,25 @@ findOne = function (target, config)
 	releaseCapture()
 	keepCapture()
 	
-	-- 特殊问题讨伐时间到了会弹出
-	-- findTap({'cmp_国服派遣任务重新进行'}, {tapInterval = 0, sim = 1})
-	if cmpColorEx(point['cmp_国服派遣任务重新进行'], 1) == 1 then 
+	-- 派遣任务
+	-- 循环 5s 未发现
+	if cmpColorEx(point['cmp_国服派遣任务重新进行'], 1) == 1 then
+		releaseCapture()
 		ssleep(1)
-		-- 取消掉
-		tap(639, 582)
+		-- 取消掉 or 继续 ?
+		-- 642,578 关闭
+		-- 878,577 重新
+		local t = time()
+		local timeout = 5 * 1000
+		while 'qqGroup_206490280' do
+			if cmpColorEx(point['cmp_国服派遣任务重新进行'], 1) == 1 then
+				log('派遣任务')
+				tap(878,577)
+				ssleep(1.5)
+				t = time()
+			end
+			if time() - t > timeout then break end
+		end
 		reWaitTime()
 		return
 	end
