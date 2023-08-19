@@ -1552,3 +1552,19 @@ consoleInit = function()
   console.setTitle(is_apk_old() and apk_old_warning or title)
   console.dismiss()
 end
+
+setEventCallBack = function ()
+	setStopCallBack(function(error)
+		if error then
+			log("异常退出")
+			setNumberConfig("scriptStatus", 3)
+			sStopApp(current_server)
+			reScript()
+		else
+			log('exit')
+			slog('exit')
+			initLocalState()
+			console.show()
+		end
+	end)
+end

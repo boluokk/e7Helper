@@ -5,8 +5,8 @@ update_source_fallback = update_source
 -- apk level 限制
 is_apk_old = function() return getApkVerInt() < 0 end
 apk_old_warning = "怎么还有人用" .. getApkVerInt()
-release_date = "08.10 01:35"
-release_content = '修复bug'
+release_date = "08.19 20:58"
+release_content = '添加国际服-刷标签'
 -- 获取workPath
 root_path = getWorkPath() .. '/'
 -- 禁止热更新
@@ -32,7 +32,8 @@ app_is_run = time()
 --server pkg name
 server_pkg_name = {
   ["国服"] = 'com.zlongame.cn.epicseven',
-  ['B服'] = 'com.zlongame.cn.epicseven.bilibili', 
+  ['B服'] = 'com.zlongame.cn.epicseven.bilibili',
+  ['国际服'] = 'com.stove.epic7.google',
 }
 -- 当前服务器
 current_server = "国服"
@@ -79,30 +80,18 @@ require("test")
 -- 或者   1280x720
 local disPlayDPI = 320
 displaySizeWidth, displaySizeHeight = getDisplaySize()
-if disPlayDPI ~= 320 or ((displaySizeHeight ~= 1280 and displaySizeHeight > 0) and 
-                         (displaySizeHeight ~= 720 and displaySizeHeight > 0)) 
-                     or ((displaySizeWidth ~= 720 and displaySizeWidth > 0) and 
-                         (displaySizeWidth ~= 1280 and displaySizeWidth > 0)) then
-  wait(function ()
-    toast("当前分辨率："..displaySizeWidth.."x"..displaySizeHeight.."\tDPI："..disPlayDPI.."\n"..
-          "请手动配置成(模拟器或者虚拟机设置中)：\n分辨率: 720x1280或者1280x720 \nDPI：320\n之后重启脚本")
-  end, 1, 99999999 * 60)
-end
+-- if disPlayDPI ~= 320 or ((displaySizeHeight ~= 1280 and displaySizeHeight > 0) and 
+--                          (displaySizeHeight ~= 720 and displaySizeHeight > 0)) 
+--                      or ((displaySizeWidth ~= 720 and displaySizeWidth > 0) and 
+--                          (displaySizeWidth ~= 1280 and displaySizeWidth > 0)) then
+--   wait(function ()
+--     toast("当前分辨率："..displaySizeWidth.."x"..displaySizeHeight.."\tDPI："..disPlayDPI.."\n"..
+--           "请手动配置成(模拟器或者虚拟机设置中)：\n分辨率: 720x1280或者1280x720 \nDPI：320\n之后重启脚本")
+--   end, 1, 99999999 * 60)
+-- end
 
 -- 异常处理
-setStopCallBack(function(error)
-  if error then
-    log("异常退出")
-    setNumberConfig("scriptStatus", 3)
-    sStopApp(current_server)
-    reScript()
-  else
-    log('exit')
-    slog('exit')
-    initLocalState()
-    console.show()
-  end
-end)
+setEventCallBack()
 
 local scriptStatus = sgetNumberConfig("scriptStatus", 0)
 -- 热更新开始
