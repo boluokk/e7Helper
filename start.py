@@ -92,11 +92,17 @@ def saveAndPush():
         # 读取文件, 写入到git所在文件夹中
         for v in curFileAbsPath:
             print(v)
-            with open(v, mode='r', encoding='GB18030') as f:
-                content = f.read()
-            with open(os.path.join(os.getcwd(), re.search(r"([^\\]+)\.[^.]+$", v).group()), mode='w',
-                      encoding="UTF-8") as f:
-                f.write(content)
+            if v.rfind('.rc'):
+                with open(v, mode='rb') as f:
+                    content = f.read()
+                with open(os.path.join(os.getcwd(), re.search(r"([^\\]+)\.[^.]+$", v).group()), mode='wb') as f:
+                    f.write(content)
+            else:
+                with open(v, mode='r', encoding='GB18030') as f:
+                    content = f.read()
+                with open(os.path.join(os.getcwd(), re.search(r"([^\\]+)\.[^.]+$", v).group()), mode='w',
+                          encoding="UTF-8") as f:
+                    f.write(content)
     print('更新 or 添加(文件成功)!')
     with open(os.path.join(r'./release', 'script.lr.md5'), mode='r', encoding='UTF-8') as f:
         oldMD5 = f.read()

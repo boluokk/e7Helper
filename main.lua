@@ -1,83 +1,83 @@
--- ç³»ç»Ÿæ—¶é—´
+-- ÏµÍ³Ê±¼ä
 time = systemTime
 update_source = 'https://gitee.com/boluokk/e7-helper/raw/master/release/'
 update_source_fallback = update_source
--- apk level é™åˆ¶
+-- apk level ÏŞÖÆ
 is_apk_old = function() return getApkVerInt() < 0 end
-apk_old_warning = "æ€ä¹ˆè¿˜æœ‰äººç”¨" .. getApkVerInt()
-release_date = "08.29 21:56"
-release_content = 'æ·»åŠ å›½é™…æœ-åˆ·æ ‡ç­¾'
--- è·å–workPath
+apk_old_warning = "ÔõÃ´»¹ÓĞÈËÓÃ" .. getApkVerInt()
+release_date = "08.30 21:22"
+release_content = 'Ë¢±êÇ©ÎÊÌâ¡¢²¿·ÖĞéÄâ»úÇ°Ì¨ÓÎÏ·Ê¶±ğÒì³£ÎÊÌâ'
+-- »ñÈ¡workPath
 root_path = getWorkPath() .. '/'
--- ç¦æ­¢çƒ­æ›´æ–°
+-- ½ûÖ¹ÈÈ¸üĞÂ
 hotupdate_disabled = true
--- log æ—¥å¿—æ˜¾ç¤ºåœ¨å·¦ä¸‹è§’
--- true stoat æ‰“å°
--- false print æ‰“å°
+-- log ÈÕÖ¾ÏÔÊ¾ÔÚ×óÏÂ½Ç
+-- true stoat ´òÓ¡
+-- false print ´òÓ¡
 logger_display_left_bottom = true
--- æ‰“å°å½“å‰æ‰§è¡Œåˆ°å“ªé‡Œäº†(ä¼šè¾“å‡ºæŸä¸ªå›¾è‰²å)
+-- ´òÓ¡µ±Ç°Ö´ĞĞµ½ÄÄÀïÁË(»áÊä³öÄ³¸öÍ¼É«Ãû)
 detail_log_message = not logger_display_left_bottom
--- ç¦ç”¨æµ‹è¯•
+-- ½ûÓÃ²âÊÔ
 disable_test = true
--- æˆªå›¾å»¶è¿Ÿ
+-- ½ØÍ¼ÑÓ³Ù
 capture_interval = 0
--- æ¸¸æˆä»£ç†è¯†å›¾é—´éš”
+-- ÓÎÏ·´úÀíÊ¶Í¼¼ä¸ô
 game_running_capture_interval = 3
--- æ‰€æœ‰é…ç½®æ–‡ä»¶åç§°
+-- ËùÓĞÅäÖÃÎÄ¼şÃû³Æ
 fileNames = {'config.txt', 'fightConfig.txt', 'bagConfig.txt'}
--- ç‚¹å‡»å»¶è¿Ÿ
+-- µã»÷ÑÓ³Ù
 tap_interval = 0
--- appè¿è¡Œæ—¶é—´
+-- appÔËĞĞÊ±¼ä
 app_is_run = time()
 --server pkg name
 server_pkg_name = {
-  ["å›½æœ"] = 'com.zlongame.cn.epicseven',
-  ['Bæœ'] = 'com.zlongame.cn.epicseven.bilibili',
-  ['å›½é™…æœ'] = 'com.stove.epic7.google',
+  ["¹ú·ş"] = 'com.zlongame.cn.epicseven',
+  ['B·ş'] = 'com.zlongame.cn.epicseven.bilibili',
+  ['¹ú¼Ê·ş'] = 'com.stove.epic7.google',
 }
--- å½“å‰æœåŠ¡å™¨
-current_server = "å›½æœ"
--- wait é—´éš”
+-- µ±Ç°·şÎñÆ÷
+current_server = "¹ú·ş"
+-- wait ¼ä¸ô
 wait_interval = .7
--- æ˜¯å¦å¼‚å¸¸é€€å‡º
+-- ÊÇ·ñÒì³£ÍË³ö
 is_exception_quit = false
--- UIé…ç½®å®Œæ¯•
+-- UIÅäÖÃÍê±Ï
 ui_config_finish = false
 -- loggerID
 logger_ID = nil
--- è·å–çŠ¶æ€ç 
+-- »ñÈ¡×´Ì¬Âë
 sgetNumberConfig = function (key, defval) return tonumber(getNumberConfig(key, defval)) end
--- æ˜¯å¦æ˜¯åˆ·ä¹¦ç­¾
+-- ÊÇ·ñÊÇË¢ÊéÇ©
 is_refresh_book_tag = sgetNumberConfig('is_refresh_book_tag', 0)
--- å½“å‰ä»»åŠ¡
+-- µ±Ç°ÈÎÎñ
 current_task_index = sgetNumberConfig("current_task_index", 0)
--- å¼‚å¸¸é€€å‡ºæ¬¡æ•°
+-- Òì³£ÍË³ö´ÎÊı
 exception_count = sgetNumberConfig('exception_count', 1)
--- å½“å‰è´¦å·ä»»åŠ¡
+-- µ±Ç°ÕËºÅÈÎÎñ
 current_task = {}
--- æ£€æŸ¥æ¸¸æˆçŠ¶æ€ 10s
+-- ¼ì²éÓÎÏ·×´Ì¬ 10s
 check_game_status_interval = 10000
--- æ£€æŸ¥å›¾è‰²è¯†åˆ«æ—¶é—´
+-- ¼ì²éÍ¼É«Ê¶±ğÊ±¼ä
 getMillisecond = function (secound) return secound * 1000 end
--- å•ä½ç§’
+-- µ¥Î»Ãë
 check_game_identify_timeout = getMillisecond(20)
--- å…¶ä»–ssleepé—´éš”
+-- ÆäËûssleep¼ä¸ô
 other_ssleep_interval = 1
--- å•ä»»åŠ¡ä¼‘æ¯æ—¶é—´
+-- µ¥ÈÎÎñĞİÏ¢Ê±¼ä
 single_task_rest_time = 5
--- å¼€æºè¯´æ˜æ‰‹å†Œåœ°å€
+-- ¿ªÔ´ËµÃ÷ÊÖ²áµØÖ·
 open_resource_doc = 'https://boluokk.gitee.io/e7-helper'
--- æ‰“å°é…ç½®ä¿¡æ¯
+-- ´òÓ¡ÅäÖÃĞÅÏ¢
 print_config_info = false
 require("point")
 require('path')
 require("util")
 require("userinterface")
 require("test")
--- åˆ†è¾¨ç‡æç¤º
+-- ·Ö±æÂÊÌáÊ¾
 -- DPI 320
--- åˆ†è¾¨ç‡ 720x1280
--- æˆ–è€…   1280x720
+-- ·Ö±æÂÊ 720x1280
+-- »òÕß   1280x720
 local disPlayDPI = 320
 displaySizeWidth, displaySizeHeight = getDisplaySize()
 -- if disPlayDPI ~= 320 or ((displaySizeHeight ~= 1280 and displaySizeHeight > 0) and 
@@ -85,42 +85,42 @@ displaySizeWidth, displaySizeHeight = getDisplaySize()
 --                      or ((displaySizeWidth ~= 720 and displaySizeWidth > 0) and 
 --                          (displaySizeWidth ~= 1280 and displaySizeWidth > 0)) then
 --   wait(function ()
---     toast("å½“å‰åˆ†è¾¨ç‡ï¼š"..displaySizeWidth.."x"..displaySizeHeight.."\tDPIï¼š"..disPlayDPI.."\n"..
---           "è¯·æ‰‹åŠ¨é…ç½®æˆ(æ¨¡æ‹Ÿå™¨æˆ–è€…è™šæ‹Ÿæœºè®¾ç½®ä¸­)ï¼š\nåˆ†è¾¨ç‡: 720x1280æˆ–è€…1280x720 \nDPIï¼š320\nä¹‹åé‡å¯è„šæœ¬")
---   end, 1, 99999999 * 60)
+--     toast("µ±Ç°·Ö±æÂÊ£º"..displaySizeWidth.."x"..displaySizeHeight.."\tDPI£º"..disPlayDPI.."\n"..
+--           "ÇëÊÖ¶¯ÅäÖÃ³É(Ä£ÄâÆ÷»òÕßĞéÄâ»úÉèÖÃÖĞ)£º\n·Ö±æÂÊ: 720x1280»òÕß1280x720 \nDPI£º320\nÖ®ºóÖØÆô½Å±¾")
+--   end, 1, 1)
 -- end
 
--- å¼‚å¸¸å¤„ç†
+-- Òì³£´¦Àí
 setEventCallBack()
 
 local scriptStatus = sgetNumberConfig("scriptStatus", 0)
--- çƒ­æ›´æ–°å¼€å§‹
+-- ÈÈ¸üĞÂ¿ªÊ¼
 if scriptStatus == 0 then
   consoleInit()
   initLocalState()
-  slog('æœ€æ–°æ›´æ–°æ—¶é—´: '..release_date)
-  slog('æ›´æ–°å†…å®¹: '..(release_content or 'æš‚æ— '))
+  slog('×îĞÂ¸üĞÂÊ±¼ä: '..release_date)
+  slog('¸üĞÂÄÚÈİ: '..(release_content or 'ÔİÎŞ'))
   if not hotupdate_disabled then hotUpdate() end
   sui.show()
 else
   setNumberConfig("scriptStatus", 0)
-  -- å¤šæ¬¡å¼‚å¸¸å…³é—­è„šæœ¬
-  -- é€€å‡ºæ¸¸æˆè¿˜æ˜¯é‡å¯æ¸¸æˆ?
+  -- ¶à´ÎÒì³£¹Ø±Õ½Å±¾
+  -- ÍË³öÓÎÏ·»¹ÊÇÖØÆôÓÎÏ·?
   if exception_count > 3 then 
-    slog('è¿ç»­3æ¬¡å¼‚å¸¸é€€å‡º') 
+    slog('Á¬Ğø3´ÎÒì³£ÍË³ö') 
     setNumberConfig("exception_count", 1) 
     exit() 
   else
     setNumberConfig("exception_count", exception_count + 1)
   end 
-  -- åŠ è½½æœ¬åœ°é…ç½®
+  -- ¼ÓÔØ±¾µØÅäÖÃ
   -- current_task = read('config.txt', true)
   current_task = uiConfigUnion(fileNames)
   if is_refresh_book_tag == 1 then
-    path.åˆ·ä¹¦ç­¾(sgetNumberConfig("refresh_book_tag_count", 0))
+    path.Ë¢ÊéÇ©(sgetNumberConfig("refresh_book_tag_count", 0))
   elseif is_refresh_book_tag == 2 then
-    path.å‡3æ˜Ÿç‹—ç²®()
+    path.Éı3ĞÇ¹·Á¸()
   else
-    path.æ¸¸æˆå¼€å§‹()
+    path.ÓÎÏ·¿ªÊ¼()
   end
 end
