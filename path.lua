@@ -534,7 +534,7 @@ path.战斗代理 = function (isRepeat, isAgent, currentCount, isActivity)
 		local pos, targetV
 		wait(function ()
 			if currentCount then
-				log('代理中: '..currentCount)
+				log('代理中: '..currentCount..'/'..global_stage_count)
 			else
 				log('代理中..')
 			end
@@ -824,10 +824,10 @@ path.刷图开启 = function ()
 	-- 图过滤
 	log('开启刷图')
 	-- 讨伐
-	local passAll = ui_option.战斗类型
-	local currentPass = sgetNumberConfig('current_pass', 1)
-	for i,v in pairs(passAll) do
-		if current_task[v] and i >= currentPass then
+	local stageAll = ui_option.战斗类型
+	local currentStage = sgetNumberConfig('current_stage', 1)
+	for i,v in pairs(stageAll) do
+		if current_task[v] and i >= currentStage then
 			if v:includes({'讨伐', '迷宫', '精灵祭坛', '深渊'}) then
 				path.战斗选择页()
 				wait(function ()
@@ -842,7 +842,7 @@ path.刷图开启 = function ()
 			end
 			-- 重置刷图次数
 			setNumberConfig("fight_count", 0)
-			sgetNumberConfig('current_pass', i)
+			sgetNumberConfig('current_stage', i)
 			path.游戏首页()
 		end
 	end
@@ -937,6 +937,7 @@ end
 -- 834,686 834,147
 -- fightCount: 10
 path.通用刷图模式1 = function (fightCount, isActivity, levelTarget)
+	global_stage_count = fightCount
 	local rightBottomRegion = isActivity and '国服右下角活动' or '国服右下角'
 	untilAppear(rightBottomRegion, {keyword = {'战斗开始'}})	ssleep(.5)
 	-- 这里如果有的话,就处理
@@ -1628,7 +1629,7 @@ path.后记 = function ()
 
 	wait(function () return findTapOnce('后记准备战斗') end)
 
-	longAppearAndTap('国服长选择队伍', nil, nil, 2)
+	-- longAppearAndTap('国服长选择队伍', nil, nil, 2)
 	wait(function ()
 		findTapOnce('国服长选择队伍')
 		return wait(function ()
@@ -1641,21 +1642,46 @@ path.后记 = function ()
 end
 
 path.活动 = function ()
+	local fc = current_task.活动次数
 	wait(function ()
 		stap(point.支线故事)
 		ssleep(1)
 		return not findOne('国服主页Rank')
 	end)
+	local e, w
 	wait(function ()
 		stap({61,187})
-		stap({1059,291})
-		return findOne('活动首页', {keyword = '序幕'})
+		stap({1059,285})
+		e, w = findOne({'活动首页', '活动冒险'}, {keyword = '序幕'})
+		return w
 	end)
-	wait(function ()
-		stap({994,657})
-		return findOne('国服右下角', {keyword = '战斗开始'})
-	end)
-	local level = getUIRealValue('活动级别', '活动级别')
-	local fc = current_task.活动次数
-	return path.战斗跑图1(nil, level, fc, {175,613,357,714})
+	-- 判定是哪一种活动
+	if w == '活动冒险' then
+		log('活动-默认关卡')
+		wait(function ()
+			stap({1166,661})
+			return findOne('后记准备战斗')
+		end)
+		wait(function ()
+			findTapOnce('后记准备战斗')
+			return wait(function ()
+			if not findOne('后记准备战斗') then return 1 end
+			end, .5, 5)
+		end)
+		wait(function ()
+				findTapOnce('国服长选择队伍')
+				return wait(function ()
+				if not findOne('国服长选择队伍') then return 1 end
+			end, 1, 4)
+		end)
+		return path.通用刷图模式1(fc, nil, '后记')
+	elseif w == '活动首页' then
+		log('活动-可选关卡')
+		wait(function ()
+			stap({994,657})
+			return findOne('国服右下角', {keyword = '战斗开始'})
+		end)
+		local level = getUIRealValue('活动级别', '活动级别')
+		return path.战斗跑图1(nil, level, fc, {175,613,357,714})
+	end
 end

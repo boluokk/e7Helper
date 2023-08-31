@@ -5,7 +5,7 @@ update_source_fallback = update_source
 -- apk level 限制
 is_apk_old = function() return getApkVerInt() < 0 end
 apk_old_warning = "怎么还有人用" .. getApkVerInt()
-release_date = "08.30 21:22"
+release_date = "08.31 23:55"
 release_content = '刷标签问题、部分虚拟机前台游戏识别异常问题'
 -- 获取workPath
 root_path = getWorkPath() .. '/'
@@ -67,6 +67,8 @@ other_ssleep_interval = 1
 single_task_rest_time = 5
 -- 开源说明手册地址
 open_resource_doc = 'https://boluokk.gitee.io/e7-helper'
+-- 全局关卡次数(用来代理的时候提示: 代理中 1/100)
+global_stage_count = 0
 -- 打印配置信息
 print_config_info = false
 require("point")
