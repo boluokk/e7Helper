@@ -354,7 +354,6 @@ end
 
 -- log_history = {}
 log = function(...)
-	if disable_log then return end
 	local arg = {...}
 	for _, v in pairs(arg) do
 		if type(v) == 'table' then
