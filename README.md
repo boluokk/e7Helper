@@ -3,8 +3,8 @@
 <p>一款多功能覆盖的第七史诗脚本助手</a> </p>
 
 <p>
-    <a style="color: greenyellow" href=https://boluokk.gitee.io/e7-helper/>使用文档(必读)&nbsp&nbsp</a>
-    <a style="color: deepskyblue" href=https://boluokk.gitee.io/e7-helper/>功能介绍&nbsp&nbsp</a>
+    <a style="color: greenyellow" href=https://boluokk.gitee.io/e7-helper/>使用文档(必读)　</a>
+    <a style="color: deepskyblue" href=https://boluokk.gitee.io/e7-helper/>国服反和谐(教程)　</a>
     <a style="color: orange;" href=https://qm.qq.com/cgi-bin/qm/qr?k=o6MW-K-Ws6A2-S_WhHEro1JggzREWPzt&jump_from=webapi&authKey=PRSHw0kOjKtnqEVwyXCRHnKKwAWhzXWD/y486deoyZ/AWyNfGLwHIEwjb8gf9yoX>qq交流群:206490280</a>
 </p>
 

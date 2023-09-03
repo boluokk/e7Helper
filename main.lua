@@ -5,7 +5,7 @@ update_source_fallback = update_source
 -- apk level 限制
 is_apk_old = function() return getApkVerInt() < 0 end
 apk_old_warning = "怎么还有人用" .. getApkVerInt()
-release_date = "09.03 12:11"
+release_date = "09.03 12:28"
 release_content = '\n(1)代理超时异常修复\n(2)升3星异常修复'
 -- 获取workPath
 root_path = getWorkPath() .. '/'
