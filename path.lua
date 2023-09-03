@@ -534,7 +534,11 @@ path.战斗代理 = function (isRepeat, isAgent, currentCount, isActivity)
 		local pos, targetV
 		wait(function ()
 			if currentCount then
-				log('代理中: '..currentCount..'/'..global_stage_count)
+				if isAgent then
+					log('代理中-有宠物: '..currentCount..'/'..global_stage_count)
+				else	
+					log('代理中-无宠物: '..currentCount..'/'..global_stage_count)
+				end
 			else
 				log('代理中..')
 			end
@@ -568,7 +572,7 @@ path.战斗代理 = function (isRepeat, isAgent, currentCount, isActivity)
 			if findTap('国服我的通缉名单') then log('点击通缉名单') end
 			if findTap('申请好友取消') then log('好友申请取消') end
 			if findTap('紧急任务确认') then log('紧急任务确认') end
-		end, game_running_capture_interval, 25 * 10 * 60) -- 25 * 7 (一把7分钟)
+		end, game_running_capture_interval, isAgent and (9999 * 10 * 60) or (10 * 60)) -- 有宠物9999分钟, 无宠物10分钟(代理中可能会被re_wait_time, 不影响[说明游戏没有卡死])
 	end
 	log('战斗代理完成')
 end

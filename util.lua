@@ -343,6 +343,7 @@ wait = function (func, interval, TIMEOUT, disableRestartGame)
 		if not TIMEOUT and not disableRestartGame
 									 and time() - waitTimeout > check_game_identify_timeout then
 			log('超时重试')
+			slog('超时重试')
 			setNumberConfig("scriptStatus", 3)
 			path.游戏首页()
 			reScript()
