@@ -8,9 +8,7 @@ end
 -- isBack: 通过按back来回退
 path.游戏首页 = function ()
 	current_server = getUIRealValue('服务器', '服务器')
-	isBack = true
 	if not sAppIsRunning(current_server) or not sAppIsFront(current_server) then
-		isBack = false
 		open(server_pkg_name[current_server])
 	end
 	setControlBarPosNew(0, 1)
@@ -21,6 +19,7 @@ path.游戏首页 = function ()
 		-- 服务器维护中
 		if findOne('国服服务器维护中') then return 'exit' end
 		if findOne('国服主页Rank') and not longAppearMomentDisAppear('国服主页Rank', nil, nil, 1) then
+			isBack = true
 			return 1
 		end
 		if not findTapOnce(clickTarget, {keyword = {'结束'}}) then
@@ -141,9 +140,8 @@ path.社团奖励 = function ()
 	end
 end
 
--- mumu12模拟器很奇怪, 有时候脚本会很执行的很慢。
--- 蓝叠国服版尝试下?(蓝叠会出现一种已经点击了, 但是页面没有动。)
--- 最终mumu6最流畅
+-- 会乱购买东西??
+-- 添加标签类型识别判定(召唤)
 path.刷书签 = function (rest)
 	rest = rest or 0
 	setNumberConfig("is_refresh_book_tag", 1)
@@ -173,20 +171,31 @@ path.刷书签 = function (rest)
 	local refreshCount = current_task['更新次数'] or 334
 	local enoughResources = true
 	local msg
+	local newRg
+	local pos, countTarget
 	for i=1,refreshCount do
 		if i > rest then
 			for i=1,4 do
 				-- 可能会出现乱买, 相似度不够高?
 				-- 第一排神秘会漏掉? todo
-				local pos, countTarget = findOne(target, {rg = {540,70,669,718}})
+			 	pos, countTarget= findOne(target, {rg = {540,70,669,718}})
 				if pos then
-					local newRg = {1147, pos[2] - 80, 1226, pos[2] + 80}
-					untilTap('国服神秘商店购买', {rg = newRg})
-					untilTap('国服神秘商店购买1')
-					-- 等待购买特效消失
-					wait(function ()
-						if not longAppearMomentDisAppear({'国服神秘商店立即更新', '国服神秘商店购买资源不足', '国服一般商店'}, nil, nil, 1.5) then return 1 end
-					end)
+					newRg = {1147, pos[2] - 80, 1226, pos[2] + 80}
+					point.ocr_标签类型 = {660, pos[2] - 80, 760, pos[2] + 80}
+					if not wait(function ()
+						if findOne('标签类型', {keyword = {'召唤', '神秘', '书签'}}) then
+							return 1
+						end
+					end, .3, 1) then 
+						log('标签类型不正确')
+					else
+						untilTap('国服神秘商店购买', {rg = newRg})
+						untilTap('国服神秘商店购买1')
+						-- 等待购买特效消失
+						wait(function ()
+							if not longAppearMomentDisAppear({'国服神秘商店立即更新', '国服神秘商店购买资源不足', '国服一般商店'}, nil, nil, 1.5) then return 1 end
+						end)
+					end
 				end
 				-- 资源是否耗尽
 				wait(function ()
@@ -572,7 +581,7 @@ path.战斗代理 = function (isRepeat, isAgent, currentCount, isActivity)
 			if findTap('国服我的通缉名单') then log('点击通缉名单') end
 			if findTap('申请好友取消') then log('好友申请取消') end
 			if findTap('紧急任务确认') then log('紧急任务确认') end
-		end, game_running_capture_interval, isAgent and (9999 * 10 * 60) or (10 * 60)) -- 有宠物9999分钟, 无宠物10分钟(代理中可能会被re_wait_time, 不影响[说明游戏没有卡死])
+		end, game_running_capture_interval, 9999 * 10 * 60) -- 不影响
 	end
 	log('战斗代理完成')
 end

@@ -5,8 +5,8 @@ update_source_fallback = update_source
 -- apk level 限制
 is_apk_old = function() return getApkVerInt() < 0 end
 apk_old_warning = "怎么还有人用" .. getApkVerInt()
-release_date = "09.03 19:05"
-release_content = '\n国际服购买体力问题'
+release_date = "09.03 23:23"
+release_content = '\n刷书签问题'
 -- 获取workPath
 root_path = getWorkPath() .. '/'
 -- 禁止热更新
@@ -43,6 +43,8 @@ wait_interval = .7
 is_exception_quit = false
 -- UI配置完毕
 ui_config_finish = false
+-- 已经进入过游戏首页
+isBack = false
 -- loggerID
 logger_ID = nil
 -- 获取状态码
