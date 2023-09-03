@@ -1,8 +1,8 @@
 --[[
-Í¼Æ¬£º img_¿ªÍ·
-ÑÕÉ«±ÈÖµ£ºcmp_¿ªÍ·
-ÑÕÉ«¶àÍ¼£ºmul_¿ªÍ·
-Ê¶×Ö£ºocr_¿ªÍ·
+å›¾ç‰‡ï¼š img_å¼€å¤´
+é¢œè‰²æ¯”å€¼ï¼šcmp_å¼€å¤´
+é¢œè‰²å¤šå›¾ï¼šmul_å¼€å¤´
+è¯†å­—ï¼šocr_å¼€å¤´
 ]]
 
 findNode = function(selector) return nodeLib.findOne(selector, true) end
@@ -43,13 +43,13 @@ findTapOnce = function (target, config)
 	end
 end
 
--- ÖØÖÃµÈ´ıÊ±¼ä 
+-- é‡ç½®ç­‰å¾…æ—¶é—´ 
 reWaitTime = function ()
 	log('re_wait_time')
-	-- ÖØÖÃwait()³¬Ê±Ê±¼ä
-	-- Ä¬ÈÏ³¬Ê±Ê±¼ä
+	-- é‡ç½®wait()è¶…æ—¶æ—¶é—´
+	-- é»˜è®¤è¶…æ—¶æ—¶é—´
 	waitTimeout = time()
-	-- ÉèÖÃµÄ³¬Ê±Ê±¼ä
+	-- è®¾ç½®çš„è¶…æ—¶æ—¶é—´
 	if TIMEOUT then
 		TIMEOUT = time() + 1000 * TIMEOUTSECOND
 	end
@@ -67,13 +67,13 @@ findOne = function (target, config)
 	
 	if type(config.keyword) == 'string' then config.keyword = {config.keyword} end
 	
-	-- ½ØÍ¼ÑÓ³Ù
+	-- æˆªå›¾å»¶è¿Ÿ
 	ssleep(capture_interval)
 	
-	-- ¼ä¸ôÊ±¼ä²é¿´ÓÎÏ·ÊÇ·ñÔÚÔËĞĞ
+	-- é—´éš”æ—¶é—´æŸ¥çœ‹æ¸¸æˆæ˜¯å¦åœ¨è¿è¡Œ
 	if time() - app_is_run > check_game_status_interval then
 		if not sAppIsRunning(current_server) then
-			log("³ÌĞòÎ´ÔËĞĞ¡£")
+			log("ç¨‹åºæœªè¿è¡Œã€‚")
 			open(server_pkg_name[current_server])
 		end
 		if not sAppIsFront(current_server) then
@@ -86,19 +86,19 @@ findOne = function (target, config)
 	releaseCapture()
 	keepCapture()
 	
-	-- ÅÉÇ²ÈÎÎñ
-	-- Ñ­»· 5s Î´·¢ÏÖ
-	if cmpColorEx(point['cmp_¹ú·şÅÉÇ²ÈÎÎñÖØĞÂ½øĞĞ'], 1) == 1 then
+	-- æ´¾é£ä»»åŠ¡
+	-- å¾ªç¯ 5s æœªå‘ç°
+	if cmpColorEx(point['cmp_å›½æœæ´¾é£ä»»åŠ¡é‡æ–°è¿›è¡Œ'], 1) == 1 then
 		releaseCapture()
 		ssleep(1)
-		-- È¡Ïûµô or ¼ÌĞø ?
-		-- 642,578 ¹Ø±Õ
-		-- 878,577 ÖØĞÂ
+		-- å–æ¶ˆæ‰ or ç»§ç»­ ?
+		-- 642,578 å…³é—­
+		-- 878,577 é‡æ–°
 		local t = time()
 		local timeout = 5 * 1000
 		while 'qqGroup_206490280' do
-			if cmpColorEx(point['cmp_¹ú·şÅÉÇ²ÈÎÎñÖØĞÂ½øĞĞ'], 1) == 1 then
-				log('ÅÉÇ²ÈÎÎñ')
+			if cmpColorEx(point['cmp_å›½æœæ´¾é£ä»»åŠ¡é‡æ–°è¿›è¡Œ'], 1) == 1 then
+				log('æ´¾é£ä»»åŠ¡')
 				tap(878,577)
 				ssleep(1.5)
 				t = time()
@@ -108,29 +108,29 @@ findOne = function (target, config)
 		reWaitTime()
 		return
 	end
-	-- Ìá½»Éñ¾­ÍøÂç
-	if cmpColorEx(point['cmp_¹ú·şConnection'], 1) == 1 then
+	-- æäº¤ç¥ç»ç½‘ç»œ
+	if cmpColorEx(point['cmp_å›½æœConnection'], 1) == 1 then
 		releaseCapture()
 		wait(function ()
 			log('connection..')
 			reWaitTime()
-			if cmpColorEx(point['cmp_¹ú·şConnection'], 1) == 0 then keepCapture() return true end
+			if cmpColorEx(point['cmp_å›½æœConnection'], 1) == 0 then keepCapture() return true end
 		end, 1, nil, true)
 	end
-	-- Î¬»¤¹«¸æ¹Ø±Õµô
-	local retX, retY = findMultiColor(310,67,972,227,point.¹ú·şÎ¬»¤¹«¸æ[1],point.¹ú·şÎ¬»¤¹«¸æ[2],0,.95)
+	-- ç»´æŠ¤å…¬å‘Šå…³é—­æ‰
+	local retX, retY = findMultiColor(310,67,972,227,point.å›½æœç»´æŠ¤å…¬å‘Š[1],point.å›½æœç»´æŠ¤å…¬å‘Š[2],0,.95)
 	if retX ~= -1 then
 		tap(retX, retY)
 		ssleep(1)
 		releaseCapture()
-		if cmpColorEx(point['cmp_¹ú·şÓÊ¼şÁìÈ¡È·ÈÏÀ¶µ×'], .95) == 1 then
+		if cmpColorEx(point['cmp_å›½æœé‚®ä»¶é¢†å–ç¡®è®¤è“åº•'], .95) == 1 then
 			tap(743,442)
 			reWaitTime()
 			return
 		end
 	end
 	
-	-- ÕËºÅ±»¶¥Ö®ÀàµÄ todo 
+	-- è´¦å·è¢«é¡¶ä¹‹ç±»çš„ todo 
 		
 	for i=1,#target do
 		tar = target[i]
@@ -210,7 +210,7 @@ findAll = function (target, config)
 	config.imgEnd = config.imgEnd or '.png'
 	config.dir = config.dir or 0
 	
-	-- ¼ì²âÒì³£
+	-- æ£€æµ‹å¼‚å¸¸
 	-- findOne({})
 	
 	releaseCapture()
@@ -239,13 +239,13 @@ findAll = function (target, config)
 	
 end
 
--- ÇĞ¸î×Ö·û´®
+-- åˆ‡å‰²å­—ç¬¦ä¸²
 string.split = function (str, sStr)
 	local r = splitStr(str, sStr)
 	if r then return r end
 end
 
--- ÏÔÊ¾¶à¾Ã ³ÖĞøĞÔ£¬»áµ½timeout²Å»áÍË³ö]
+-- æ˜¾ç¤ºå¤šä¹… æŒç»­æ€§ï¼Œä¼šåˆ°timeoutæ‰ä¼šé€€å‡º]
 longAppearAndTap = function (target, config, pos, timeout)
 	local t = time()
 	local timeout = timeout or 1.5
@@ -259,7 +259,7 @@ longAppearAndTap = function (target, config, pos, timeout)
 	end, .1)
 end
 
--- ÏûÊ§¶à¾Ã[³ÖĞøĞÔ£¬»áµ½timeout²Å»áÍË³ö]
+-- æ¶ˆå¤±å¤šä¹…[æŒç»­æ€§ï¼Œä¼šåˆ°timeoutæ‰ä¼šé€€å‡º]
 longDisappearTap = function (target, config, pos, timeout, waitTimeOut)
 	local t = time()
 	local timeout = timeout or 1.5
@@ -273,9 +273,9 @@ longDisappearTap = function (target, config, pos, timeout, waitTimeOut)
 	end, .1, waitTimeOut)
 end
 
--- ÏÔÊ¾¶à¾Ã [È·±£±ØĞëÊÇappearÒ³Ãæ]
--- ÏÔÊ¾ÖĞ¼äÍ»È»¶Ïµô true
--- ÏÔÊ¾µ½Ê±¼äÍê false
+-- æ˜¾ç¤ºå¤šä¹… [ç¡®ä¿å¿…é¡»æ˜¯appearé¡µé¢]
+-- æ˜¾ç¤ºä¸­é—´çªç„¶æ–­æ‰ true
+-- æ˜¾ç¤ºåˆ°æ—¶é—´å®Œ false
 longAppearMomentDisAppear = function (target, config, pos, timeout)
 	local t = time()
 	local timeout = timeout or 1.5
@@ -290,7 +290,7 @@ longAppearMomentDisAppear = function (target, config, pos, timeout)
 	end
 end
 
--- ÏûÊ§¶à¾Ã[·Ç³ÖĞøĞÔ]
+-- æ¶ˆå¤±å¤šä¹…[éæŒç»­æ€§]
 longDisappearMomentTap = function (target, config, pos, timeout)
 	local t = time()
 	local timeout = timeout or 1.5
@@ -305,29 +305,29 @@ longDisappearMomentTap = function (target, config, pos, timeout)
 	end
 end
 
--- µ¥Î»Ãë
+-- å•ä½ç§’
 ssleep = function (time) time = time or 0 sleep(time * 1000) end
 
--- ½Å±¾ÔËĞĞÊ±¼ä
+-- è„šæœ¬è¿è¡Œæ—¶é—´
 appRunningTime = function () return tickCount() end
 
 stap = function (pos, interval, disableTapCheck)
 	if not interval then interval = tap_interval end
-	-- ½â¾ö°Ñ¼·ÏÂÏßµã»÷ÁËºÍ4µãÖØÁ¬½Ó
-	-- ·ÀÖ¹Îóµã»÷
+	-- è§£å†³æŠŠæŒ¤ä¸‹çº¿ç‚¹å‡»äº†å’Œ4ç‚¹é‡è¿æ¥
+	-- é˜²æ­¢è¯¯ç‚¹å‡»
 	if not disableTapCheck then ssleep(interval) findOne('') end
 	-- log(pos)
 	if type(pos) == "table" then tap(pos[1], pos[2]) end
 	if type(pos) == "string" then pos = getTargetName(pos) local p = string.split(point[pos], '|') tap(tonumber(p[1]), tonumber(p[2])) end
 end
 
--- Ê¶±ğÑÕÉ«Ê±¼ä³¬Ê±
--- ¿¨ÔÚÄ³Ò»´¦
+-- è¯†åˆ«é¢œè‰²æ—¶é—´è¶…æ—¶
+-- å¡åœ¨æŸä¸€å¤„
 wait = function (func, interval, TIMEOUT, disableRestartGame)
 	interval = interval or wait_interval
 	
 	if TIMEOUT then
-		-- ¼ÇÂ¼´«ÈëµÄTIMEOUT
+		-- è®°å½•ä¼ å…¥çš„TIMEOUT
 		TIMEOUTSECOND = TIMEOUT
 		TIMEOUT = time() + 1000 * TIMEOUT
 	end
@@ -338,14 +338,14 @@ wait = function (func, interval, TIMEOUT, disableRestartGame)
 		if r then TIMEOUTSECOND = nil return r end
 		ssleep(interval)
 		if TIMEOUT and time() + 0 > TIMEOUT then TIMEOUTSECOND = nil TIMEOUT = nil break end
-		-- wait ³¬Ê±¿ÉÄÜ¿¨Ö÷ÁË
-		-- ÖØÆô½Å±¾ + »ØÍËµ½Ê×Ò³
+		-- wait è¶…æ—¶å¯èƒ½å¡ä¸»äº†
+		-- é‡å¯è„šæœ¬ + å›é€€åˆ°é¦–é¡µ
 		if not TIMEOUT and not disableRestartGame
 									 and time() - waitTimeout > check_game_identify_timeout then
-			log('³¬Ê±ÖØÊÔ')
-			slog('³¬Ê±ÖØÊÔ')
+			log('è¶…æ—¶é‡è¯•')
+			slog('è¶…æ—¶é‡è¯•')
 			setNumberConfig("scriptStatus", 3)
-			path.ÓÎÏ·Ê×Ò³()
+			path.æ¸¸æˆé¦–é¡µ()
 			reScript()
 		end
 	end
@@ -404,7 +404,7 @@ onceFingerSwiper = function (f, e, time)
 	ssleep(1)
 end
 
--- ÌîĞ´Â·¾¶»¬¶¯
+-- å¡«å†™è·¯å¾„æ»‘åŠ¨
 fingerSwiperPath = function (firstPoint, otherPoints, interval)
 	
 	touchDown(1, firstPoint[1], firstPoint[2])
@@ -418,7 +418,7 @@ fingerSwiperPath = function (firstPoint, otherPoints, interval)
 	
 end
 
--- »¬¶¯ºóÔİÍ£
+-- æ»‘åŠ¨åæš‚åœ
 swipeEndStop = function (start, dest, stopTime, swTime)
 	touchDown(1, start[1], start[2])
 	ssleep(.05)
@@ -436,7 +436,7 @@ end
 screen = getScreen()
 gesture = function(fingers)
 	if #fingers == 0 then fingers = {fingers} end
-	local gesture = Gesture:new() -- ´´½¨Ò»¸öÊÖÊÆ»¬¶¯¶ÔÏó
+	local gesture = Gesture:new() -- åˆ›å»ºä¸€ä¸ªæ‰‹åŠ¿æ»‘åŠ¨å¯¹è±¡
 	for _, finger in pairs(fingers) do
 		local path = Path:new()
 		for _, point in pairs(finger.point) do path:addPoint(point[1], point[2]) end
@@ -577,7 +577,7 @@ table.sum = function(t)
 	for _, c in pairs(t) do a = a + c end
 	return a
 end
--- ´ÓtÖĞÑ¡³ö³¤¶ÈÎªnµÄËùÓĞ×éºÏ£¬½á¹ûÔÚans£¬
+-- ä»tä¸­é€‰å‡ºé•¿åº¦ä¸ºnçš„æ‰€æœ‰ç»„åˆï¼Œç»“æœåœ¨ansï¼Œ
 table.combination = function(t, n)
 	local ans = {}
 	local cur = {}
@@ -623,7 +623,7 @@ table.remove_duplicate = function(t)
 	return ans
 end
 
--- ³öÏÖn´ÎµÄÔªËØ
+-- å‡ºç°næ¬¡çš„å…ƒç´ 
 table.appear_times = function(t, times)
 	local ans = {}
 	local visited = {}
@@ -640,7 +640,7 @@ end
 --   return table.extend(table.slice(t, idx), table.slice(t, 1, idx - 1))
 -- end
 
--- ½»
+-- äº¤
 table.intersect = function(a, b)
 	local ans = {}
 	if #b < #a then a, b = b, a end
@@ -650,7 +650,7 @@ table.intersect = function(a, b)
 	return ans
 end
 
--- ²î
+-- å·®
 table.subtract = function(a, b)
 	local ans = {}
 	b = table.value2key(b or {})
@@ -768,7 +768,7 @@ table.containsTable = function (old, new)
 	return ans
 end
 
--- ½«¶à¸ötableºÏ²¢³ÉÒ»¸ötable: °üÀ¨keyºÍvalue
+-- å°†å¤šä¸ªtableåˆå¹¶æˆä¸€ä¸ªtable: åŒ…æ‹¬keyå’Œvalue
 mergeTables = function(...)
     local mergedTable = {}
     
@@ -908,7 +908,7 @@ table.findInsert = function (t, n, v)
 	end
 end
 
--- ´ÓtableÖĞ»ñÈ¡Ëæ»úÊı
+-- ä»tableä¸­è·å–éšæœºæ•°
 table.randomWithTableIn = function (arr, many)
 	local t = {}
 	local tempIndex = {}
@@ -933,12 +933,12 @@ filterImgSuffix = function (t)
 	return c
 end
 
--- »ñÈ¡µ¹ÊıÊ±¼ä
+-- è·å–å€’æ•°æ—¶é—´
 getTimeBase = function (secound)
 	return secound + math.floor(time() / 1000)
 end
 
--- »ñÈ¡Ïà²îÊ±¼ä(½áÊøÊ±¼ä£¬ ¿ªÊ¼Ê±¼ä)
+-- è·å–ç›¸å·®æ—¶é—´(ç»“æŸæ—¶é—´ï¼Œ å¼€å§‹æ—¶é—´)
 getTime = function (startTime, isMinus)
 	local sec = tonumber(startTime) or 0
 	if isMinus then
@@ -948,10 +948,10 @@ getTime = function (startTime, isMinus)
 	local hour = math.floor(sec / 60 / 60 % 24)
 	local min = math.floor(sec / 60 % 60)
 	sec = sec % 60
-	return day.."Ìì"..hour.."Ê±"..min.."·Ö"..sec.."Ãë"
+	return day.."å¤©"..hour.."æ—¶"..min.."åˆ†"..sec.."ç§’"
 end
 
--- »ñµÃËùÓĞK
+-- è·å¾—æ‰€æœ‰K
 getAllKey = function (originData)
 	if not originData then return {} end
 	local r = {}
@@ -971,7 +971,7 @@ chineseUnicodeStringMatch = function(a, b)
 	return score
 end
 
---»ñÈ¡Ê±¼ä
+--è·å–æ—¶é—´
 getDate = function ()
 	return os.date('%Y-%m-%d %H:%M:%S')
 end
@@ -982,26 +982,26 @@ closeWin = function (w)
 	ui.dismiss(w)
 end
 
--- ¸üĞÂapp
+-- æ›´æ–°app
 uploadAppTip = function (message)
 	ISRUN = true
-	ui.newLayout("APP¸üĞÂ", 600)
-	-- ui.addTextView("APP¸üĞÂ","message", message)
-	ui.newRow("APP¸üĞÂ","row2")
+	ui.newLayout("APPæ›´æ–°", 600)
+	-- ui.addTextView("APPæ›´æ–°","message", message)
+	ui.newRow("APPæ›´æ–°","row2")
 	
-	ui.addTextView("APP¸üĞÂ", "down", "https://wwm.lanzouv.com/iNTtJ0at6rfi")
-	ui.newRow("APP¸üĞÂ","row3")
-	ui.addTextView("APP¸üĞÂ","pass","ÃÜÂë£º66")
-	ui.newRow("APP¸üĞÂ","row4")
-	ui.addButton("APP¸üĞÂ","download","ÏÂÔØ")
+	ui.addTextView("APPæ›´æ–°", "down", "https://wwm.lanzouv.com/iNTtJ0at6rfi")
+	ui.newRow("APPæ›´æ–°","row3")
+	ui.addTextView("APPæ›´æ–°","pass","å¯†ç ï¼š66")
+	ui.newRow("APPæ›´æ–°","row4")
+	ui.addButton("APPæ›´æ–°","download","ä¸‹è½½")
 	
 	ui.setTextSize("message", 10)
 	ui.setTextSize("down", 10)
 	ui.setTextSize("pass", 10)
 	ui.setTextColor("messageTip","#FFFF730B")
-	ui.setTitleBackground("APP¸üĞÂ","#FF00FF40")
+	ui.setTitleBackground("APPæ›´æ–°","#FF00FF40")
 	ui.setFullScreen("download")
-	ui.show("APP¸üĞÂ", false)
+	ui.show("APPæ›´æ–°", false)
 	ui.setOnClick("download","jumbNewAppWebSite('https://wwm.lanzouv.com/iNTtJ0at6rfi')")
 	
 	while ISRUN do
@@ -1009,24 +1009,24 @@ uploadAppTip = function (message)
 	end
 end
 
--- Ìø×ªµ½×îĞÂ¸úĞÂappÍøÒ³
+-- è·³è½¬åˆ°æœ€æ–°è·Ÿæ–°appç½‘é¡µ
 jumbNewAppWebSite = function (website)
 	i ={};
-	-- android ÅäÖÃµÄaction Ñ¡Ïî£¬ Í¨³£ºÍuri ÅäºÏÊ¹ÓÃ
+	-- android é…ç½®çš„action é€‰é¡¹ï¼Œ é€šå¸¸å’Œuri é…åˆä½¿ç”¨
 	i['action'] = "android.intent.action.VIEW";
-	-- uri Í¨³£ÓÃ×÷Ğ­ÒéÌø×ª
+	-- uri é€šå¸¸ç”¨ä½œåè®®è·³è½¬
 	i['uri'] = website;
-	-- data ¶îÍâÔö¼ÓµÄÊı¾İ
+	-- data é¢å¤–å¢åŠ çš„æ•°æ®
 	i['data'] ="";
-	-- packageName Í¨³£Ö¸ ÒªÌø×ªµÄ°üÃû
+	-- packageName é€šå¸¸æŒ‡ è¦è·³è½¬çš„åŒ…å
 	i['packageName'] = "";
-	-- classname Í¨³£Ö¸ ¾ßÌåÒªÌø×ªµÄactivity
+	-- classname é€šå¸¸æŒ‡ å…·ä½“è¦è·³è½¬çš„activity
 	i['classname'] = "";
-	-- extra Îª¶îÍâÔö¼ÓµÄ ²ÎÊı
+	-- extra ä¸ºé¢å¤–å¢åŠ çš„ å‚æ•°
 	i['extra'] = {};
 	i['extra']["data"] = "hello";
 	runIntent(i)
-	closeWin("APP¸üĞÂ")
+	closeWin("APPæ›´æ–°")
 end
 
 hscale = screen.height / 1080
@@ -1045,12 +1045,12 @@ scale = function(x, mode)
 end
 
 solveCapture = function(server)
-	log("»¬¶¯ÑéÖ¤Âë")
+	log("æ»‘åŠ¨éªŒè¯ç ")
 	ssleep(other_ssleep_interval)
 	keepCapture()
 	local node = findNode({class = "android.webkit.WebView", package = server})
 	if not node then
-		log("Î´·¢ÏÖ½Úµã")
+		log("æœªå‘ç°èŠ‚ç‚¹")
 		return
 	end
 	local left, top = node.bounds.l, node.bounds.t
@@ -1215,7 +1215,7 @@ logger = function (fun, config)
 	showHUD(logger_ID, fun(), config[1], config[2], config[3], config[4], config[5], config[6], config[7], config[8], 0, 0, 0, 0, 2)
 end
 
--- serverName: ·şÎñÆ÷Ãû³ÆÊı×é(ÖĞÎÄÃû³Æ£¬·ÇpkgName)
+-- serverName: æœåŠ¡å™¨åç§°æ•°ç»„(ä¸­æ–‡åç§°ï¼ŒépkgName)
 sAppIsRunning = function (serverName)
 	if type(serverName) == "string" then serverName = {serverName} end
 	for i=1,#serverName do
@@ -1236,12 +1236,12 @@ sStopApp = function (appNames)
 	local appNames = appNames
 	if type(appNames) == "string" then appNames = {appNames} end
 	for i=1,#appNames do
-		-- log("Í£Ö¹£º"..appNames[i])
+		-- log("åœæ­¢ï¼š"..appNames[i])
 		stopApp(server_pkg_name[appNames[i]])
 	end
 end
 
--- »ñÈ¡µ±Ç°ĞÇÆÚ
+-- è·å–å½“å‰æ˜ŸæœŸ
 getCurWeek = function ()
 	return uiSetting.week[tonumber(tonumber(os.date("%w")) == 0 and 7 or tonumber(os.date("%w")))]
 end
@@ -1254,7 +1254,7 @@ end
 -- displaySizeWidth
 -- displaySizeHeight
 stoast = function (message, x, y, messageSize)
-	-- 0ÎŞĞı×ª 1±íÊ¾ÆÁÄ»ÄæÊ±ÕëĞı×ª90¶È 2±íÊ¾ÆÁÄ»ÄæÊ±ÕëĞı×ª180¶È 3±íÊ¾ÆÁÄ»ÄæÊ±ÕëĞı×ª270¶È
+	-- 0æ— æ—‹è½¬ 1è¡¨ç¤ºå±å¹•é€†æ—¶é’ˆæ—‹è½¬90åº¦ 2è¡¨ç¤ºå±å¹•é€†æ—¶é’ˆæ—‹è½¬180åº¦ 3è¡¨ç¤ºå±å¹•é€†æ—¶é’ˆæ—‹è½¬270åº¦
 	if getDisplayRotate() == 0 then
 		if displaySizeWidth == 720 then
 			toast(message, x or 0, y or 0, messageSize or 12)
@@ -1278,28 +1278,28 @@ exit = function () exitScript() end
 
 reScript = function () restartScript() end
 
--- »ñÈ¡×Ö·û´®µÄ³¤¶È£¨ÈÎºÎµ¥¸ö×Ö·û³¤¶È¶¼Îª1£©
--- ½â¾öÖĞÎÄ³¤¶ÈÎÊÌâ
+-- è·å–å­—ç¬¦ä¸²çš„é•¿åº¦ï¼ˆä»»ä½•å•ä¸ªå­—ç¬¦é•¿åº¦éƒ½ä¸º1ï¼‰
+-- è§£å†³ä¸­æ–‡é•¿åº¦é—®é¢˜
 getStringLength = function(inputstr)
 	if not inputstr or type(inputstr) ~= "string" or #inputstr <= 0 then
 		return nil
 	end
-	local length = 0  -- ×Ö·ûµÄ¸öÊı
+	local length = 0  -- å­—ç¬¦çš„ä¸ªæ•°
 	local i = 1
 	while true do
-		local curByte = string.byte(inputstr, i)--¸ù¾İÊ××Ö½ÚµÄ´óĞ¡È·¶¨
+		local curByte = string.byte(inputstr, i)--æ ¹æ®é¦–å­—èŠ‚çš„å¤§å°ç¡®å®š
 		local byteCount = 1
 		if curByte > 239 then --11110xxx
-			byteCount = 4  -- 4×Ö½Ú×Ö·û
+			byteCount = 4  -- 4å­—èŠ‚å­—ç¬¦
 		elseif curByte > 223 then --1110xxxx
-			byteCount = 3  -- 3×Ö½Ú×Ö·û
+			byteCount = 3  -- 3å­—èŠ‚å­—ç¬¦
 		elseif curByte > 128 then  --110xxxxx
-			byteCount = 2  -- Ë«×Ö½Ú×Ö·û
+			byteCount = 2  -- åŒå­—èŠ‚å­—ç¬¦
 		else
-			byteCount = 1  -- µ¥×Ö½Ú×Ö·û
+			byteCount = 1  -- å•å­—èŠ‚å­—ç¬¦
 		end
 		-- local char = string.sub(inputstr, i, i + byteCount - 1)
-		-- print(char)  -- ´òÓ¡µ¥¸ö×Ö·û
+		-- print(char)  -- æ‰“å°å•ä¸ªå­—ç¬¦
 		i = i + byteCount
 		length = length + 1
 		if i > #inputstr then
@@ -1311,15 +1311,15 @@ end
 
 
 hotUpdate = function()
-  stoast("ÕıÔÚ¼ì²é¸üĞÂ...")
+  stoast("æ­£åœ¨æ£€æŸ¥æ›´æ–°...")
   if hotupdate_disabled then return end
   local url = update_source .. '/script.lr'
-  if beta_mode then url = url .. '.beta' end 	-- µ÷ÊÔ¸üĞÂÔ´
+  if beta_mode then url = url .. '.beta' end 	-- è°ƒè¯•æ›´æ–°æº
   local md5url = url .. '.md5'
   local path = getWorkPath() .. '/newScript.lr'
   local md5path = path .. '.md5'
   if downloadFile(md5url, md5path) == -1 then
-    stoast("ÏÂÔØĞ£ÑéÊı¾İÊ§°Ü")
+    stoast("ä¸‹è½½æ ¡éªŒæ•°æ®å¤±è´¥")
     ssleep(3)
     return
   end
@@ -1332,17 +1332,17 @@ hotUpdate = function()
     return hotUpdate()
   end
   if expectmd5 == loadConfig("lr_md5", "2") then
-    stoast("ÒÑ¾­ÊÇ×îĞÂ°æ")
+    stoast("å·²ç»æ˜¯æœ€æ–°ç‰ˆ")
     return
   end
   -- log(3, expectmd5, loadConfig("lr_md5", "2"))
   if downloadFile(url, path) == -1 then
-    stoast("ÏÂÔØ×îĞÂ½Å±¾Ê§°Ü")
+    stoast("ä¸‹è½½æœ€æ–°è„šæœ¬å¤±è´¥")
     ssleep(3)
     return
   end
   if fileMD5(path) ~= expectmd5 then
-    stoast("½Å±¾Ğ£ÑéÊ§°Ü")
+    stoast("è„šæœ¬æ ¡éªŒå¤±è´¥")
     ssleep(3)
     return
   end
@@ -1350,7 +1350,7 @@ hotUpdate = function()
   saveConfig("lr_md5", expectmd5)
   sleep(1000)
   -- log(5, expectmd5, loadConfig("lr_md5", "2"))
-  log("ÒÑ¸üĞÂÖÁ×îĞÂ")
+  log("å·²æ›´æ–°è‡³æœ€æ–°")
   return reScript()
 end
 
@@ -1402,14 +1402,14 @@ currentAllRunningApp = function (pkgs)
 	return ans
 end
 
--- ËùÓĞ·şÎñÆ÷
+-- æ‰€æœ‰æœåŠ¡å™¨
 all_server = getAllKey(server_pkg_name)
--- ÌáÊ¾·şÎñÆ÷Ñ¡ÔñÕıÈ·ÊÇ·ñ£¬½öµ¥ÕËºÅ
--- Ñ¡´í·şÎñÆ÷Çé¿öÏÂ»òÕßÃ»ÓĞÏÂÔØµÄÇé¿öÏÂ
+-- æç¤ºæœåŠ¡å™¨é€‰æ‹©æ­£ç¡®æ˜¯å¦ï¼Œä»…å•è´¦å·
+-- é€‰é”™æœåŠ¡å™¨æƒ…å†µä¸‹æˆ–è€…æ²¡æœ‰ä¸‹è½½çš„æƒ…å†µä¸‹
 tipCheckServer = function (close)
 	local close
-	-- Î´°²×°ÔòÖ±½ÓÍË³ö
-	-- °²×°ÁËµ«ÊÇ²»¶ÔÔòÌáÊ¾
+	-- æœªå®‰è£…åˆ™ç›´æ¥é€€å‡º
+	-- å®‰è£…äº†ä½†æ˜¯ä¸å¯¹åˆ™æç¤º
 	local apps = getInstalledApk()
 	local curPkg = server_pkg_name[current_server]
 	if #table.containsTable(apps, {curPkg}) > 0 then return else close = true end
@@ -1422,25 +1422,25 @@ tipCheckServer = function (close)
 	for i=1,#exApps do
 		local k = getAllKey(table.filterKV(server_pkg_name, function (k, v) if v == exApps[i] then return k end end))
 		if i ~= #exApps then
-			msg = msg..k[1].."¡¢"
+			msg = msg..k[1].."ã€"
 		else
 			msg = msg..k[1]
 		end
 	end
 	
-	msg = msg.."\nµ±Ç°ÔËĞĞ£º"
-	if #runApps == 0 then msg = msg.."ÎŞ" end
+	msg = msg.."\nå½“å‰è¿è¡Œï¼š"
+	if #runApps == 0 then msg = msg.."æ— " end
 	for i=1,#runApps do
 		local k = getAllKey(table.filterKV(server_pkg_name, function (k, v) if k == runApps[i] then return k end end))
 		if i ~= #runApps then
-			msg = msg..k[1].."¡¢"
+			msg = msg..k[1].."ã€"
 		else
 			msg = msg..k[1]
 		end
 	end
 	-- log(exApps)
 	wait(function ()
-		stoast("µ±Ç°Ñ¡Ôñ·şÎñÆ÷£º"..current_server.."\nÒÑ°²×°£º"..msg)
+		stoast("å½“å‰é€‰æ‹©æœåŠ¡å™¨ï¼š"..current_server.."\nå·²å®‰è£…ï¼š"..msg)
 	end, 1, 10)
 	
 	if close then exit() end
@@ -1459,7 +1459,7 @@ untilAppear = function (target, config)
 	return r1,r2
 end
 
--- »ñÈ¡¾º¼¼³¡»ı·Ö
+-- è·å–ç«æŠ€åœºç§¯åˆ†
 getArenaPoints = function (p)
   local points = ''
   for i in string.gmatch(p, '[0-9]+') do points = points..i end
@@ -1481,12 +1481,12 @@ back = function ()
 	keyPress("back")
 end
 
--- ±¾Éí + ¶Ô°ë»ñÈ¡´Ê
--- input: Å·¶àÂí¶Ù
+-- æœ¬èº« + å¯¹åŠè·å–è¯
+-- input: æ¬§å¤šé©¬é¡¿
 -- output:
---				Å·¶àÂí¶Ù
---				Å·¶à
---				Âí¶Ù
+--				æ¬§å¤šé©¬é¡¿
+--				æ¬§å¤š
+--				é©¬é¡¿
 cutStringGetBinWord = function (input)
     local output = {}
     local len = getStringLength(input)
@@ -1499,7 +1499,7 @@ cutStringGetBinWord = function (input)
     return output
 end
 
--- Êı¾İ¸ñÊ½×ª»», Õë¶ÔUIÅäÖÃ30
+-- æ•°æ®æ ¼å¼è½¬æ¢, é’ˆå¯¹UIé…ç½®30
 uiDataCovert = function (data)
   local ans = {}
   for i,v in pairs(data) do
@@ -1512,9 +1512,9 @@ uiDataCovert = function (data)
   return ans
 end
 
--- ui ÅäÖÃÎÄ¼şºÏ²¢
--- ÊÖ¶¯¹ıÂËÒ»Ğ©ÌØÊâÖµ
--- Ö±½Ó½«UIÅäÖÃÑ¡Ïî, ÅäÖÃµ½pointÖĞÈ¥, ÕâÑùÄÜ±£Ö¤ÏÂ±êÊı×ÖºÍÕæÕıµÄÖµ¶¼ÄÜÓÃ
+-- ui é…ç½®æ–‡ä»¶åˆå¹¶
+-- æ‰‹åŠ¨è¿‡æ»¤ä¸€äº›ç‰¹æ®Šå€¼
+-- ç›´æ¥å°†UIé…ç½®é€‰é¡¹, é…ç½®åˆ°pointä¸­å», è¿™æ ·èƒ½ä¿è¯ä¸‹æ ‡æ•°å­—å’ŒçœŸæ­£çš„å€¼éƒ½èƒ½ç”¨
 uiConfigUnion = function (fileNames)
   local ans = {}
   for i,v in pairs(fileNames) do table.insert(ans, uiDataCovert(read(v, true))) end
@@ -1524,7 +1524,7 @@ end
 -- get UI real value
 getUIRealValue = function (optionName, indexName) return ui_option[optionName][current_task[indexName] + 1] end
 
--- ³õÊ¼»¯±¾µØÊı¾İ
+-- åˆå§‹åŒ–æœ¬åœ°æ•°æ®
 initLocalState = function (datas, state)
 	if not dates then
 		setNumberConfig("scriptStatus", 0)
@@ -1535,9 +1535,9 @@ initLocalState = function (datas, state)
     setNumberConfig("g1", 0)
     setNumberConfig("g2", 0)
     setNumberConfig("g3", 0)
-    -- Éı3ĞÇ¹·Á¸
+    -- å‡3æ˜Ÿç‹—ç²®
     setNumberConfig("upgrade_3x_hero", 0)
-		-- Ë¢Í¼´ÎÊı
+		-- åˆ·å›¾æ¬¡æ•°
     setNumberConfig("fight_count", 0)
 	end
 end
@@ -1556,7 +1556,7 @@ end
 setEventCallBack = function ()
 	setStopCallBack(function(error)
 		if error then
-			log("Òì³£ÍË³ö")
+			log("å¼‚å¸¸é€€å‡º")
 			setNumberConfig("scriptStatus", 3)
 			sStopApp(current_server)
 			reScript()

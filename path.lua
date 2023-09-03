@@ -1,136 +1,136 @@
 path = {}
 
-path.ÓÎÏ·¿ªÊ¼ = function ()
-	path.ÓÎÏ·Ê×Ò³()
-	path.ÈÎÎñ¶ÓÁĞ()
+path.æ¸¸æˆå¼€å§‹ = function ()
+	path.æ¸¸æˆé¦–é¡µ()
+	path.ä»»åŠ¡é˜Ÿåˆ—()
 end
 
--- isBack: Í¨¹ı°´backÀ´»ØÍË
-path.ÓÎÏ·Ê×Ò³ = function ()
-	current_server = getUIRealValue('·şÎñÆ÷', '·şÎñÆ÷')
+-- isBack: é€šè¿‡æŒ‰backæ¥å›é€€
+path.æ¸¸æˆé¦–é¡µ = function ()
+	current_server = getUIRealValue('æœåŠ¡å™¨', 'æœåŠ¡å™¨')
 	if not sAppIsRunning(current_server) or not sAppIsFront(current_server) then
 		open(server_pkg_name[current_server])
 	end
 	setControlBarPosNew(0, 1)
-	local clickTarget = {'¹ú·şÇ©µ½ÓÒÏÂÀ¶µ×', '¹ú·şÇ©µ½ÓÒÏÂÀ¶µ×2', '¹ú·ş¹«¸æX',
-											 '¹ú·şµÇÂ¼µÚÆßÊ·Ê«', '¹ú·ş·ÅÆúÕ½¶·', '¹ú·ş½áÊø',
-											 '¹ú·şÉñÃØÉÌµêÈ¡Ïû'}
+	local clickTarget = {'å›½æœç­¾åˆ°å³ä¸‹è“åº•', 'å›½æœç­¾åˆ°å³ä¸‹è“åº•2', 'å›½æœå…¬å‘ŠX',
+											 'å›½æœç™»å½•ç¬¬ä¸ƒå²è¯—', 'å›½æœæ”¾å¼ƒæˆ˜æ–—', 'å›½æœç»“æŸ',
+											 'å›½æœç¥ç§˜å•†åº—å–æ¶ˆ'}
 	if wait(function ()
-		-- ·şÎñÆ÷Î¬»¤ÖĞ
-		if findOne('¹ú·ş·şÎñÆ÷Î¬»¤ÖĞ') then return 'exit' end
-		if findOne('¹ú·şÖ÷Ò³Rank') and not longAppearMomentDisAppear('¹ú·şÖ÷Ò³Rank', nil, nil, 1) then
+		-- æœåŠ¡å™¨ç»´æŠ¤ä¸­
+		if findOne('å›½æœæœåŠ¡å™¨ç»´æŠ¤ä¸­') then return 'exit' end
+		if findOne('å›½æœä¸»é¡µRank') and not longAppearMomentDisAppear('å›½æœä¸»é¡µRank', nil, nil, 1) then
 			isBack = true
 			return 1
 		end
-		if not findTapOnce(clickTarget, {keyword = {'½áÊø'}}) then
+		if not findTapOnce(clickTarget, {keyword = {'ç»“æŸ'}}) then
 			if not isBack then
-				stap(point.»ØÍË)
+				stap(point.å›é€€)
 			else
 				back()
 			end
 		end
 	end, .5, 7 * 60) == 'exit' then
-		slog('·şÎñÆ÷Î¬»¤ÖĞ...')
+		slog('æœåŠ¡å™¨ç»´æŠ¤ä¸­...')
 		exit()
 	end
 end
 
-path.ÈÎÎñ¶ÓÁĞ = function ()
-	local allTask = table.filter(ui_option.ÈÎÎñ, function (v)
-		return not v:includes({'ÉçÍÅÇ©µ½',
-		'ÉçÍÅ½±Àø',
-		'ÉçÍÅ¾èÔù'})
+path.ä»»åŠ¡é˜Ÿåˆ— = function ()
+	local allTask = table.filter(ui_option.ä»»åŠ¡, function (v)
+		return not v:includes({'ç¤¾å›¢ç­¾åˆ°',
+		'ç¤¾å›¢å¥–åŠ±',
+		'ç¤¾å›¢æèµ '})
 	end)
 	local curTaskIndex = sgetNumberConfig("current_task_index", 0)
 	for i,v in pairs(allTask) do
 		if i > curTaskIndex and current_task[v] then
-			-- 0 ±íÊ¾Òì³£
-			-- 1 »òÕß nil ±íÊ¾ ok
-			-- 2 ±íÊ¾ÖØ×ö
-			if path[v]() == 2 then path.ÓÎÏ·Ê×Ò³() path[v]() end
+			-- 0 è¡¨ç¤ºå¼‚å¸¸
+			-- 1 æˆ–è€… nil è¡¨ç¤º ok
+			-- 2 è¡¨ç¤ºé‡åš
+			if path[v]() == 2 then path.æ¸¸æˆé¦–é¡µ() path[v]() end
 			slog(v)
 			setNumberConfig("exception_count", 1)
-			path.ÓÎÏ·Ê×Ò³()
+			path.æ¸¸æˆé¦–é¡µ()
 		end
 		setNumberConfig('current_task_index', i)
 	end
 end
 
-path.ÉçÍÅ¿ªÆô = function ()
+path.ç¤¾å›¢å¼€å¯ = function ()
 	wait(function ()
-		stap(point.ÉçÍÅ)
+		stap(point.ç¤¾å›¢)
 				ssleep(1)
-			if not findOne('¹ú·şÖ÷Ò³Rank') then return 1 end
+			if not findOne('å›½æœä¸»é¡µRank') then return 1 end
 	end)
 	wait(function ()
-		if findOne('¹ú·ş×óÉÏÆïÊ¿ÍÅ') then ssleep(1) return 1 end
+		if findOne('å›½æœå·¦ä¸Šéª‘å£«å›¢') then ssleep(1) return 1 end
 		stap({447,47})
 	end)
 	
-	if current_task.ÉçÍÅÇ©µ½ then path.ÉçÍÅÇ©µ½() end
-	if current_task.ÉçÍÅ¾èÔù then path.ÉçÍÅ¾èÔù() end
-	if current_task.ÉçÍÅ½±Àø then path.ÉçÍÅ½±Àø() end
+	if current_task.ç¤¾å›¢ç­¾åˆ° then path.ç¤¾å›¢ç­¾åˆ°() end
+	if current_task.ç¤¾å›¢æèµ  then path.ç¤¾å›¢æèµ () end
+	if current_task.ç¤¾å›¢å¥–åŠ± then path.ç¤¾å›¢å¥–åŠ±() end
 	
 end
 
-path.ÉçÍÅÇ©µ½ = function ()
-	if findTap('¹ú·şÆïÊ¿ÍÅÇ©µ½') then
+path.ç¤¾å›¢ç­¾åˆ° = function ()
+	if findTap('å›½æœéª‘å£«å›¢ç­¾åˆ°') then
 		wait(function ()
 			stap({509,35})
-			if findOne('¹ú·ş×óÉÏÆïÊ¿ÍÅ') then return 1 end
+			if findOne('å›½æœå·¦ä¸Šéª‘å£«å›¢') then return 1 end
 		end)
 	end
 end
 
-path.ÉçÍÅ¾èÔù = function ()
+path.ç¤¾å›¢æèµ  = function ()
 	wait(function ()
 		stap({1090,414})
 		if findOne("500|130|FFFFFF,513|121|FFFFFF,520|132|FFFFFF,544|128|FFFFFF,538|137|FFFFFF") then
 			return 1
 		end
 	end)
-	-- ½ğ±Ò
-	-- ÓÂÆøÖ¤¾İ
-	-- ¶¼¾èÔù
-	local giveType = current_task.ÉçÍÅ¾èÔùÀàĞÍ
+	-- é‡‘å¸
+	-- å‹‡æ°”è¯æ®
+	-- éƒ½æèµ 
+	local giveType = current_task.ç¤¾å›¢æèµ ç±»å‹
 	if giveType == 0 then
-		findTap('¹ú·ş½ğ±Ò¾èÔù')
+		findTap('å›½æœé‡‘å¸æèµ ')
 	elseif giveType == 1 then
-		findTap('¹ú·şÓÂÆøÖ¤¾İ¾èÔù')
+		findTap('å›½æœå‹‡æ°”è¯æ®æèµ ')
 	elseif giveType == 2 then
-		findTap('¹ú·ş½ğ±Ò¾èÔù')
+		findTap('å›½æœé‡‘å¸æèµ ')
 		wait(function ()
 			stap({515,40})
-			if findOne('¹ú·ş×óÉÏÆïÊ¿ÍÅ') then return 1 end
+			if findOne('å›½æœå·¦ä¸Šéª‘å£«å›¢') then return 1 end
 		end)
-		findTap('¹ú·şÓÂÆøÖ¤¾İ¾èÔù')
+		findTap('å›½æœå‹‡æ°”è¯æ®æèµ ')
 	end
 	wait(function ()
 		stap({515,40})
-		if findOne('¹ú·ş×óÉÏÆïÊ¿ÍÅ') then return 1 end
+		if findOne('å›½æœå·¦ä¸Šéª‘å£«å›¢') then return 1 end
 	end)
 end
 
-path.ÉçÍÅ½±Àø = function ()
+path.ç¤¾å›¢å¥–åŠ± = function ()
 	wait(function ()
 		stap({1114,698})
-		if findOne('¹ú·şÆïÊ¿ÍÅÃ¿ÖÜÈÎÎñ', {sim = 1}) then return 1 end
+		if findOne('å›½æœéª‘å£«å›¢æ¯å‘¨ä»»åŠ¡', {sim = 1}) then return 1 end
 	end)
-	-- ÉÏ·½Ğ¡ºìµã´¦Àí, Õâ¸öÊ¶±ğµÄ...¿ÉÒÔ¹«ÓÃ
-	if findTap('¹ú·şÃ¿ÈÕÃ¿ÖÜĞ¡ºìÇò', {rg = {437,140,987,212}, sim = .98}) then
+	-- ä¸Šæ–¹å°çº¢ç‚¹å¤„ç†, è¿™ä¸ªè¯†åˆ«çš„...å¯ä»¥å…¬ç”¨
+	if findTap('å›½æœæ¯æ—¥æ¯å‘¨å°çº¢çƒ', {rg = {437,140,987,212}, sim = .98}) then
 		wait(function ()
 			stap({600,81})
-			if findOne('¹ú·şÆïÊ¿ÍÅÃ¿ÖÜÈÎÎñ', {sim = 1}) then return 1 end
+			if findOne('å›½æœéª‘å£«å›¢æ¯å‘¨ä»»åŠ¡', {sim = 1}) then return 1 end
 		end)
 	end
-	-- ÖĞ¼äÁìÈ¡´¦Àí
-	-- ºÃËÆÖ»ÓÃ»¬¶¯Ò»ÏÂ, Ò²¾ÍÊÇÖ»ÓĞÁ½Ò³
+	-- ä¸­é—´é¢†å–å¤„ç†
+	-- å¥½ä¼¼åªç”¨æ»‘åŠ¨ä¸€ä¸‹, ä¹Ÿå°±æ˜¯åªæœ‰ä¸¤é¡µ
 	for i=1,2 do
 		wait(function ()
-			if findTap('¹ú·şÆïÊ¿ÍÅÈÎÎñÁìÈ¡', {rg = {866,255,990,722}}) then
+			if findTap('å›½æœéª‘å£«å›¢ä»»åŠ¡é¢†å–', {rg = {866,255,990,722}}) then
 				wait(function ()
 					stap({424,30})
-					if findOne('¹ú·şÆïÊ¿ÍÅÃ¿ÖÜÈÎÎñ', {sim = 1}) then return 1 end
+					if findOne('å›½æœéª‘å£«å›¢æ¯å‘¨ä»»åŠ¡', {sim = 1}) then return 1 end
 				end)
 			else
 				return 1
@@ -140,35 +140,35 @@ path.ÉçÍÅ½±Àø = function ()
 	end
 end
 
--- »áÂÒ¹ºÂò¶«Î÷??
--- Ìí¼Ó±êÇ©ÀàĞÍÊ¶±ğÅĞ¶¨(ÕÙ»½)
-path.Ë¢ÊéÇ© = function (rest)
+-- ä¼šä¹±è´­ä¹°ä¸œè¥¿??
+-- æ·»åŠ æ ‡ç­¾ç±»å‹è¯†åˆ«åˆ¤å®š(å¬å”¤)
+path.åˆ·ä¹¦ç­¾ = function (rest)
 	rest = rest or 0
 	setNumberConfig("is_refresh_book_tag", 1)
-	path.ÓÎÏ·Ê×Ò³()
-	local tapPoint1 = point['ÃØÃÜÉÌµê0']
-	local tapPoint2 = point['ÃØÃÜÉÌµê1']
+	path.æ¸¸æˆé¦–é¡µ()
+	local tapPoint1 = point['ç§˜å¯†å•†åº—0']
+	local tapPoint2 = point['ç§˜å¯†å•†åº—1']
 	wait(function ()
 		stap(tapPoint1)
 		stap(tapPoint2)
 		ssleep(1)
-		if not findOne('¹ú·şÖ÷Ò³Rank') then return 1 end
+		if not findOne('å›½æœä¸»é¡µRank') then return 1 end
 	end)
-	log('½øÈëÉñÃØÉÌµê')
-	untilAppear('¹ú·şÉñÃØÉÌµêÁ¢¼´¸üĞÂ')
-	untilAppear('¹ú·şÉñÃØÉÌµêµÚÒ»¸öÉÌÆ·') ssleep(.5)
-	-- ¿ªÊ¼¹Ò»úË¢ĞÂÊéÇ©ÁË
-	-- ¹ú·şÉñÃØÉÌµêÓÑÇéÊéÇ©
-	-- ¹ú·şÉñÃØÉÌµêÊÄÔ¼ÊéÇ©
+	log('è¿›å…¥ç¥ç§˜å•†åº—')
+	untilAppear('å›½æœç¥ç§˜å•†åº—ç«‹å³æ›´æ–°')
+	untilAppear('å›½æœç¥ç§˜å•†åº—ç¬¬ä¸€ä¸ªå•†å“') ssleep(.5)
+	-- å¼€å§‹æŒ‚æœºåˆ·æ–°ä¹¦ç­¾äº†
+	-- å›½æœç¥ç§˜å•†åº—å‹æƒ…ä¹¦ç­¾
+	-- å›½æœç¥ç§˜å•†åº—èª“çº¦ä¹¦ç­¾
 	local target = {}
 	local g1 = sgetNumberConfig("g1", 0)
 	local g2 = sgetNumberConfig("g2", 0)
 	local g3 = sgetNumberConfig("g3", 0)
-	-- [¹ú·şÉñÃØÉÌµêÉñÃØ½±ÅÆ ¹ú·şÉñÃØÉÌµêÊÄÔ¼ÊéÇ©]  »áµ¼ÖÂÂÒÂò¶«Î÷?
-	if current_task['ÉñÃØ½±ÅÆ'] then table.insert(target, 'ÉñÃØ') end
-	if current_task['ÊÄÔ¼ÊéÇ©'] then table.insert(target, 'ÊéÇ©') end
-	if current_task['ÓÑÇéÊéÇ©'] then table.insert(target, '¹ú·şÉñÃØÉÌµêÓÑÇéÊéÇ©') end
-	local refreshCount = current_task['¸üĞÂ´ÎÊı'] or 334
+	-- [å›½æœç¥ç§˜å•†åº—ç¥ç§˜å¥–ç‰Œ å›½æœç¥ç§˜å•†åº—èª“çº¦ä¹¦ç­¾]  ä¼šå¯¼è‡´ä¹±ä¹°ä¸œè¥¿?
+	if current_task['ç¥ç§˜å¥–ç‰Œ'] then table.insert(target, 'ç¥ç§˜') end
+	if current_task['èª“çº¦ä¹¦ç­¾'] then table.insert(target, 'ä¹¦ç­¾') end
+	if current_task['å‹æƒ…ä¹¦ç­¾'] then table.insert(target, 'å›½æœç¥ç§˜å•†åº—å‹æƒ…ä¹¦ç­¾') end
+	local refreshCount = current_task['æ›´æ–°æ¬¡æ•°'] or 334
 	local enoughResources = true
 	local msg
 	local newRg
@@ -176,87 +176,87 @@ path.Ë¢ÊéÇ© = function (rest)
 	for i=1,refreshCount do
 		if i > rest then
 			for i=1,4 do
-				-- ¿ÉÄÜ»á³öÏÖÂÒÂò, ÏàËÆ¶È²»¹»¸ß?
-				-- µÚÒ»ÅÅÉñÃØ»áÂ©µô? todo
+				-- å¯èƒ½ä¼šå‡ºç°ä¹±ä¹°, ç›¸ä¼¼åº¦ä¸å¤Ÿé«˜?
+				-- ç¬¬ä¸€æ’ç¥ç§˜ä¼šæ¼æ‰? todo
 			 	pos, countTarget= findOne(target, {rg = {540,70,669,718}})
 				if pos then
 					newRg = {1147, pos[2] - 80, 1226, pos[2] + 80}
-					point.ocr_±êÇ©ÀàĞÍ = {660, pos[2] - 80, 760, pos[2] + 80}
+					point.ocr_æ ‡ç­¾ç±»å‹ = {660, pos[2] - 80, 760, pos[2] + 80}
 					if not wait(function ()
-						if findOne('±êÇ©ÀàĞÍ', {keyword = {'ÕÙ»½', 'ÉñÃØ', 'ÊéÇ©'}}) then
+						if findOne('æ ‡ç­¾ç±»å‹', {keyword = {'å¬å”¤', 'ç¥ç§˜', 'ä¹¦ç­¾'}}) then
 							return 1
 						end
 					end, .3, 1) then 
-						log('±êÇ©ÀàĞÍ²»ÕıÈ·')
+						log('æ ‡ç­¾ç±»å‹ä¸æ­£ç¡®')
 					else
-						untilTap('¹ú·şÉñÃØÉÌµê¹ºÂò', {rg = newRg})
-						untilTap('¹ú·şÉñÃØÉÌµê¹ºÂò1')
-						-- µÈ´ı¹ºÂòÌØĞ§ÏûÊ§
+						untilTap('å›½æœç¥ç§˜å•†åº—è´­ä¹°', {rg = newRg})
+						untilTap('å›½æœç¥ç§˜å•†åº—è´­ä¹°1')
+						-- ç­‰å¾…è´­ä¹°ç‰¹æ•ˆæ¶ˆå¤±
 						wait(function ()
-							if not longAppearMomentDisAppear({'¹ú·şÉñÃØÉÌµêÁ¢¼´¸üĞÂ', '¹ú·şÉñÃØÉÌµê¹ºÂò×ÊÔ´²»×ã', '¹ú·şÒ»°ãÉÌµê'}, nil, nil, 1.5) then return 1 end
+							if not longAppearMomentDisAppear({'å›½æœç¥ç§˜å•†åº—ç«‹å³æ›´æ–°', 'å›½æœç¥ç§˜å•†åº—è´­ä¹°èµ„æºä¸è¶³', 'å›½æœä¸€èˆ¬å•†åº—'}, nil, nil, 1.5) then return 1 end
 						end)
 					end
 				end
-				-- ×ÊÔ´ÊÇ·ñºÄ¾¡
+				-- èµ„æºæ˜¯å¦è€—å°½
 				wait(function ()
-					local r1, r2 = findOne({'¹ú·şÉñÃØÉÌµê¹ºÂò×ÊÔ´²»×ã', '¹ú·şÉñÃØÉÌµêÁ¢¼´¸üĞÂ', '¹ú·şÒ»°ãÉÌµê'}, {sim = 1})
-					if r2 == '¹ú·şÉñÃØÉÌµêÁ¢¼´¸üĞÂ' then
-						-- Í³¼Æ»ñµÃÎïÆ·´ÎÊı
+					local r1, r2 = findOne({'å›½æœç¥ç§˜å•†åº—è´­ä¹°èµ„æºä¸è¶³', 'å›½æœç¥ç§˜å•†åº—ç«‹å³æ›´æ–°', 'å›½æœä¸€èˆ¬å•†åº—'}, {sim = 1})
+					if r2 == 'å›½æœç¥ç§˜å•†åº—ç«‹å³æ›´æ–°' then
+						-- ç»Ÿè®¡è·å¾—ç‰©å“æ¬¡æ•°
 						if countTarget then
-							if countTarget == 'ÉñÃØ' then
+							if countTarget == 'ç¥ç§˜' then
 								g1 = g1 + 1
 								setNumberConfig("g1", g1)
-							elseif countTarget == 'ÊéÇ©' then
+							elseif countTarget == 'ä¹¦ç­¾' then
 								g2 = g2 + 1
 								setNumberConfig("g2", g2)
-							elseif countTarget == '¹ú·şÉñÃØÉÌµêÓÑÇéÊéÇ©' then
+							elseif countTarget == 'å›½æœç¥ç§˜å•†åº—å‹æƒ…ä¹¦ç­¾' then
 								g3 = g3 + 1
 								setNumberConfig("g3", g3)
 							end
 						end
 						return 1 
 					end
-					if r2 == '¹ú·şÉñÃØÉÌµê¹ºÂò×ÊÔ´²»×ã' or r2 == '¹ú·şÒ»°ãÉÌµê' then 
-						-- ÌáÊ¾ÓĞ¶«Î÷Ã»ÓĞÂòÍê
+					if r2 == 'å›½æœç¥ç§˜å•†åº—è´­ä¹°èµ„æºä¸è¶³' or r2 == 'å›½æœä¸€èˆ¬å•†åº—' then 
+						-- æç¤ºæœ‰ä¸œè¥¿æ²¡æœ‰ä¹°å®Œ
 						enoughResources = false
 						if countTarget then
-							local curTagName = countTarget:split('ÉÌµê')[2]
-							slog('½ğ±Ò²»×ãµ¼ÖÂ, ÓĞÎïÆ·Ã»ÓĞ¹ºÂò³É¹¦: '..curTagName)
+							local curTagName = countTarget:split('å•†åº—')[2]
+							slog('é‡‘å¸ä¸è¶³å¯¼è‡´, æœ‰ç‰©å“æ²¡æœ‰è´­ä¹°æˆåŠŸ: '..curTagName)
 						end
 						return 1 
 					end
 				end)
-				-- Ğ´ËÀÅĞ¶¨£¬¿ÉÄÜ»áconnectionµ¼ÖÂ»¬¶¯Ê§Ğ§
+				-- å†™æ­»åˆ¤å®šï¼Œå¯èƒ½ä¼šconnectionå¯¼è‡´æ»‘åŠ¨å¤±æ•ˆ
 				if i == 2 and enoughResources then
 					wait(function ()
-						if findOne({'¹ú·şÉñÃØÉÌµêµÚ¶ş¸öÉÌÆ·',
-												'¹ú·şÉñÃØÉÌµêµÚÈı¸öÉÌÆ·',
-												'¹ú·şÉñÃØÉÌµêµÚËÄ¸öÉÌÆ·'}, {sim = .99}) then
+						if findOne({'å›½æœç¥ç§˜å•†åº—ç¬¬äºŒä¸ªå•†å“',
+												'å›½æœç¥ç§˜å•†åº—ç¬¬ä¸‰ä¸ªå•†å“',
+												'å›½æœç¥ç§˜å•†åº—ç¬¬å››ä¸ªå•†å“'}, {sim = .99}) then
 							return 1
 						end
 						sswipe({858,578}, {858,150})
 					end)
 				end
 			end
-			msg = 'Ë¢ĞÂ´ÎÊı: '..i..'/'..refreshCount..'(ÉñÃØ½±ÅÆ: '..g1..'*50, ÊÄÔ¼ÊéÇ©: '..g2..'*5, ÓÑÇéÊéÇ©: '..g3..'*5)'
+			msg = 'åˆ·æ–°æ¬¡æ•°: '..i..'/'..refreshCount..'(ç¥ç§˜å¥–ç‰Œ: '..g1..'*50, èª“çº¦ä¹¦ç­¾: '..g2..'*5, å‹æƒ…ä¹¦ç­¾: '..g3..'*5)'
 			if not enoughResources then
-				log('×ÊÔ´ºÄ¾¡!')
-				slog('×ÊÔ´ºÄ¾¡!')
-				-- untilTap('¹ú·şÉñÃØÉÌµêÈ¡Ïû')
-				path.ÓÎÏ·Ê×Ò³()
+				log('èµ„æºè€—å°½!')
+				slog('èµ„æºè€—å°½!')
+				-- untilTap('å›½æœç¥ç§˜å•†åº—å–æ¶ˆ')
+				path.æ¸¸æˆé¦–é¡µ()
 				break
 			end
-			-- Ë¢ĞÂ´ÎÊı: 1 (ÉñÃØ½±ÅÆ: 5*5, ÊÄÔ¼ÊéÇ©: 10*5, ÓÑÇéÊéÇ©: 20*5)
+			-- åˆ·æ–°æ¬¡æ•°: 1 (ç¥ç§˜å¥–ç‰Œ: 5*5, èª“çº¦ä¹¦ç­¾: 10*5, å‹æƒ…ä¹¦ç­¾: 20*5)
 			log(msg)
 			slog(msg, nil, true)
 			if i == refreshCount then
-				path.ÓÎÏ·Ê×Ò³()
+				path.æ¸¸æˆé¦–é¡µ()
 				break
 			end
-			-- Èç¹ûÍøÂç²»ºÃ»áµ¼ÖÂÁ½´Îµã»÷, ¸Ä³É sim = 1
-			untilTap('¹ú·şÉñÃØÉÌµêÁ¢¼´¸üĞÂ', {sim = 1})
-			untilTap('¹ú·şÉñÃØÉÌµê¹ºÂòÈ·ÈÏ')
-			untilAppear('¹ú·şÉñÃØÉÌµêµÚÒ»¸öÉÌÆ·', {sim = .98}) ssleep(.5)
+			-- å¦‚æœç½‘ç»œä¸å¥½ä¼šå¯¼è‡´ä¸¤æ¬¡ç‚¹å‡», æ”¹æˆ sim = 1
+			untilTap('å›½æœç¥ç§˜å•†åº—ç«‹å³æ›´æ–°', {sim = 1})
+			untilTap('å›½æœç¥ç§˜å•†åº—è´­ä¹°ç¡®è®¤')
+			untilAppear('å›½æœç¥ç§˜å•†åº—ç¬¬ä¸€ä¸ªå•†å“', {sim = .98}) ssleep(.5)
 			setNumberConfig("exception_count", 1)
 		end
 		setNumberConfig("refresh_book_tag_count", i)
@@ -264,156 +264,156 @@ path.Ë¢ÊéÇ© = function (rest)
 	slog(msg, nil, true)
 end
 
-path.Ë¢¾º¼¼³¡ = function ()
-	local type = current_task.¾º¼¼³¡´ÎĞò
+path.åˆ·ç«æŠ€åœº = function ()
+	local type = current_task.ç«æŠ€åœºæ¬¡åº
 	if type == 0 then
-		path.¾º¼¼³¡Íæ¼Ò()
+		path.ç«æŠ€åœºç©å®¶()
 	elseif type == 1 then
-		path.¾º¼¼³¡NPC()
+		path.ç«æŠ€åœºNPC()
 	elseif type == 2 then
-		path.¾º¼¼³¡NPC()
-		path.ÓÎÏ·Ê×Ò³()
-		path.¾º¼¼³¡Íæ¼Ò()
+		path.ç«æŠ€åœºNPC()
+		path.æ¸¸æˆé¦–é¡µ()
+		path.ç«æŠ€åœºç©å®¶()
 	end
 end
 
-path.¾º¼¼³¡Íæ¼Ò = function ()
+path.ç«æŠ€åœºç©å®¶ = function ()
 	wait(function ()
-		stap(point.¾º¼¼³¡)
+		stap(point.ç«æŠ€åœº)
 				ssleep(1)
-			if not findOne('¹ú·şÖ÷Ò³Rank') then return 1 end
+			if not findOne('å›½æœä¸»é¡µRank') then return 1 end
 	end)
-	untilTap('¹ú·ş¾º¼¼³¡')
+	untilTap('å›½æœç«æŠ€åœº')
 	local r1, r2
 	wait(function ()
 		stap({386,17})
-		r1, r2 = findOne({'¹ú·ş¾º¼¼³¡ÅäÖÃ·ÀÓù¶Ó', 
-											'¹ú·ş¾º¼¼³¡Ã¿ÖÜ½áËãÊ±¼ä', 
-											'¹ú·ş¾º¼¼³¡Ã¿ÖÜÅÅÃû½±Àø'})
+		r1, r2 = findOne({'å›½æœç«æŠ€åœºé…ç½®é˜²å¾¡é˜Ÿ', 
+											'å›½æœç«æŠ€åœºæ¯å‘¨ç»“ç®—æ—¶é—´', 
+											'å›½æœç«æŠ€åœºæ¯å‘¨æ’åå¥–åŠ±'})
 		if r1 then return 1 end
 	end)
-	if r2 == '¹ú·ş¾º¼¼³¡Ã¿ÖÜ½áËãÊ±¼ä' then
-		slog('¾º¼¼³¡Ã¿ÖÜ½áËãÊ±¼äÍË³ö')
+	if r2 == 'å›½æœç«æŠ€åœºæ¯å‘¨ç»“ç®—æ—¶é—´' then
+		slog('ç«æŠ€åœºæ¯å‘¨ç»“ç®—æ—¶é—´é€€å‡º')
 		return
 	end
-	if r2 == '¹ú·ş¾º¼¼³¡Ã¿ÖÜÅÅÃû½±Àø' then
-		slog('¾º¼¼³¡»ñÈ¡Ã¿ÖÜÅÅÃû½±Àø')
-		local rankIndex = current_task['¾º¼¼³¡Ã¿ÖÜ½±Àø'] or 0
-		local pos = point.¹ú·ş¾º¼¼³¡Ã¿ÖÜ½±Àø[rankIndex + 1]
+	if r2 == 'å›½æœç«æŠ€åœºæ¯å‘¨æ’åå¥–åŠ±' then
+		slog('ç«æŠ€åœºè·å–æ¯å‘¨æ’åå¥–åŠ±')
+		local rankIndex = current_task['ç«æŠ€åœºæ¯å‘¨å¥–åŠ±'] or 0
+		local pos = point.å›½æœç«æŠ€åœºæ¯å‘¨å¥–åŠ±[rankIndex + 1]
 		wait(function ()
 			stap(pos)
-			if findOne(point.¹ú·ş¾º¼¼³¡Ã¿ÖÜ½±ÀøÅĞ¶¨[rankIndex + 1]) then return 1 end
+			if findOne(point.å›½æœç«æŠ€åœºæ¯å‘¨å¥–åŠ±åˆ¤å®š[rankIndex + 1]) then return 1 end
 		end)
-		untilTap({'¹ú·ş¾º¼¼³¡ÁìÈ¡Ã¿ÖÜ½±Àø', 'cmp_¹ú¼Ê·ş¾º¼¼³¡ÁìÈ¡Ã¿ÖÜ½±Àø'})
+		untilTap({'å›½æœç«æŠ€åœºé¢†å–æ¯å‘¨å¥–åŠ±', 'cmp_å›½é™…æœç«æŠ€åœºé¢†å–æ¯å‘¨å¥–åŠ±'})
 	end
-	log('½øÈë¾º¼¼³¡')
-	-- ¾º¼¼²ßÂÔ
-	-- ¸öÈË»ı·Ö
-	local privatePoints = untilAppear('¹ú·ş¾º¼¼³¡¸öÈË»ı·Ö', {keyword = {'»ı·Ö', '»ı', '·Ö'}})
+	log('è¿›å…¥ç«æŠ€åœº')
+	-- ç«æŠ€ç­–ç•¥
+	-- ä¸ªäººç§¯åˆ†
+	local privatePoints = untilAppear('å›½æœç«æŠ€åœºä¸ªäººç§¯åˆ†', {keyword = {'ç§¯åˆ†', 'ç§¯', 'åˆ†'}})
 	privatePoints = getArenaPoints(privatePoints[1].text)
 	-- log(privatePoints)
-	-- ½»Õ½¶ÔÊÖÇĞ»»
+	-- äº¤æˆ˜å¯¹æ‰‹åˆ‡æ¢
 	wait(function ()
 		stap({1108,116})
-		if findOne({'¹ú·ş¾º¼¼³¡ÌôÕ½', 
-								'¹ú·ş¾º¼¼³¡ÔÙ´ÎÌôÕ½', 
-								'¹ú·ş¾º¼¼³¡ÒÑÌôÕ½¹ı¶ÔÊÖ'}, 
+		if findOne({'å›½æœç«æŠ€åœºæŒ‘æˆ˜', 
+								'å›½æœç«æŠ€åœºå†æ¬¡æŒ‘æˆ˜', 
+								'å›½æœç«æŠ€åœºå·²æŒ‘æˆ˜è¿‡å¯¹æ‰‹'}, 
 								{rg = {879,146,990,686}}) then
 			ssleep(1)
 			return 1
 		end
 	end, .5)
-	-- Ë¢ĞÂ¶ÔÊÖµ½´ï´ÎÊı
-	local refreshCount = current_task['½»Õ½´ÎÊı']
-	-- ¹ºÂòÇĞ»»ÌôÕ½¶ÔÊÖ´ÎÊı£¬½ğ±Ò
+	-- åˆ·æ–°å¯¹æ‰‹åˆ°è¾¾æ¬¡æ•°
+	local refreshCount = current_task['äº¤æˆ˜æ¬¡æ•°']
+	-- è´­ä¹°åˆ‡æ¢æŒ‘æˆ˜å¯¹æ‰‹æ¬¡æ•°ï¼Œé‡‘å¸
 	local buyChangeCount = true
 	wait(function ()
 		wait(function ()
-			findTap('¹ú·ş¾º¼¼³¡ÌôÕ½Éı¼¶')
+			findTap('å›½æœç«æŠ€åœºæŒ‘æˆ˜å‡çº§')
 			stap({323,27})
-			if findOne('¹ú·ş¾º¼¼³¡ÆìÖÄÎ»ÖÃ') then return 1 end
+			if findOne('å›½æœç«æŠ€åœºæ——å¸œä½ç½®') then return 1 end
 		end)
-		-- µĞÈË»ı·Ö
-		local enemyPointsInfo = untilAppear('¹ú·ş¾º¼¼³¡µĞÈË»ı·Ö')
-		-- ¹ıÂË·ÇµĞÈË»ı·Ö; µĞÈË»ı·Ö×ª»»³ÉÊı×Ö
+		-- æ•Œäººç§¯åˆ†
+		local enemyPointsInfo = untilAppear('å›½æœç«æŠ€åœºæ•Œäººç§¯åˆ†')
+		-- è¿‡æ»¤éæ•Œäººç§¯åˆ†; æ•Œäººç§¯åˆ†è½¬æ¢æˆæ•°å­—
 		enemyPointsInfo = table.filter(enemyPointsInfo, function (v)
-			if v.text:find('»ı·Ö') or v.text:find('»ı') or v.text:find('·Ö') then
-				local tmp, isChallenge = untilAppear({'¹ú·ş¾º¼¼³¡ÒÑÌôÕ½¹ı¶ÔÊÖ', '¹ú·ş¾º¼¼³¡ÌôÕ½',
-				'¹ú·ş¾º¼¼³¡ÔÙ´ÎÌôÕ½'}, {rg = {886, v.t - 50, 990, v.b + 50}})
-				if isChallenge == '¹ú·ş¾º¼¼³¡ÌôÕ½' then v.text = getArenaPoints(v.text) return 1 end
+			if v.text:find('ç§¯åˆ†') or v.text:find('ç§¯') or v.text:find('åˆ†') then
+				local tmp, isChallenge = untilAppear({'å›½æœç«æŠ€åœºå·²æŒ‘æˆ˜è¿‡å¯¹æ‰‹', 'å›½æœç«æŠ€åœºæŒ‘æˆ˜',
+				'å›½æœç«æŠ€åœºå†æ¬¡æŒ‘æˆ˜'}, {rg = {886, v.t - 50, 990, v.b + 50}})
+				if isChallenge == 'å›½æœç«æŠ€åœºæŒ‘æˆ˜' then v.text = getArenaPoints(v.text) return 1 end
 			end
 		end)
 		-- log(enemyPointsInfo)
-		-- ×îÖÕĞèÒªµÄ: Ğ¡ÓÚ¸öÈË»ı·Ö¾ÍĞĞ
+		-- æœ€ç»ˆéœ€è¦çš„: å°äºä¸ªäººç§¯åˆ†å°±è¡Œ
 		local finalPointsInfo = table.filter(enemyPointsInfo, function (v) return v.text < privatePoints end)
-		-- Ã»ÓĞĞ¡ÓÚ×Ô¼ºµÄ
-		-- ÒªÃ´ÊÖ¶¯»¨·Ñ½ğ±ÒË¢ĞÂ£¬ÒªÃ´µÈ´ıË¢ĞÂ8·ÖÖÓ
+		-- æ²¡æœ‰å°äºè‡ªå·±çš„
+		-- è¦ä¹ˆæ‰‹åŠ¨èŠ±è´¹é‡‘å¸åˆ·æ–°ï¼Œè¦ä¹ˆç­‰å¾…åˆ·æ–°8åˆ†é’Ÿ
 		if #finalPointsInfo == 0 then
 			if buyChangeCount then
-				local result = untilAppear('¹ú·şË¢ĞÂÌôÕ½', {keyword = {'Ãâ·Ñ', 'Ê£ÓàÊ±¼ä', 'Ê±¼ä', 'Ê£Óà'}})[1]
-				untilTap('¹ú·şË¢ĞÂÌôÕ½')
-				if result.text:includes({'Ê£ÓàÊ±¼ä', 'Ê£Óà', 'Ê±¼ä'}) then
-					local availableRefreashCount = math.floor(getArenaPoints(untilAppear('¹ú·ş¾º¼¼³¡ÌôÕ½¶ÔÊÖÊ£ÓàË¢ĞÂ´ÎÊı')[1].text) / 100)
+				local result = untilAppear('å›½æœåˆ·æ–°æŒ‘æˆ˜', {keyword = {'å…è´¹', 'å‰©ä½™æ—¶é—´', 'æ—¶é—´', 'å‰©ä½™'}})[1]
+				untilTap('å›½æœåˆ·æ–°æŒ‘æˆ˜')
+				if result.text:includes({'å‰©ä½™æ—¶é—´', 'å‰©ä½™', 'æ—¶é—´'}) then
+					local availableRefreashCount = math.floor(getArenaPoints(untilAppear('å›½æœç«æŠ€åœºæŒ‘æˆ˜å¯¹æ‰‹å‰©ä½™åˆ·æ–°æ¬¡æ•°')[1].text) / 100)
 					if refreshCount == 0 then
-						slog('¶ÔÊÖ¸ü»»´ÎÊıÒÑÉÏÏŞ!')
-						untilTap('¹ú·ş¾º¼¼³¡È¡Ïû¸ü»»¶ÔÊÖ')
+						slog('å¯¹æ‰‹æ›´æ¢æ¬¡æ•°å·²ä¸Šé™!')
+						untilTap('å›½æœç«æŠ€åœºå–æ¶ˆæ›´æ¢å¯¹æ‰‹')
 						return 1
 					end
 				end
-				untilTap('¹ú·ş¾º¼¼³¡ÇĞ»»¶ÔÊÖÈ·¶¨')
+				untilTap('å›½æœç«æŠ€åœºåˆ‡æ¢å¯¹æ‰‹ç¡®å®š')
 				refreshCount  = refreshCount - 1
-				-- ½ğ±ÒÊÇ·ñºÄ¾¡
-				local tmp, v = untilAppear({'¹ú·şÉñÃØÉÌµê¹ºÂò×ÊÔ´²»×ã', '¹ú·ş¾º¼¼³¡ÅäÖÃ·ÀÓù¶Ó'})
-				if v == '¹ú·şÉñÃØÉÌµê¹ºÂò×ÊÔ´²»×ã' then log('×ÊÔ´²»×ã') untilTap('¹ú·şÉñÃØÉÌµêÈ¡Ïû') return 1 end
-				-- ¸üĞÂÍê¶ÔÊÖ, ¿ªÊ¼ĞÂµÄÒ»ÂÖ
+				-- é‡‘å¸æ˜¯å¦è€—å°½
+				local tmp, v = untilAppear({'å›½æœç¥ç§˜å•†åº—è´­ä¹°èµ„æºä¸è¶³', 'å›½æœç«æŠ€åœºé…ç½®é˜²å¾¡é˜Ÿ'})
+				if v == 'å›½æœç¥ç§˜å•†åº—è´­ä¹°èµ„æºä¸è¶³' then log('èµ„æºä¸è¶³') untilTap('å›½æœç¥ç§˜å•†åº—å–æ¶ˆ') return 1 end
+				-- æ›´æ–°å®Œå¯¹æ‰‹, å¼€å§‹æ–°çš„ä¸€è½®
 				return
 			else
-				log('ÎŞµÍÓÚ×Ô¼º»ı·Ö')
+				log('æ— ä½äºè‡ªå·±ç§¯åˆ†')
 				return 1
 			end
 		end
 		finalPointsInfo = finalPointsInfo[1]
-		untilTap('¹ú·ş¾º¼¼³¡ÌôÕ½', {rg = {886, finalPointsInfo.t - 80, 990, finalPointsInfo.b + 80}})
-		untilTap('¹ú·ş¾º¼¼³¡Õ½¶·¿ªÊ¼')
-		if path.¾º¼¼³¡¹ºÆ±() == 1 then
+		untilTap('å›½æœç«æŠ€åœºæŒ‘æˆ˜', {rg = {886, finalPointsInfo.t - 80, 990, finalPointsInfo.b + 80}})
+		untilTap('å›½æœç«æŠ€åœºæˆ˜æ–—å¼€å§‹')
+		if path.ç«æŠ€åœºè´­ç¥¨() == 1 then
 			return 1
 		end
-		path.Õ½¶·´úÀí()
+		path.æˆ˜æ–—ä»£ç†()
 	end, .5, nil, true)
 end
 
-path.¾º¼¼³¡NPC = function ()
+path.ç«æŠ€åœºNPC = function ()
 	wait(function ()
-		stap(point.¾º¼¼³¡)
+		stap(point.ç«æŠ€åœº)
 				ssleep(1)
-			if not findOne('¹ú·şÖ÷Ò³Rank') then return 1 end
+			if not findOne('å›½æœä¸»é¡µRank') then return 1 end
 	end)
 	wait(function ()
-		if not findOne('¹ú·ş¾º¼¼³¡') then
+		if not findOne('å›½æœç«æŠ€åœº') then
 			return 1
 		end
 		stap({999,339})
 	end)
 	local p, v
 	wait(function ()
-		p, v = findOne({'¹ú·şJJC×óÏÂ½£', 
-								 '¹ú·ş¾º¼¼³¡Ã¿ÖÜÅÅÃû½±Àø'})
-		if v == '¹ú·şJJC×óÏÂ½£' then
+		p, v = findOne({'å›½æœJJCå·¦ä¸‹å‰‘', 
+								 'å›½æœç«æŠ€åœºæ¯å‘¨æ’åå¥–åŠ±'})
+		if v == 'å›½æœJJCå·¦ä¸‹å‰‘' then
 			return 1
 		end
-		if v == '¹ú·ş¾º¼¼³¡Ã¿ÖÜÅÅÃû½±Àø' then
-			slog('¾º¼¼³¡»ñÈ¡Ã¿ÖÜÅÅÃû½±Àø')
-			local rankIndex = current_task['¾º¼¼³¡Ã¿ÖÜ½±Àø'] or 0
-			local pos = point.¹ú·ş¾º¼¼³¡Ã¿ÖÜ½±Àø[rankIndex + 1]
+		if v == 'å›½æœç«æŠ€åœºæ¯å‘¨æ’åå¥–åŠ±' then
+			slog('ç«æŠ€åœºè·å–æ¯å‘¨æ’åå¥–åŠ±')
+			local rankIndex = current_task['ç«æŠ€åœºæ¯å‘¨å¥–åŠ±'] or 0
+			local pos = point.å›½æœç«æŠ€åœºæ¯å‘¨å¥–åŠ±[rankIndex + 1]
 			wait(function ()
 				stap(pos)
-				if findOne(point.¹ú·ş¾º¼¼³¡Ã¿ÖÜ½±ÀøÅĞ¶¨[rankIndex + 1]) then return 1 end
+				if findOne(point.å›½æœç«æŠ€åœºæ¯å‘¨å¥–åŠ±åˆ¤å®š[rankIndex + 1]) then return 1 end
 			end)
-			untilTap('¹ú·ş¾º¼¼³¡ÁìÈ¡Ã¿ÖÜ½±Àø')
+			untilTap('å›½æœç«æŠ€åœºé¢†å–æ¯å‘¨å¥–åŠ±')
 		end
 	end)
 	wait(function ()
-		if findOne('¹ú·şNPC½»Õ½¶ÔÊÖ') then
+		if findOne('å›½æœNPCäº¤æˆ˜å¯¹æ‰‹') then
 			return 1
 		end
 		stap({1048,216})
@@ -421,13 +421,13 @@ path.¾º¼¼³¡NPC = function ()
 
 	local pos
 	local isSwipe = 1
-	while 'qqÈº206490280' do
+	while 'qqç¾¤206490280' do
 		wait(function ()
-			findTap('¹ú·ş¾º¼¼³¡ÌôÕ½Éı¼¶')
+			findTap('å›½æœç«æŠ€åœºæŒ‘æˆ˜å‡çº§')
 			stap({323,27})
-			if findOne('¹ú·ş¾º¼¼³¡ÆìÖÄÎ»ÖÃ') then ssleep(1) return 1 end
+			if findOne('å›½æœç«æŠ€åœºæ——å¸œä½ç½®') then ssleep(1) return 1 end
 		end)
-		pos = findOne('¹ú·şNPCÌôÕ½', {rg = {855,141,996,721}})
+		pos = findOne('å›½æœNPCæŒ‘æˆ˜', {rg = {855,141,996,721}})
 		if not pos and isSwipe == 2 then break end
 		if not pos then
 			isSwipe = isSwipe + 1
@@ -439,443 +439,443 @@ path.¾º¼¼³¡NPC = function ()
 				end
 			end)
 		else
-			-- ¿ªÊ¼Ë¢NPC
+			-- å¼€å§‹åˆ·NPC
 			wait(function ()
 				stap(pos)
-				if not findOne('¹ú·şJJC×óÏÂ½£') then return 1 end
+				if not findOne('å›½æœJJCå·¦ä¸‹å‰‘') then return 1 end
 			end)
-			untilTap('¹ú·ş¾º¼¼³¡Õ½¶·¿ªÊ¼')
-			-- ¹ºÆ±
-			if path.¾º¼¼³¡¹ºÆ±() == 1 then
+			untilTap('å›½æœç«æŠ€åœºæˆ˜æ–—å¼€å§‹')
+			-- è´­ç¥¨
+			if path.ç«æŠ€åœºè´­ç¥¨() == 1 then
 				break
 			end
-			path.Õ½¶·´úÀí()
+			path.æˆ˜æ–—ä»£ç†()
 			isSwipe = 1
 		end
 	end
-	slog('¾º¼¼³¡NPCÍê³É')
+	slog('ç«æŠ€åœºNPCå®Œæˆ')
 end
 
-path.¾º¼¼³¡¹ºÆ± = function ()
-	-- Ò¶×Ó¹ºÂòÆ±
-	local buyTicket = current_task['Ò¶×ÓÂòÆ±']
+path.ç«æŠ€åœºè´­ç¥¨ = function ()
+	-- å¶å­è´­ä¹°ç¥¨
+	local buyTicket = current_task['å¶å­ä¹°ç¥¨']
 	local t,v
 	wait (function ()
 		stap({615,23})
-		t, v = findOne({'¹ú·ş¾º¼¼³¡¹ºÂòÆ±Ò³Ãæ', '¹ú·şAuto'})
+		t, v = findOne({'å›½æœç«æŠ€åœºè´­ä¹°ç¥¨é¡µé¢', 'å›½æœAuto'})
 		if v then
 			return 1
 		end
 	end)
-	-- ÊÇ·ñÊ¹ÓÃÒ¶×Ó¶Ò»»5ÕÅÆ±
-	-- ÊÇ·ñÊ¹ÓÃ×©Ê¯¶Ò»»5ÕÅÆ± Ôİ²»Ö§³Ö
-	if v == '¹ú·ş¾º¼¼³¡¹ºÂòÆ±Ò³Ãæ' and buyTicket then
-		local tmp, ticketType = untilAppear({'¹ú·ş¾º¼¼³¡Ò¶×Ó¹ºÂòÆ±', 
-																					'¹ú·ş¾º¼¼³¡×©Ê¯¹ºÂòÆ±'})
-		if ticketType == '¹ú·ş¾º¼¼³¡Ò¶×Ó¹ºÂòÆ±' then
-			log('¹ºÆ±')
-			untilTap('¹ú·ş¾º¼¼³¡¹ºÂòÆ±')
-			-- ½ğ±ÒÊÇ·ñ¹»ÓÃ
-			local tmp, v = untilAppear({'¹ú·şÉñÃØÉÌµê¹ºÂò×ÊÔ´²»×ã',
-																	'¹ú·ş¾º¼¼³¡ÏÂÕ½¶·¿ªÊ¼'})
-			if v == '¹ú·şÉñÃØÉÌµê¹ºÂò×ÊÔ´²»×ã' then log('×ÊÔ´²»×ã') return 1 end
+	-- æ˜¯å¦ä½¿ç”¨å¶å­å…‘æ¢5å¼ ç¥¨
+	-- æ˜¯å¦ä½¿ç”¨ç –çŸ³å…‘æ¢5å¼ ç¥¨ æš‚ä¸æ”¯æŒ
+	if v == 'å›½æœç«æŠ€åœºè´­ä¹°ç¥¨é¡µé¢' and buyTicket then
+		local tmp, ticketType = untilAppear({'å›½æœç«æŠ€åœºå¶å­è´­ä¹°ç¥¨', 
+																					'å›½æœç«æŠ€åœºç –çŸ³è´­ä¹°ç¥¨'})
+		if ticketType == 'å›½æœç«æŠ€åœºå¶å­è´­ä¹°ç¥¨' then
+			log('è´­ç¥¨')
+			untilTap('å›½æœç«æŠ€åœºè´­ä¹°ç¥¨')
+			-- é‡‘å¸æ˜¯å¦å¤Ÿç”¨
+			local tmp, v = untilAppear({'å›½æœç¥ç§˜å•†åº—è´­ä¹°èµ„æºä¸è¶³',
+																	'å›½æœç«æŠ€åœºä¸‹æˆ˜æ–—å¼€å§‹'})
+			if v == 'å›½æœç¥ç§˜å•†åº—è´­ä¹°èµ„æºä¸è¶³' then log('èµ„æºä¸è¶³') return 1 end
 		end
-		if ticketType == '¹ú·ş¾º¼¼³¡×©Ê¯¹ºÂòÆ±' then log('È¡Ïû¹ºÆ±') untilTap('¹ú·ş¾º¼¼³¡È¡Ïû¹ºÆ±') return 1 end
-		untilTap('¹ú·ş¾º¼¼³¡Õ½¶·¿ªÊ¼')	
+		if ticketType == 'å›½æœç«æŠ€åœºç –çŸ³è´­ä¹°ç¥¨' then log('å–æ¶ˆè´­ç¥¨') untilTap('å›½æœç«æŠ€åœºå–æ¶ˆè´­ç¥¨') return 1 end
+		untilTap('å›½æœç«æŠ€åœºæˆ˜æ–—å¼€å§‹')	
 	end
 
-	if v == '¹ú·ş¾º¼¼³¡¹ºÂòÆ±Ò³Ãæ' and not buyTicket then
-		log('²»¹ºÆ±')
+	if v == 'å›½æœç«æŠ€åœºè´­ä¹°ç¥¨é¡µé¢' and not buyTicket then
+		log('ä¸è´­ç¥¨')
 		return 1
 	end
 end
 
--- isRepeat ÊÇ·ñÖØÊÔ
--- isAgent ÊÇ·ñ´úÀí
--- isActivity ÊÇ·ñÊÇ»î¶¯, ¿ÉÄÜ²»ÊÇ²¼¶ûÖµ,¶øÊÇ·¶Î§
-path.Õ½¶·´úÀí = function (isRepeat, isAgent, currentCount, isActivity)
-	-- ÓÒÏÂ½ÇÊ¶±ğ·¶Î§
-	local rightBottomRegion = isActivity and '¹ú·şÓÒÏÂ½Ç»î¶¯' or '¹ú·şÓÒÏÂ½Ç'
-	log('Õ½¶·¿ªÊ¼')
-	-- ¿ªÆôauto
+-- isRepeat æ˜¯å¦é‡è¯•
+-- isAgent æ˜¯å¦ä»£ç†
+-- isActivity æ˜¯å¦æ˜¯æ´»åŠ¨, å¯èƒ½ä¸æ˜¯å¸ƒå°”å€¼,è€Œæ˜¯èŒƒå›´
+path.æˆ˜æ–—ä»£ç† = function (isRepeat, isAgent, currentCount, isActivity)
+	-- å³ä¸‹è§’è¯†åˆ«èŒƒå›´
+	local rightBottomRegion = isActivity and 'å›½æœå³ä¸‹è§’æ´»åŠ¨' or 'å›½æœå³ä¸‹è§’'
+	log('æˆ˜æ–—å¼€å§‹')
+	-- å¼€å¯auto
 	if not isRepeat then
-		-- untilAppear('¹ú·şAuto')
+		-- untilAppear('å›½æœAuto')
 		wait(function ()
-			if findOne('¹ú·şAuto') then
+			if findOne('å›½æœAuto') then
 				return 1
 			end
 			stap({638,31})
 		end)
 		wait(function ()
-			stap('¹ú·şAuto')
+			stap('å›½æœAuto')
 			ssleep(1)
-			if findOne(point.¹ú·şAUto³É¹¦) then return 1 end
+			if findOne(point.å›½æœAUtoæˆåŠŸ) then return 1 end
 		end)
 	end
 	
 	
 	if isRepeat then
 		wait(function ()
-			if findOne('¹ú·ş¶ş±¶ËÙ') then return 1 end
+			if findOne('å›½æœäºŒå€é€Ÿ') then return 1 end
 			ssleep(1)
-			stap('¹ú·ş¶ş±¶ËÙ')
+			stap('å›½æœäºŒå€é€Ÿ')
 		end)
 	end
 	
-	-- µÈ´ı½áÊø
-	-- Ã¿´ÎÏŞ¶¨³¬Ê±Õ½¶·Îª5·ÖÖÓ
+	-- ç­‰å¾…ç»“æŸ
+	-- æ¯æ¬¡é™å®šè¶…æ—¶æˆ˜æ–—ä¸º5åˆ†é’Ÿ
 	if not isRepeat then
 		wait(function ()
-			-- ²¿·Ö»áÓĞÒ»¸ö½áÊøÇ°ÖÃÒ³, Ö±½Óµã»÷µô
-			log('´úÀíÖĞ.')
-			-- NPC¶Ô»°µã»÷ 
+			-- éƒ¨åˆ†ä¼šæœ‰ä¸€ä¸ªç»“æŸå‰ç½®é¡µ, ç›´æ¥ç‚¹å‡»æ‰
+			log('ä»£ç†ä¸­.')
+			-- NPCå¯¹è¯ç‚¹å‡» 
 			stap({615,23})
-			if findTap({'¹ú·şÕ½¶·Íê³É¾º¼¼³¡È·¶¨', 
-									'¹ú·şÕ½¶·Íê³ÉÈ·¶¨'}, {tapInterval = 1}) then 
+			if findTap({'å›½æœæˆ˜æ–—å®Œæˆç«æŠ€åœºç¡®å®š', 
+									'å›½æœæˆ˜æ–—å®Œæˆç¡®å®š'}, {tapInterval = 1}) then 
 				return 1
 			end
 		end, game_running_capture_interval, 10 * 60)
 	else
-		local targetKey = {'Õ½¶·¿ªÊ¼', 'È·ÈÏ', 'ÖØĞÂ½øĞĞ', 'Ñ¡Ôñ¶ÓÎé'}
-		local target = {'ÉêÇëºÃÓÑÈ¡Ïû','½ô¼±ÈÎÎñÈ·ÈÏ','¹ú·ş±³°ü¿Õ¼ä²»×ã', 
-										'¹ú·şĞĞ¶¯Á¦²»×ã', '¹ú·şÓÒÏÂ½Ç', '¹ú·şÓÒÏÂ½Ç»î¶¯', 
-										'¹ú·şÕ½¶·Ê§°Ü', '¹ú·şÕ½¶·ÎÊºÅ'} -- ºÃÓÑÉêÇë¡¢½ô¼±ÈÎÎñ¿ÉÄÜ»á½øÀ´
+		local targetKey = {'æˆ˜æ–—å¼€å§‹', 'ç¡®è®¤', 'é‡æ–°è¿›è¡Œ', 'é€‰æ‹©é˜Ÿä¼'}
+		local target = {'ç”³è¯·å¥½å‹å–æ¶ˆ','ç´§æ€¥ä»»åŠ¡ç¡®è®¤','å›½æœèƒŒåŒ…ç©ºé—´ä¸è¶³', 
+										'å›½æœè¡ŒåŠ¨åŠ›ä¸è¶³', 'å›½æœå³ä¸‹è§’', 'å›½æœå³ä¸‹è§’æ´»åŠ¨', 
+										'å›½æœæˆ˜æ–—å¤±è´¥', 'å›½æœæˆ˜æ–—é—®å·'} -- å¥½å‹ç”³è¯·ã€ç´§æ€¥ä»»åŠ¡å¯èƒ½ä¼šè¿›æ¥
 		local pos, targetV
 		wait(function ()
 			if currentCount then
 				if isAgent then
-					log('´úÀíÖĞ-ÓĞ³èÎï: '..currentCount..'/'..global_stage_count)
+					log('ä»£ç†ä¸­-æœ‰å® ç‰©: '..currentCount..'/'..global_stage_count)
 				else	
-					log('´úÀíÖĞ-ÎŞ³èÎï: '..currentCount..'/'..global_stage_count)
+					log('ä»£ç†ä¸­-æ— å® ç‰©: '..currentCount..'/'..global_stage_count)
 				end
 			else
-				log('´úÀíÖĞ..')
+				log('ä»£ç†ä¸­..')
 			end
-			-- ·ÇÍĞ¹ÜĞèÒªÊÖ¶¯µã»÷,²ÅÄÜµ½´ï½áÊøÒ³Ãæ
+			-- éæ‰˜ç®¡éœ€è¦æ‰‹åŠ¨ç‚¹å‡»,æ‰èƒ½åˆ°è¾¾ç»“æŸé¡µé¢
 			if not isAgent then stap({483,15}) end
-			if ((isAgent and findOne('¹ú·şÖØ¸´Õ½¶·Íê³É', {keyword = {'ÖØ¸´Õ½¶·ÒÑ½áÊø'}})) or
+			if ((isAgent and findOne('å›½æœé‡å¤æˆ˜æ–—å®Œæˆ', {keyword = {'é‡å¤æˆ˜æ–—å·²ç»“æŸ'}})) or
 				 not isAgent) and 
-				 findOne({'¹ú·şÓÒÏÂ½Ç', '¹ú·şÕ½¶·Ê§°Ü'}, {keyword = {'È·ÈÏ', 'ÖØĞÂ½øĞĞ'}}) then
+				 findOne({'å›½æœå³ä¸‹è§’', 'å›½æœæˆ˜æ–—å¤±è´¥'}, {keyword = {'ç¡®è®¤', 'é‡æ–°è¿›è¡Œ'}}) then
 				wait(function ()
 					pos, targetV = findOne(target, {keyword = targetKey})
 					if not pos then return end
-					if targetV:includes({'¹ú·ş±³°ü¿Õ¼ä²»×ã', '¹ú·şĞĞ¶¯Á¦²»×ã', '¹ú·şÕ½¶·ÎÊºÅ'}) then
-						-- ±£Ö¤²»ÔÚ½áÊøÒ³
-						if targetV == '¹ú·şÕ½¶·ÎÊºÅ' and findOne('¹ú·şÕ½¶·½áÊø×óÉÏ±³°ü') then
+					if targetV:includes({'å›½æœèƒŒåŒ…ç©ºé—´ä¸è¶³', 'å›½æœè¡ŒåŠ¨åŠ›ä¸è¶³', 'å›½æœæˆ˜æ–—é—®å·'}) then
+						-- ä¿è¯ä¸åœ¨ç»“æŸé¡µ
+						if targetV == 'å›½æœæˆ˜æ–—é—®å·' and findOne('å›½æœæˆ˜æ–—ç»“æŸå·¦ä¸ŠèƒŒåŒ…') then
 							return
 						end
 						return 1
 					end
-					if targetV:includes({'¹ú·şÓÒÏÂ½Ç', '¹ú·şÕ½¶·Ê§°Ü'}) then
-						findTap({'ÉêÇëºÃÓÑÈ¡Ïû', '½ô¼±ÈÎÎñÈ·ÈÏ'}) -- ÓĞ¿ÉÄÜ»á½øÈëÕâÀï
+					if targetV:includes({'å›½æœå³ä¸‹è§’', 'å›½æœæˆ˜æ–—å¤±è´¥'}) then
+						findTap({'ç”³è¯·å¥½å‹å–æ¶ˆ', 'ç´§æ€¥ä»»åŠ¡ç¡®è®¤'}) -- æœ‰å¯èƒ½ä¼šè¿›å…¥è¿™é‡Œ
 						stap({pos[1].l, pos[1].t})
 					end
-					if targetV:includes({'ºÃÓÑÉêÇëÈ¡Ïû', '½ô¼±ÈÎÎñÈ·ÈÏ'}) then
+					if targetV:includes({'å¥½å‹ç”³è¯·å–æ¶ˆ', 'ç´§æ€¥ä»»åŠ¡ç¡®è®¤'}) then
 						stap(pos)
 					end
 				end)
 				return 1
 			end
-			-- ÆäËûÒ»Ğ©´¦Àí
-			-- if findOne('¹ú·şÉñÊŞ¼¼ÄÜ', {sim = .9}) then stap({903,664}) end
-			if findTap('¹ú·şÎÒµÄÍ¨¼©Ãûµ¥') then log('µã»÷Í¨¼©Ãûµ¥') end
-			if findTap('ÉêÇëºÃÓÑÈ¡Ïû') then log('ºÃÓÑÉêÇëÈ¡Ïû') end
-			if findTap('½ô¼±ÈÎÎñÈ·ÈÏ') then log('½ô¼±ÈÎÎñÈ·ÈÏ') end
-		end, game_running_capture_interval, 9999 * 10 * 60) -- ²»Ó°Ïì
+			-- å…¶ä»–ä¸€äº›å¤„ç†
+			-- if findOne('å›½æœç¥å…½æŠ€èƒ½', {sim = .9}) then stap({903,664}) end
+			if findTap('å›½æœæˆ‘çš„é€šç¼‰åå•') then log('ç‚¹å‡»é€šç¼‰åå•') end
+			if findTap('ç”³è¯·å¥½å‹å–æ¶ˆ') then log('å¥½å‹ç”³è¯·å–æ¶ˆ') end
+			if findTap('ç´§æ€¥ä»»åŠ¡ç¡®è®¤') then log('ç´§æ€¥ä»»åŠ¡ç¡®è®¤') end
+		end, game_running_capture_interval, 9999 * 10 * 60) -- ä¸å½±å“
 	end
-	log('Õ½¶·´úÀíÍê³É')
+	log('æˆ˜æ–—ä»£ç†å®Œæˆ')
 end
 
-path.ÁìÑø³èÎï = function ()
-	if not findOne('¹ú·ş³èÎïĞ¡Îİºìµã') then log('ÎŞ³èÎïÁìÈ¡') return end
+path.é¢†å…»å® ç‰© = function ()
+	if not findOne('å›½æœå® ç‰©å°å±‹çº¢ç‚¹') then log('æ— å® ç‰©é¢†å–') return end
 		wait(function ()
-			stap(point.³èÎïĞ¡Îİ)
+			stap(point.å® ç‰©å°å±‹)
 					ssleep(1)
-			if not findOne('¹ú·şÖ÷Ò³Rank') then return 1 end
+			if not findOne('å›½æœä¸»é¡µRank') then return 1 end
 		end)
-		untilTap('¹ú·ş³èÎïÁìÑø')
+		untilTap('å›½æœå® ç‰©é¢†å…»')
 		if wait(function ()
-			stap('¹ú·ş³èÎïÃâ·ÑÁìÑø')
-			if not findOne('¹ú·ş³èÎïÃâ·ÑÁìÑø') then return 1 end
-			if findOne('¹ú·ş³èÎï±³°ü²»×ã') then
-				path.³èÎï±³°üÇåÀí()
+			stap('å›½æœå® ç‰©å…è´¹é¢†å…»')
+			if not findOne('å›½æœå® ç‰©å…è´¹é¢†å…»') then return 1 end
+			if findOne('å›½æœå® ç‰©èƒŒåŒ…ä¸è¶³') then
+				path.å® ç‰©èƒŒåŒ…æ¸…ç†()
 				return 2
 			end
 		end) == 2 then
 		return 2
 	end
-	-- Ãâ·ÑÁìÈ¡Ò»´Î
+	-- å…è´¹é¢†å–ä¸€æ¬¡
 	wait(function ()
 		stap({34,151})
-		if findOne('¹ú·ş³èÎïÁìÑø') then return 1 end
+		if findOne('å›½æœå® ç‰©é¢†å…»') then return 1 end
 	end)
 end
 
-path.³É¾ÍÁìÈ¡ = function ()
-	if not findOne({'¹ú·ş³É¾Íºìµã', '¹ú·ş³É¾Íºìµã2'}) then log('ÎŞ³É¾ÍÁìÈ¡') return 1 end
+path.æˆå°±é¢†å– = function ()
+	if not findOne({'å›½æœæˆå°±çº¢ç‚¹', 'å›½æœæˆå°±çº¢ç‚¹2'}) then log('æ— æˆå°±é¢†å–') return 1 end
 	wait(function ()
-		stap(point.³É¾Í)
+		stap(point.æˆå°±)
 				ssleep(1)
-			if not findOne('¹ú·şÖ÷Ò³Rank') then return 1 end
+			if not findOne('å›½æœä¸»é¡µRank') then return 1 end
 	end)
-	untilAppear('¹ú·şÉùÓş×Ü·ÖÏÂ·½»¨')
-	local target = {'¹ú·şÈı½ãÃÃÈÕ¼Ç', '¹ú·ş¼ÇÒäÖ®¸ù¹ÜÀíÔº', '¹ú·şÔªÀÏÔº', '¹ú·şÉÌÈËÁªÃË', '¹ú·şÌØÎñ»ÃÓ°¶Ó'}
+	untilAppear('å›½æœå£°èª‰æ€»åˆ†ä¸‹æ–¹èŠ±')
+	local target = {'å›½æœä¸‰å§å¦¹æ—¥è®°', 'å›½æœè®°å¿†ä¹‹æ ¹ç®¡ç†é™¢', 'å›½æœå…ƒè€é™¢', 'å›½æœå•†äººè”ç›Ÿ', 'å›½æœç‰¹åŠ¡å¹»å½±é˜Ÿ'}
 	for i,v in pairs(target) do
 		local curTarget
 		wait(function ()
 			stap(v)
-			curTarget = findOne('¹ú·ş³É¾ÍÀàĞÍ')
+			curTarget = findOne('å›½æœæˆå°±ç±»å‹')
 			if curTarget and v:find(curTarget[1].text) then return 1 end
 		end)
-		-- Èı½ãÃÃÈÕ¼Ç±È½ÏÌØÊâ
-		if v == '¹ú·şÈı½ãÃÃÈÕ¼Ç' then
-			local targ = {'¹ú·şÃ¿ÈÕ³É¾Í', '¹ú·şÃ¿ÖÜ³É¾Í'}
-			local key = {{'Ã¿ÈÕ', 'ÈÕ'}, {'Ã¿ÖÜ', 'ÖÜ'}}
+		-- ä¸‰å§å¦¹æ—¥è®°æ¯”è¾ƒç‰¹æ®Š
+		if v == 'å›½æœä¸‰å§å¦¹æ—¥è®°' then
+			local targ = {'å›½æœæ¯æ—¥æˆå°±', 'å›½æœæ¯å‘¨æˆå°±'}
+			local key = {{'æ¯æ—¥', 'æ—¥'}, {'æ¯å‘¨', 'å‘¨'}}
 			for i,v in pairs(targ) do
 				if findOne(v) then
-					-- ÇĞ»»µ½ Ã¿ÈÕ/Ã¿ÖÜµãÊı
+					-- åˆ‡æ¢åˆ° æ¯æ—¥/æ¯å‘¨ç‚¹æ•°
 					wait(function ()
 						stap(v)
-						if findOne('¹ú·şÃ¿ÈÕÃ¿ÖÜµãÊı', {keyword = key[i]}) then return 1 end
+						if findOne('å›½æœæ¯æ—¥æ¯å‘¨ç‚¹æ•°', {keyword = key[i]}) then return 1 end
 					end)
-					untilTap('¹ú·şÃ¿ÈÕÃ¿ÖÜĞ¡ºìÇò', {rg = {415,141,946,185}, sim = .98})
+					untilTap('å›½æœæ¯æ—¥æ¯å‘¨å°çº¢çƒ', {rg = {415,141,946,185}, sim = .98})
 					wait(function ()
 						stap({574,40})
-						if findOne('¹ú·şÉùÓş×Ü·ÖÏÂ·½»¨') then return 1 end
+						if findOne('å›½æœå£°èª‰æ€»åˆ†ä¸‹æ–¹èŠ±') then return 1 end
 					end)
 				end
 			end
 		else
 			wait(function ()
-				findTap('¹ú·ş³É¾ÍÁìÈ¡ÂÌÉ«')
-				if findOne('¹ú·ş³É¾ÍÇ°Íù»ÒÉ«') then log(11) return 1 end
+				findTap('å›½æœæˆå°±é¢†å–ç»¿è‰²')
+				if findOne('å›½æœæˆå°±å‰å¾€ç°è‰²') then log(11) return 1 end
 				stap({574,40})
 			end)
 		end
 	end
 end
 
-path.³èÎïÀñºĞ = function ()
-	if findOne('¹ú·ş³èÎïÀñºĞ') then untilTap('¹ú·ş³èÎïÀñºĞ') else log('ÎŞ³èÎïÀñºĞ') end
+path.å® ç‰©ç¤¼ç›’ = function ()
+	if findOne('å›½æœå® ç‰©ç¤¼ç›’') then untilTap('å›½æœå® ç‰©ç¤¼ç›’') else log('æ— å® ç‰©ç¤¼ç›’') end
 end
 
-path.ÊÕÈ¡ÓÊ¼ş = function ()
-	if not findOne({'¹ú·şÓÊ¼ş', '¹ú·şÓÊ¼ş2'}) then log('ÎŞÓÊ¼ş') return 1 end
+path.æ”¶å–é‚®ä»¶ = function ()
+	if not findOne({'å›½æœé‚®ä»¶', 'å›½æœé‚®ä»¶2'}) then log('æ— é‚®ä»¶') return 1 end
 	wait(function ()
-		stap(point.ÓÊ¼ş)
+		stap(point.é‚®ä»¶)
 				ssleep(1)
-			if not findOne('¹ú·şÖ÷Ò³Rank') then return 1 end
+			if not findOne('å›½æœä¸»é¡µRank') then return 1 end
 	end)
-	untilAppear({'¹ú·şÓÊ¼şÒ³Ãæ', '¹ú¼Ê·şÓÊ¼ş'})
+	untilAppear({'å›½æœé‚®ä»¶é¡µé¢', 'å›½é™…æœé‚®ä»¶'})
 	wait(function ()
 		stap({911,87})
-		if findTap('¹ú·şÓÊ¼şÁìÈ¡È·ÈÏÀ¶µ×') then return 1 end
+		if findTap('å›½æœé‚®ä»¶é¢†å–ç¡®è®¤è“åº•') then return 1 end
 	end)
 	wait(function ()
 		stap({563,85})
-		if findOne('¹ú·şÓÊ¼şÒ³Ãæ') then return 1 end
+		if findOne('å›½æœé‚®ä»¶é¡µé¢') then return 1 end
 	end)
-	-- ²¿·ÖÎŞ·¨ÓÃÈ«²¿ÁìÈ¡µÄ
-	-- ¿ÉÄÜ»áÓĞ×°±¸ĞèÒªÇåÀí
+	-- éƒ¨åˆ†æ— æ³•ç”¨å…¨éƒ¨é¢†å–çš„
+	-- å¯èƒ½ä¼šæœ‰è£…å¤‡éœ€è¦æ¸…ç†
 	wait(function ()
-		if not findTap('¹ú·şÓÊ¼şÁìÈ¡ÂÌµ×') then return 1 end
-		local tmp, target = untilAppear({'¹ú·şÓÊ¼şÊÕĞÅ', '¹ú·şÓÊ¼şÁìÈ¡À¶µ×', '¹ú·şÓÊ¼ş»ñµÃ½±ÀøTip',
-		'¹ú·şÓÊ¼şÒ³Ãæ', '¹ú·şÓÊ¼şÁìÈ¡Ó¢ĞÛÈ·¶¨', '¹ú·ş±³°ü¿Õ¼ä²»×ã'})
-		if target and (target ~= '¹ú·şÓÊ¼şÒ³Ãæ' and target ~= '¹ú·ş±³°ü¿Õ¼ä²»×ã')  then untilTap(target) end
-		if target and target == '¹ú·ş±³°ü¿Õ¼ä²»×ã'  then
-			path.±³°ü´¦Àí(function () path.Ìø×ª('¹ú·şÓÊ¼şÒ³Ãæ') end)
+		if not findTap('å›½æœé‚®ä»¶é¢†å–ç»¿åº•') then return 1 end
+		local tmp, target = untilAppear({'å›½æœé‚®ä»¶æ”¶ä¿¡', 'å›½æœé‚®ä»¶é¢†å–è“åº•', 'å›½æœé‚®ä»¶è·å¾—å¥–åŠ±Tip',
+		'å›½æœé‚®ä»¶é¡µé¢', 'å›½æœé‚®ä»¶é¢†å–è‹±é›„ç¡®å®š', 'å›½æœèƒŒåŒ…ç©ºé—´ä¸è¶³'})
+		if target and (target ~= 'å›½æœé‚®ä»¶é¡µé¢' and target ~= 'å›½æœèƒŒåŒ…ç©ºé—´ä¸è¶³')  then untilTap(target) end
+		if target and target == 'å›½æœèƒŒåŒ…ç©ºé—´ä¸è¶³'  then
+			path.èƒŒåŒ…å¤„ç†(function () path.è·³è½¬('å›½æœé‚®ä»¶é¡µé¢') end)
 		end
 		wait(function ()
 			stap({563,85})
-			findTap('¹ú·şÓÊ¼şÁìÈ¡Ó¢ĞÛÈ·¶¨')
-			if findOne('¹ú·şÓÊ¼şÒ³Ãæ') then ssleep(.5) return 1 end
+			findTap('å›½æœé‚®ä»¶é¢†å–è‹±é›„ç¡®å®š')
+			if findOne('å›½æœé‚®ä»¶é¡µé¢') then ssleep(.5) return 1 end
 		end)
 	end, 1, 5 * 60, nil, true)
 end
 
-path.ÊÄÔ¼ÕÙ»½ = function ()
-	if not findOne({'¹ú·şÕÙ»½Ğ¡ºìµã'}) then log('ÎŞÊÄÔ¼ÕÙ»½') return 1 end
+path.èª“çº¦å¬å”¤ = function ()
+	if not findOne({'å›½æœå¬å”¤å°çº¢ç‚¹'}) then log('æ— èª“çº¦å¬å”¤') return 1 end
 	wait(function ()
-		stap(point.ÕÙ»½)
+		stap(point.å¬å”¤)
 				ssleep(1)
-			if not findOne('¹ú·şÖ÷Ò³Rank') then return 1 end
+			if not findOne('å›½æœä¸»é¡µRank') then return 1 end
 	end)
-	-- Ñ°ÕÒÊÄÔ¼ÕÙ»½
+	-- å¯»æ‰¾èª“çº¦å¬å”¤
 	local pos, target
 	wait(function ()
 		sswipe({1141,588}, {1141,100})
 		ssleep(1)
-		pos = findOne('¹ú·şÕÙ»½ÀàĞÍ', {keyword = {'ÊÄÔ¼ÕÙ»½', 'ÊÄÔ¼'}})
+		pos = findOne('å›½æœå¬å”¤ç±»å‹', {keyword = {'èª“çº¦å¬å”¤', 'èª“çº¦'}})
 		if pos then return 1 end
 	end)
 	wait(function ()
 		stap({pos[1].l, pos[1].t})
-		if findOne('¹ú·ş10´ÎÕÙ»½') then ssleep(1) return 1 end
+		if findOne('å›½æœ10æ¬¡å¬å”¤') then ssleep(1) return 1 end
 	end)
-	if findTap('¹ú·şÃâ·Ñ1´ÎÕÙ»½') then untilTap('¹ú·şÕÙ»½È·ÈÏ') end
+	if findTap('å›½æœå…è´¹1æ¬¡å¬å”¤') then untilTap('å›½æœå¬å”¤ç¡®è®¤') end
 	wait(function ()
 		stap({156,659})
-		if findOne('¹ú·ş10´ÎÕÙ»½') then return 1 end
+		if findOne('å›½æœ10æ¬¡å¬å”¤') then return 1 end
 	end)
 end
 
-path.Ê¥ÓòÊÕ²Ë = function ()
-	if not findOne({'¹ú·şÊ¥ÓòĞ¡ºìµã'}) then log('ÎŞĞèÊÕ²Ë') return 1 end
+path.åœ£åŸŸæ”¶èœ = function ()
+	if not findOne({'å›½æœåœ£åŸŸå°çº¢ç‚¹'}) then log('æ— éœ€æ”¶èœ') return 1 end
 	wait(function ()
-		stap(point.Ê¥Óò)
+		stap(point.åœ£åŸŸ)
 			ssleep(1)
-		if not findOne('¹ú·şÖ÷Ò³Rank') then return 1 end
+		if not findOne('å›½æœä¸»é¡µRank') then return 1 end
 	end)
-	path.Ê¥ÓòÉú²ú½±ÀøÁìÈ¡()
-	path.Ê¥Óò¾«ÁéÖ®É­ÁìÈ¡()
+	path.åœ£åŸŸç”Ÿäº§å¥–åŠ±é¢†å–()
+	path.åœ£åŸŸç²¾çµä¹‹æ£®é¢†å–()
 end
 
-path.Ê¥ÓòÉú²ú½±ÀøÁìÈ¡ = function ()
-	untilAppear('¹ú·şÊ¥ÓòÊ×Ò³')
-	log('Å·ÀÕ±ÏË¹Ö®ĞÄ´¦Àí')
+path.åœ£åŸŸç”Ÿäº§å¥–åŠ±é¢†å– = function ()
+	untilAppear('å›½æœåœ£åŸŸé¦–é¡µ')
+	log('æ¬§å‹’æ¯•æ–¯ä¹‹å¿ƒå¤„ç†')
 	wait(function ()
-		if findTap('¹ú·şÅ·ÀÕ±ÏË¹Ö®ĞÄ') then
+		if findTap('å›½æœæ¬§å‹’æ¯•æ–¯ä¹‹å¿ƒ') then
 			return 1
 		end
 	end, .1, 1)
 	wait(function ()
 		stap({649,58})
-		if findOne('¹ú·şÊ¥ÓòÊ×Ò³') then ssleep(.5) return 1 end
+		if findOne('å›½æœåœ£åŸŸé¦–é¡µ') then ssleep(.5) return 1 end
 	end)
 end
 
-path.Ê¥Óò¾«ÁéÖ®É­ÁìÈ¡ = function ()
-	log('¾«ÁéÖ®É­´¦Àí')
-	local target = {'¹ú·şÊ¥ÓòÆó¶ìµ°', '¹ú·şÊ¥Óò¾«ÁéÖ®Èª', '¹ú·şÊ¥ÓòÖÖÖ²µØ', '¹ú·şÊ¥ÓòÖÖÖ²µØÊÕ»ñ'}
-	if findTap('¹ú·şÊ¥Óò¾«ÁéÖ®É­Ğ¡ºìµã') then
-		-- untilAppear('½¨ÖşÉı¼¶×´Ì¬')
+path.åœ£åŸŸç²¾çµä¹‹æ£®é¢†å– = function ()
+	log('ç²¾çµä¹‹æ£®å¤„ç†')
+	local target = {'å›½æœåœ£åŸŸä¼é¹…è›‹', 'å›½æœåœ£åŸŸç²¾çµä¹‹æ³‰', 'å›½æœåœ£åŸŸç§æ¤åœ°', 'å›½æœåœ£åŸŸç§æ¤åœ°æ”¶è·'}
+	if findTap('å›½æœåœ£åŸŸç²¾çµä¹‹æ£®å°çº¢ç‚¹') then
+		-- untilAppear('å»ºç­‘å‡çº§çŠ¶æ€')
 		wait(function ()
 			stap({104,100})
-			if findOne('¹ú·şÊ¥ÓòÆó¶ì³²Ñ¨') then return 1 end
+			if findOne('å›½æœåœ£åŸŸä¼é¹…å·¢ç©´') then return 1 end
 		end)
 		for i,v in pairs(target) do
 			if wait(function () if findTap(v) then return 1 end end, 0, .5) then
 				wait(function ()
 					stap({104,100})
-					if findOne('¹ú·şÊ¥ÓòÆó¶ì³²Ñ¨') then return 1 end
+					if findOne('å›½æœåœ£åŸŸä¼é¹…å·¢ç©´') then return 1 end
 				end)
 			end
 		end
 	end
-	path.Ê¥ÓòÊ×Ò³()
+	path.åœ£åŸŸé¦–é¡µ()
 end
 
 local number = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'}
 -- todo
-path.Ê¥ÓòÖ¸»Ó×Ü²¿ = function ()
-	log('Ö¸»Ó×Ü²¿´¦Àí')
-	local target = 'ÌÖ·¥'
-	if findTap('¹ú·şÊ¥ÓòÖ¸»Ó×Ü²¿Ğ¡ºìµã') then
-		untilAppear('½¨ÖşÉı¼¶×´Ì¬')
+path.åœ£åŸŸæŒ‡æŒ¥æ€»éƒ¨ = function ()
+	log('æŒ‡æŒ¥æ€»éƒ¨å¤„ç†')
+	local target = 'è®¨ä¼'
+	if findTap('å›½æœåœ£åŸŸæŒ‡æŒ¥æ€»éƒ¨å°çº¢ç‚¹') then
+		untilAppear('å»ºç­‘å‡çº§çŠ¶æ€')
 		wait(function ()
-			stap(point.Ê¥ÓòÖ¸»Ó×Ü²¿ÈÎÎñ[target])
-			if findOne('¹ú·şÊ¥ÓòÖ¸»Ó×Ü²¿ÈÎÎñÑ¡Ôñ', {keyword = {target}}) then return 1 end
+			stap(point.åœ£åŸŸæŒ‡æŒ¥æ€»éƒ¨ä»»åŠ¡[target])
+			if findOne('å›½æœåœ£åŸŸæŒ‡æŒ¥æ€»éƒ¨ä»»åŠ¡é€‰æ‹©', {keyword = {target}}) then return 1 end
 		end)
-		local dispatchLevel = findOne('¹ú·şÅÉÇ²ÈÎÎñµÈ¼¶')
+		local dispatchLevel = findOne('å›½æœæ´¾é£ä»»åŠ¡ç­‰çº§')
 		local dispatchLevelSort = {'12', '8', '6', '4', '2', '1', '30'}
-		if not dispatchLevel then log('ÎŞÅÉÇ²') return 1 end
+		if not dispatchLevel then log('æ— æ´¾é£') return 1 end
 		if #dispatchLevel > 1 then
-			-- ¹ıÂË·ÇÅÉÇ²µÈ¼¶
+			-- è¿‡æ»¤éæ´¾é£ç­‰çº§
 			dispatchLevel = table.filter(dispatchLevel,
-			function (v) if v.text:includes({'ËùĞèÊ±¼ä', 'Ğ¡Ê±', '·Ö', 'Ãë'}) and
-			findOne('¹ú·şÅÉÇ²Ö´ĞĞ', {rg = {890, v.t, 980, v.b + 75}}) then return 1 end end)
-			-- ¸ù¾İÉèÖÃµÈ¼¶²éÑ¯ÓÅÏÈÅÉÇ²level
+			function (v) if v.text:includes({'æ‰€éœ€æ—¶é—´', 'å°æ—¶', 'åˆ†', 'ç§’'}) and
+			findOne('å›½æœæ´¾é£æ‰§è¡Œ', {rg = {890, v.t, 980, v.b + 75}}) then return 1 end end)
+			-- æ ¹æ®è®¾ç½®ç­‰çº§æŸ¥è¯¢ä¼˜å…ˆæ´¾é£level
 			for i,v in pairs(dispatchLevelSort) do
 				local result = table.findv(dispatchLevel, function (val) if val.text:includes({v}) then return 1 end end)
 				if result then dispatchLevel = result break end
 			end
 		end
-		untilTap('¹ú·şÅÉÇ²Ö´ĞĞ', {rg = {890, dispatchLevel.t, 980, dispatchLevel.b + 75}})
-		untilAppear('¹ú·şÅÉÇ²Ö´ĞĞÈÎÎñ')
-		local needLevel = getArenaPoints(untilAppear('¹ú·şÅÉÇ²ËùĞèµÈ¼¶', {keyword = {'Lw', 'L', 'v', 'w'}})[1].text)
-		-- ×Ô¼ºÅäÖÃÓ¢ĞÛÃû³Æ
+		untilTap('å›½æœæ´¾é£æ‰§è¡Œ', {rg = {890, dispatchLevel.t, 980, dispatchLevel.b + 75}})
+		untilAppear('å›½æœæ´¾é£æ‰§è¡Œä»»åŠ¡')
+		local needLevel = getArenaPoints(untilAppear('å›½æœæ´¾é£æ‰€éœ€ç­‰çº§', {keyword = {'Lw', 'L', 'v', 'w'}})[1].text)
+		-- è‡ªå·±é…ç½®è‹±é›„åç§°
 	end
 end
 
-path.Ê¥ÓòÊ×Ò³ = function ()
+path.åœ£åŸŸé¦–é¡µ = function ()
 	wait(function ()
-		if findOne('¹ú·şÊ¥ÓòÊ×Ò³') then ssleep(1) return 1 end
+		if findOne('å›½æœåœ£åŸŸé¦–é¡µ') then ssleep(1) return 1 end
 		stap({31,32})
 		ssleep(2)
 	end)
 end
 
-path.ÓÑÇéÌåÁ¦ = function ()
-	log('¹ºÂòÌåÁ¦')
+path.å‹æƒ…ä½“åŠ› = function ()
+	log('è´­ä¹°ä½“åŠ›')
 	wait(function ()
-		stap(point.ÉÌµê)
+		stap(point.å•†åº—)
 				ssleep(1)
-			if not findOne('¹ú·şÖ÷Ò³Rank') then return 1 end
+			if not findOne('å›½æœä¸»é¡µRank') then return 1 end
 	end)
-	untilAppear('¹ú·şÒ»°ãÉÌµê')
+	untilAppear('å›½æœä¸€èˆ¬å•†åº—')
 end
 
-path.¾»»¯ÉîÔ¨ = function ()
+path.å‡€åŒ–æ·±æ¸Š = function ()
 	
 end
 
-path.Õ½¶·Ñ¡ÔñÒ³ = function ()
+path.æˆ˜æ–—é€‰æ‹©é¡µ = function ()
 	wait(function ()
-		stap(point.Õ½¶·)
+		stap(point.æˆ˜æ–—)
 				ssleep(1)
-			if not findOne('¹ú·şÖ÷Ò³Rank') then return 1 end
+			if not findOne('å›½æœä¸»é¡µRank') then return 1 end
 	end)
-	untilAppear('¹ú·şÕ½¶·ÀàĞÍÒ³')
+	untilAppear('å›½æœæˆ˜æ–—ç±»å‹é¡µ')
 	wait(function ()
 		stap({280,260})
-		if not findOne('¹ú·şÃÔ¹¬Ö÷Ò³', {sim = 1}) then return 1 end
+		if not findOne('å›½æœè¿·å®«ä¸»é¡µ', {sim = 1}) then return 1 end
 	end)
 end
 
--- Ë¢Í¼
-path.Ë¢Í¼¿ªÆô = function ()
-	-- Í¼¹ıÂË
-	log('¿ªÆôË¢Í¼')
-	-- ÌÖ·¥
-	local stageAll = ui_option.Õ½¶·ÀàĞÍ
+-- åˆ·å›¾
+path.åˆ·å›¾å¼€å¯ = function ()
+	-- å›¾è¿‡æ»¤
+	log('å¼€å¯åˆ·å›¾')
+	-- è®¨ä¼
+	local stageAll = ui_option.æˆ˜æ–—ç±»å‹
 	local currentStage = sgetNumberConfig('current_stage', 1)
 	for i,v in pairs(stageAll) do
 		if current_task[v] and i >= currentStage then
-			if v:includes({'ÌÖ·¥', 'ÃÔ¹¬', '¾«Áé¼ÀÌ³', 'ÉîÔ¨'}) then
-				path.Õ½¶·Ñ¡ÔñÒ³()
+			if v:includes({'è®¨ä¼', 'è¿·å®«', 'ç²¾çµç¥­å›', 'æ·±æ¸Š'}) then
+				path.æˆ˜æ–—é€‰æ‹©é¡µ()
 				wait(function ()
-					stap(point.Õ½¶·Ä£Ê½Î»ÖÃ[v])
-					if findOne('¹ú·şÕ½¶·ÀàĞÍ', {keyword = cutStringGetBinWord(v)}) then return 1 end
+					stap(point.æˆ˜æ–—æ¨¡å¼ä½ç½®[v])
+					if findOne('å›½æœæˆ˜æ–—ç±»å‹', {keyword = cutStringGetBinWord(v)}) then return 1 end
 				end)
 			end
 			if path[v]() ~= 0 then
-				slog(v..'Íê³É')
+				slog(v..'å®Œæˆ')
 			else
-				slog(v..'Î´Íê³É')
+				slog(v..'æœªå®Œæˆ')
 			end
-			-- ÖØÖÃË¢Í¼´ÎÊı
+			-- é‡ç½®åˆ·å›¾æ¬¡æ•°
 			setNumberConfig("fight_count", 0)
 			sgetNumberConfig('current_stage', i)
-			path.ÓÎÏ·Ê×Ò³()
+			path.æ¸¸æˆé¦–é¡µ()
 		end
 	end
 end
 
-path.Õ½¶·»¬Í¼ = function (levelTarget)
-		-- È·¶¨»¬¶¯µ½×îÉÏ²ã
+path.æˆ˜æ–—æ»‘å›¾ = function (levelTarget)
+		-- ç¡®å®šæ»‘åŠ¨åˆ°æœ€ä¸Šå±‚
 	wait(function ()
 		sswipe({835,100}, {835,3000})
 		ssleep(1)
-		return findOne('¹Ø¿¨¶¥²¿')
+		return findOne('å…³å¡é¡¶éƒ¨')
 	end, 0)
-	-- ±éÀú¼¶±ğ
+	-- éå†çº§åˆ«
 	local newTextVal
-	-- ĞÂÖµÖØ¸´´ÎÊı
+	-- æ–°å€¼é‡å¤æ¬¡æ•°
 	local newTextValReCount = 0
 	local curTextVal
 	wait(function ()
 		wait(function ()
-			curTextVal = findOne('¹ú·şÕ½¶·¼¶±ğ')
+			curTextVal = findOne('å›½æœæˆ˜æ–—çº§åˆ«')
 			if curTextVal then curTextVal = curTextVal[1].text return 1 end
 		end, .05, .3)
 		if curTextVal and curTextVal:find(levelTarget) then return 1 end
@@ -896,35 +896,35 @@ path.Õ½¶·»¬Í¼ = function (levelTarget)
 				newTextValReCount = 0
 			end
 		end
-		p = findOne('¹ú·ş¼¶±ğ¹âÈ¦')
+		p = findOne('å›½æœçº§åˆ«å…‰åœˆ')
 		if p then p = {p[1], p[2] + 50} stap(p) ssleep(1) end
 	end, 0, 5 * 60)
 
-	-- 0 ±íÊ¾´ËÍ¼²¢Î´´ò¹ı
+	-- 0 è¡¨ç¤ºæ­¤å›¾å¹¶æœªæ‰“è¿‡
 	local selectGroup
 	if not wait(function ()
 		return wait(function ()
-			if findTapOnce('¹ú·ş¶ÌÑ¡Ôñ¶ÓÎé', {rg = {988,600,1278,717}}) then
+			if findTapOnce('å›½æœçŸ­é€‰æ‹©é˜Ÿä¼', {rg = {988,600,1278,717}}) then
 				return wait(function ()
-					if not findOne('¹ú·ş¶ÌÑ¡Ôñ¶ÓÎé', {rg = {988,600,1278,717}}) then return 1 end
+					if not findOne('å›½æœçŸ­é€‰æ‹©é˜Ÿä¼', {rg = {988,600,1278,717}}) then return 1 end
 				end, .3, 5)
 			end
 		end)
 	end, .5, 5) then
-		log('Î´¿ªÆô¹Ø¿¨')
-		slog('Î´¿ªÆô¹Ø¿¨')
+		log('æœªå¼€å¯å…³å¡')
+		slog('æœªå¼€å¯å…³å¡')
 		return 0
 	end
 end
 
-path.Õ½¶·ÅÜÍ¼1 = function (typeTarget, levelTarget, fightCount, isActivity)
+path.æˆ˜æ–—è·‘å›¾1 = function (typeTarget, levelTarget, fightCount, isActivity)
 	-- local p
-	-- local key = {'½×¶Î', '¼ÀÌ³', 'ÇøÓò', 'ÌÖ·¥'}
-	-- ¹Ø¿¨
+	-- local key = {'é˜¶æ®µ', 'ç¥­å›', 'åŒºåŸŸ', 'è®¨ä¼'}
+	-- å…³å¡
 	if typeTarget then
 		for i=1,3 do
 			if wait(function ()
-				if findTap(typeTarget, {rg = point.¹ú·şÕ½¶·ÀàĞÍÇøÓò, sim = .9}) then return 1 end
+				if findTap(typeTarget, {rg = point.å›½æœæˆ˜æ–—ç±»å‹åŒºåŸŸ, sim = .9}) then return 1 end
 				swipeEndStop({834,686}, {834,300}, .3)
 				ssleep(1)
 			end, 1, 5) then
@@ -933,113 +933,113 @@ path.Õ½¶·ÅÜÍ¼1 = function (typeTarget, levelTarget, fightCount, isActivity)
 				sswipe({835,300}, {835,2000})
 				ssleep(1)
 			end
-			if i == 3 then slog('¹Ø¿¨¿ÉÄÜÎ´µ½¿ªÆôÊ±¼ä') return 0 end
+			if i == 3 then slog('å…³å¡å¯èƒ½æœªåˆ°å¼€å¯æ—¶é—´') return 0 end
 		end
 	end
-	untilAppear('¹ú·ş¶ÌÑ¡Ôñ¶ÓÎé', {rg = {988,600,1278,717}})
+	untilAppear('å›½æœçŸ­é€‰æ‹©é˜Ÿä¼', {rg = {988,600,1278,717}})
 
-	if path.Õ½¶·»¬Í¼(levelTarget) == 0 then
+	if path.æˆ˜æ–—æ»‘å›¾(levelTarget) == 0 then
 		return 0
 	end
 
-	path.Í¨ÓÃË¢Í¼Ä£Ê½1(fightCount, isActivity, levelTarget)
+	path.é€šç”¨åˆ·å›¾æ¨¡å¼1(fightCount, isActivity, levelTarget)
 end
 
--- ÅÜÍ¼Ä£Ê½1
--- ÌÖ·¥ ¾«Áé¼ÀÌ³
+-- è·‘å›¾æ¨¡å¼1
+-- è®¨ä¼ ç²¾çµç¥­å›
 -- 834,686 834,147
 -- fightCount: 10
-path.Í¨ÓÃË¢Í¼Ä£Ê½1 = function (fightCount, isActivity, levelTarget)
+path.é€šç”¨åˆ·å›¾æ¨¡å¼1 = function (fightCount, isActivity, levelTarget)
 	global_stage_count = fightCount
-	local rightBottomRegion = isActivity and '¹ú·şÓÒÏÂ½Ç»î¶¯' or '¹ú·şÓÒÏÂ½Ç'
-	untilAppear(rightBottomRegion, {keyword = {'Õ½¶·¿ªÊ¼'}})	ssleep(.5)
-	-- ÕâÀïÈç¹ûÓĞµÄ»°,¾Í´¦Àí
-	local isAgent = path.ÍĞ¹Ü´¦Àí(isActivity)
+	local rightBottomRegion = isActivity and 'å›½æœå³ä¸‹è§’æ´»åŠ¨' or 'å›½æœå³ä¸‹è§’'
+	untilAppear(rightBottomRegion, {keyword = {'æˆ˜æ–—å¼€å§‹'}})	ssleep(.5)
+	-- è¿™é‡Œå¦‚æœæœ‰çš„è¯,å°±å¤„ç†
+	local isAgent = path.æ‰˜ç®¡å¤„ç†(isActivity)
 	local pos, noAct
 	if wait(function ()
-		pos, noAct = findOne({'¹ú·ş±³°ü¿Õ¼ä²»×ã', '¹ú·şĞĞ¶¯Á¦²»×ã', rightBottomRegion}, {keyword = {'Õ½¶·¿ªÊ¼', 'Ñ¡Ôñ¶ÓÎé'}})
-		if noAct == '¹ú·şĞĞ¶¯Á¦²»×ã' then
-			slog('ĞĞ¶¯Á¦²»×ã')
-			log('ĞĞ¶¯Á¦²»×ã!')
-			if path.²¹³äÌåÁ¦() == 0 then return 0 end
+		pos, noAct = findOne({'å›½æœèƒŒåŒ…ç©ºé—´ä¸è¶³', 'å›½æœè¡ŒåŠ¨åŠ›ä¸è¶³', rightBottomRegion}, {keyword = {'æˆ˜æ–—å¼€å§‹', 'é€‰æ‹©é˜Ÿä¼'}})
+		if noAct == 'å›½æœè¡ŒåŠ¨åŠ›ä¸è¶³' then
+			slog('è¡ŒåŠ¨åŠ›ä¸è¶³')
+			log('è¡ŒåŠ¨åŠ›ä¸è¶³!')
+			if path.è¡¥å……ä½“åŠ›() == 0 then return 0 end
 		end
-		if noAct == '¹ú·ş±³°ü¿Õ¼ä²»×ã' then return 1 end
+		if noAct == 'å›½æœèƒŒåŒ…ç©ºé—´ä¸è¶³' then return 1 end
 		if noAct == rightBottomRegion then stap({pos[1].l, pos[1].t}) end
-		if findOne({'¹ú·ş¶ş±¶ËÙ', '¹ú·şÒ»±¶ËÙ'}) then return 1 end
+		if findOne({'å›½æœäºŒå€é€Ÿ', 'å›½æœä¸€å€é€Ÿ'}) then return 1 end
 	end) == 0  then
 		return 0
 	end
 	local tmp, noAction
 	wait(function ()
-		tmp, noAction = findOne({'¹ú·ş±³°ü¿Õ¼ä²»×ã', '¹ú·ş¶ş±¶ËÙ', '¹ú·şÒ»±¶ËÙ'})
+		tmp, noAction = findOne({'å›½æœèƒŒåŒ…ç©ºé—´ä¸è¶³', 'å›½æœäºŒå€é€Ÿ', 'å›½æœä¸€å€é€Ÿ'})
 		if noAction then return 1 end
 	end)
 
-	local staticTarget = {'¹ú·ş±³°ü¿Õ¼ä²»×ã', '¹ú·ş¶ş±¶ËÙ', '¹ú·şĞĞ¶¯Á¦²»×ã', '¹ú·şÒ»±¶ËÙ'}
+	local staticTarget = {'å›½æœèƒŒåŒ…ç©ºé—´ä¸è¶³', 'å›½æœäºŒå€é€Ÿ', 'å›½æœè¡ŒåŠ¨åŠ›ä¸è¶³', 'å›½æœä¸€å€é€Ÿ'}
 
 	local currentCount = sgetNumberConfig('fight_count', 1)
 	while currentCount <= fightCount do
-		if noAction ~= '¹ú·ş±³°ü¿Õ¼ä²»×ã' then
-			path.Õ½¶·´úÀí(1, isAgent, currentCount, isActivity)
-			log('Íê³É´ÎÊı: '..currentCount)
+		if noAction ~= 'å›½æœèƒŒåŒ…ç©ºé—´ä¸è¶³' then
+			path.æˆ˜æ–—ä»£ç†(1, isAgent, currentCount, isActivity)
+			log('å®Œæˆæ¬¡æ•°: '..currentCount)
 		end
 		local retCode = wait(function ()
-			-- Æ£ÀÍÎÊÌâ
+			-- ç–²åŠ³é—®é¢˜
 			wait(function ()
 				tmp, noAction = findOne(staticTarget)
 				if noAction then return 1 end
 			end)
-			-- ĞĞ¶¯Á¦
-			if noAction == '¹ú·şĞĞ¶¯Á¦²»×ã' then
-				slog('ĞĞ¶¯Á¦²»×ã')
-				log('ĞĞ¶¯Á¦²»×ã!')
-				if path.²¹³äÌåÁ¦() == 0 then return 0 end
-				-- ĞèÒªµã»÷½øÍ¼
+			-- è¡ŒåŠ¨åŠ›
+			if noAction == 'å›½æœè¡ŒåŠ¨åŠ›ä¸è¶³' then
+				slog('è¡ŒåŠ¨åŠ›ä¸è¶³')
+				log('è¡ŒåŠ¨åŠ›ä¸è¶³!')
+				if path.è¡¥å……ä½“åŠ›() == 0 then return 0 end
+				-- éœ€è¦ç‚¹å‡»è¿›å›¾
 				wait(function ()
 					if findOne(staticTarget) then
 						return 1
 					end
-					if findOne(rightBottomRegion, {keyword = 'Õ½¶·¿ªÊ¼'}) then
+					if findOne(rightBottomRegion, {keyword = 'æˆ˜æ–—å¼€å§‹'}) then
 						stap({1150,659})
 					end
 				end)
 			end
-			-- ÅĞ¶¨±³°üÀàĞÍ
-			if noAction == '¹ú·ş±³°ü¿Õ¼ä²»×ã' then
-				-- ÊÇ·ñÊÇºó¼Ç£ººó¼Ç±È½ÏÌØÊâ, ±³°üÇåÀíºó»áµ½×¼±¸Õ½¶·Ò³Ãæ
-				path.±³°ü´¦Àí(function ()
+			-- åˆ¤å®šèƒŒåŒ…ç±»å‹
+			if noAction == 'å›½æœèƒŒåŒ…ç©ºé—´ä¸è¶³' then
+				-- æ˜¯å¦æ˜¯åè®°ï¼šåè®°æ¯”è¾ƒç‰¹æ®Š, èƒŒåŒ…æ¸…ç†åä¼šåˆ°å‡†å¤‡æˆ˜æ–—é¡µé¢
+				path.èƒŒåŒ…å¤„ç†(function ()
 						wait(function ()
 							stap({487,18})
-							return findOne('¹ú·ş·µ»Ø¼ıÍ·')
+							return findOne('å›½æœè¿”å›ç®­å¤´')
 						end)
-						if levelTarget == 'ºó¼Ç' then
-							-- µÚÒ»´Î²»»áµ½Î´¼ÇÔØµÄ¹ÊÊÂ
-							local rvb, res = untilAppear({'¹ú·şÎ´¼ÇÔØµÄ¹ÊÊÂ', '¹ú·ş×óÉÏ×¼±¸Õ½¶·'})
-							if res == '¹ú·şÎ´¼ÇÔØµÄ¹ÊÊÂ' then
+						if levelTarget == 'åè®°' then
+							-- ç¬¬ä¸€æ¬¡ä¸ä¼šåˆ°æœªè®°è½½çš„æ•…äº‹
+							local rvb, res = untilAppear({'å›½æœæœªè®°è½½çš„æ•…äº‹', 'å›½æœå·¦ä¸Šå‡†å¤‡æˆ˜æ–—'})
+							if res == 'å›½æœæœªè®°è½½çš„æ•…äº‹' then
 								wait(function ()
-									findTapOnce('ºó¼Ç×¼±¸Õ½¶·')
+									findTapOnce('åè®°å‡†å¤‡æˆ˜æ–—')
 									return wait(function ()
-										if not findOne('ºó¼Ç×¼±¸Õ½¶·') then return 1 end
+										if not findOne('åè®°å‡†å¤‡æˆ˜æ–—') then return 1 end
 									end, .5, 5)
 								end)
 							end
 						else
-							local rvb, res = untilAppear({'¹ú·ş¼¶±ğ¹âÈ¦', '¹ú·ş×óÉÏ×¼±¸Õ½¶·'})
-							if res == '¹ú·ş¼¶±ğ¹âÈ¦' then
-								path.Õ½¶·»¬Í¼(levelTarget)
+							local rvb, res = untilAppear({'å›½æœçº§åˆ«å…‰åœˆ', 'å›½æœå·¦ä¸Šå‡†å¤‡æˆ˜æ–—'})
+							if res == 'å›½æœçº§åˆ«å…‰åœˆ' then
+								path.æˆ˜æ–—æ»‘å›¾(levelTarget)
 							end
 						end
 				end)
-				-- ÔÙ´Îµã»÷£¬¿ÉÄÜ»¹»á³öÏÖ±³°üÎÊÌâ
-				-- Ò»¶ş±¶Êı: return 1
-				-- ĞĞ¶¯¡¢±³°ü¿Õ¼ä²»×ã: Ö±½Óreturn 0
+				-- å†æ¬¡ç‚¹å‡»ï¼Œå¯èƒ½è¿˜ä¼šå‡ºç°èƒŒåŒ…é—®é¢˜
+				-- ä¸€äºŒå€æ•°: return 1
+				-- è¡ŒåŠ¨ã€èƒŒåŒ…ç©ºé—´ä¸è¶³: ç›´æ¥return 0
 				local pos
 				local resultCode = wait(function ()
-					pos = findOne(rightBottomRegion, {keyword = {'Õ½¶·¿ªÊ¼', '×¼±¸Õ½¶·', 'Ñ¡Ôñ¶ÓÎé'}})
+					pos = findOne(rightBottomRegion, {keyword = {'æˆ˜æ–—å¼€å§‹', 'å‡†å¤‡æˆ˜æ–—', 'é€‰æ‹©é˜Ÿä¼'}})
 					if pos then stap({pos[1].l, pos[1].t}) ssleep(1) end
 					tmp, noAction = findOne(staticTarget)
-					if noAction == '¹ú·ş¶ş±¶ËÙ' or noAction == '¹ú·şÒ»±¶ËÙ' then return 1 end
-					if noAction == '¹ú·şĞĞ¶¯Á¦²»×ã' or noAction == '¹ú·ş±³°ü¿Õ¼ä²»×ã' then return 0 end
+					if noAction == 'å›½æœäºŒå€é€Ÿ' or noAction == 'å›½æœä¸€å€é€Ÿ' then return 1 end
+					if noAction == 'å›½æœè¡ŒåŠ¨åŠ›ä¸è¶³' or noAction == 'å›½æœèƒŒåŒ…ç©ºé—´ä¸è¶³' then return 0 end
 				end)
 				if resultCode == 1 then return 1 end
 				if resultCode == 0 then return end
@@ -1056,59 +1056,59 @@ path.Í¨ÓÃË¢Í¼Ä£Ê½1 = function (fightCount, isActivity, levelTarget)
 	end
 end
 
-path.²¹³äÌåÁ¦ = function ()
-	local energyType = current_task.²¹³äĞĞ¶¯Á¦ÀàĞÍ
+path.è¡¥å……ä½“åŠ› = function ()
+	local energyType = current_task.è¡¥å……è¡ŒåŠ¨åŠ›ç±»å‹
 	local targetRg = {352,237,935,456}
 	local pos
-	if energyType == 2 then slog('²»²¹³äĞĞ¶¯Á¦') return 0 end
+	if energyType == 2 then slog('ä¸è¡¥å……è¡ŒåŠ¨åŠ›') return 0 end
 	if energyType == 0 then
 		if not wait(function ()
-			pos = findOne('¹ú·şĞĞ¶¯Á¦Ò¶×Ó', {rg = targetRg})
+			pos = findOne('å›½æœè¡ŒåŠ¨åŠ›å¶å­', {rg = targetRg})
 			if pos then stap(pos) return 1 end
 		end, .1, 3) then
-		slog('Î´ÄÜ²¹³äĞĞ¶¯Á¦')
+		slog('æœªèƒ½è¡¥å……è¡ŒåŠ¨åŠ›')
 		return 0
 	end
 	end
 	if energyType == 1 then
-		-- ´æÔÚÒ¶×Ó
-		-- ²»´æÔÚÒ¶×Ó
+		-- å­˜åœ¨å¶å­
+		-- ä¸å­˜åœ¨å¶å­
 		if not wait(function ()
-			pos = findOne({'¹ú·şĞĞ¶¯Á¦Ò¶×Ó', '¹ú·şĞĞ¶¯Á¦×©Ê¯'}, {rg = targetRg})
+			pos = findOne({'å›½æœè¡ŒåŠ¨åŠ›å¶å­', 'å›½æœè¡ŒåŠ¨åŠ›ç –çŸ³'}, {rg = targetRg})
 			if pos then stap(pos) return 1 end
 		end) then
-		slog('Î´ÄÜ²¹³äĞĞ¶¯Á¦')
+		slog('æœªèƒ½è¡¥å……è¡ŒåŠ¨åŠ›')
 		return 0
 		end
 	end
-	-- µã»÷È·ÈÏ
-	-- ¿ÉÄÜÓĞbug, Èç¹ûÒ¶×ÓºÍ×©Ê¯¶¼Ã»ÓĞÁË
-	-- untilTap('¹ú·ş¾º¼¼³¡¹ºÂòÆ±')
+	-- ç‚¹å‡»ç¡®è®¤
+	-- å¯èƒ½æœ‰bug, å¦‚æœå¶å­å’Œç –çŸ³éƒ½æ²¡æœ‰äº†
+	-- untilTap('å›½æœç«æŠ€åœºè´­ä¹°ç¥¨')
 	if not wait(function ()
-		if findTap('¹ú·ş¾º¼¼³¡¹ºÂòÆ±') then return 1 end
+		if findTap('å›½æœç«æŠ€åœºè´­ä¹°ç¥¨') then return 1 end
 	end, .1, 8) then
-		slog('¹ºÂòĞĞ¶¯Á¦Ê§°Ü')
+		slog('è´­ä¹°è¡ŒåŠ¨åŠ›å¤±è´¥')
 		return 0
 	end
 	return 1
 end
 
-path.ÍĞ¹Ü´¦Àí = function (isActivity)
-	log('ÍĞ¹Ü´¦Àí')
+path.æ‰˜ç®¡å¤„ç† = function (isActivity)
+	log('æ‰˜ç®¡å¤„ç†')
 	local greenPos
 	local isAgent
-	-- »î¶¯µÄÎ»ÖÃ¿ÉÄÜ²»Ò»Ñù
+	-- æ´»åŠ¨çš„ä½ç½®å¯èƒ½ä¸ä¸€æ ·
 	local trg = isActivity or {563,528,685,584}
 	if not wait(function ()
-		greenPos = findOne('¹ú·şÊÇ·ñ¿É×Ô¶¯¹Ò»ú', {rg = trg, sim = .85})
+		greenPos = findOne('å›½æœæ˜¯å¦å¯è‡ªåŠ¨æŒ‚æœº', {rg = trg, sim = .85})
 		if greenPos then return 1 end
 	end, .1, 1) then
-		log('Î´ÕÒµ½ÍĞ¹Ü')
-		slog('Î´ÕÒµ½ÍĞ¹Ü')
+		log('æœªæ‰¾åˆ°æ‰˜ç®¡')
+		slog('æœªæ‰¾åˆ°æ‰˜ç®¡')
 	else
 		isAgent = 1
 		wait(function ()
-			if findOne('¹ú·şÖØ¸´Õ½¶·ÂÌÉ«', {rg = trg, sim = .9}) then 
+			if findOne('å›½æœé‡å¤æˆ˜æ–—ç»¿è‰²', {rg = trg, sim = .9}) then 
 				return 1 
 			end
 			stap(greenPos)
@@ -1117,111 +1117,111 @@ path.ÍĞ¹Ü´¦Àí = function (isActivity)
 	return isAgent
 end
 
--- ÅÜÍ¼Ä£Ê½2
-path.Í¨ÓÃË¢Í¼Ä£Ê½2 = function ()
+-- è·‘å›¾æ¨¡å¼2
+path.é€šç”¨åˆ·å›¾æ¨¡å¼2 = function ()
 	print('todo')
 end
 
--- ÅÜÍ¼
-path.ÌÖ·¥ = function ()
-	local type = '¹ú·ş'..getUIRealValue('ÌÖ·¥¹Ø¿¨ÀàĞÍ', 'ÌÖ·¥ÀàĞÍ')
-	local level = getUIRealValue('ÌÖ·¥¼¶±ğ', 'ÌÖ·¥¼¶±ğ')
-	local fc = current_task.ÌÖ·¥´ÎÊı
-	return path.Õ½¶·ÅÜÍ¼1(type, level, fc)
+-- è·‘å›¾
+path.è®¨ä¼ = function ()
+	local type = 'å›½æœ'..getUIRealValue('è®¨ä¼å…³å¡ç±»å‹', 'è®¨ä¼ç±»å‹')
+	local level = getUIRealValue('è®¨ä¼çº§åˆ«', 'è®¨ä¼çº§åˆ«')
+	local fc = current_task.è®¨ä¼æ¬¡æ•°
+	return path.æˆ˜æ–—è·‘å›¾1(type, level, fc)
 end
 
-path.¾«Áé¼ÀÌ³ = function ()
-	local type = '¹ú·ş'..getUIRealValue('¾«Áé¼ÀÌ³¹Ø¿¨ÀàĞÍ', '¾«Áé¼ÀÌ³ÀàĞÍ')..'¾«Áé'
-	local level = getUIRealValue('¾«Áé¼ÀÌ³¼¶±ğ', '¾«Áé¼ÀÌ³¼¶±ğ')
-	local fc = current_task.¾«Áé¼ÀÌ³´ÎÊı
-	return path.Õ½¶·ÅÜÍ¼1(type, level, fc)
+path.ç²¾çµç¥­å› = function ()
+	local type = 'å›½æœ'..getUIRealValue('ç²¾çµç¥­å›å…³å¡ç±»å‹', 'ç²¾çµç¥­å›ç±»å‹')..'ç²¾çµ'
+	local level = getUIRealValue('ç²¾çµç¥­å›çº§åˆ«', 'ç²¾çµç¥­å›çº§åˆ«')
+	local fc = current_task.ç²¾çµç¥­å›æ¬¡æ•°
+	return path.æˆ˜æ–—è·‘å›¾1(type, level, fc)
 end
 
-path.¾»»¯ÉîÔ¨ = function ()
+path.å‡€åŒ–æ·±æ¸Š = function ()
 	wait(function ()
-		stap(point.Õ½¶·)
+		stap(point.æˆ˜æ–—)
 				ssleep(1)
-			if not findOne('¹ú·şÖ÷Ò³Rank') then return 1 end
+			if not findOne('å›½æœä¸»é¡µRank') then return 1 end
 	end)
-	path.Õ½¶·Ñ¡ÔñÒ³()
+	path.æˆ˜æ–—é€‰æ‹©é¡µ()
 	wait(function ()
-		stap(point.Õ½¶·Ä£Ê½Î»ÖÃ['ÉîÔ¨'])
-		if findOne('¹ú·şÕ½¶·ÀàĞÍ', {keyword = cutStringGetBinWord('ÉîÔ¨')}) then return 1 end
+		stap(point.æˆ˜æ–—æ¨¡å¼ä½ç½®['æ·±æ¸Š'])
+		if findOne('å›½æœæˆ˜æ–—ç±»å‹', {keyword = cutStringGetBinWord('æ·±æ¸Š')}) then return 1 end
 	end)
-	if findTap('¹ú·şÉîÔ¨¾»»¯') then
-		untilTap('¹ú·şÉîÔ¨¾»»¯È·ÈÏ')
+	if findTap('å›½æœæ·±æ¸Šå‡€åŒ–') then
+		untilTap('å›½æœæ·±æ¸Šå‡€åŒ–ç¡®è®¤')
 	end
 end
 
-path.³èÎï±³°üÇåÀí = function ()
+path.å® ç‰©èƒŒåŒ…æ¸…ç† = function ()
 	wait(function ()
 		stap({1160,668})
-		if findOne('¹ú·ş³èÎï×Ô¶¯²¹Âú') then
+		if findOne('å›½æœå® ç‰©è‡ªåŠ¨è¡¥æ»¡') then
 			return 1
 		end
 	end)
 	
 	wait(function ()
-		stap('¹ú·ş³èÎï×Ô¶¯²¹Âú')
+		stap('å›½æœå® ç‰©è‡ªåŠ¨è¡¥æ»¡')
 		ssleep(1)
-		if findOne('¹ú·şÉèÖÃ×Ô¶¯Ìî³äÄ¿±ê') then return 1 end
+		if findOne('å›½æœè®¾ç½®è‡ªåŠ¨å¡«å……ç›®æ ‡') then return 1 end
 	end)
 	
-	path.¹ıÂË±³°üÑ¡Ôñ(ui_option.³èÎï¼¶±ğ, '¹ú·ş³èÎï')
-	-- ÌØÊâÔìĞÍ
+	path.è¿‡æ»¤èƒŒåŒ…é€‰æ‹©(ui_option.å® ç‰©çº§åˆ«, 'å›½æœå® ç‰©')
+	-- ç‰¹æ®Šé€ å‹
 	wait(function ()
-		if findOne('¹ú·ş²»°üº¬ÌØµãÔìĞÍ³èÎï') then return 1 end
-		stap('¹ú·ş²»°üº¬ÌØµãÔìĞÍ³èÎï')
+		if findOne('å›½æœä¸åŒ…å«ç‰¹ç‚¹é€ å‹å® ç‰©') then return 1 end
+		stap('å›½æœä¸åŒ…å«ç‰¹ç‚¹é€ å‹å® ç‰©')
 	end)
 	
 	wait(function ()
 		stap({995,657})
-		if not findOne('¹ú·şÉèÖÃ×Ô¶¯Ìî³äÄ¿±ê') then
+		if not findOne('å›½æœè®¾ç½®è‡ªåŠ¨å¡«å……ç›®æ ‡') then
 			return 1
 		end
 	end)
 	
-	-- ¿ÉÄÜÃ»ÓĞÅäÖÃ
+	-- å¯èƒ½æ²¡æœ‰é…ç½®
 	if not wait(function ()
-		if findTap('¹ú·şÊÍ·Å³èÎï') then
+		if findTap('å›½æœé‡Šæ”¾å® ç‰©') then
 			return 1
 		end
 	end, .5, 5) then
 		return
 	end
 	wait(function ()
-		if findTap('¹ú·şÓÊ¼şÁìÈ¡È·ÈÏÀ¶µ×') then
+		if findTap('å›½æœé‚®ä»¶é¢†å–ç¡®è®¤è“åº•') then
 			return 1
 		end
 	end, .5, 5)
 end
 
-path.ÇåÀí×°±¸±³°ü = function ()
+path.æ¸…ç†è£…å¤‡èƒŒåŒ… = function ()
 	wait(function ()
 		stap({341,88})
-		return findOne('¹ú·ş±³°üÖ÷Ò³')
+		return findOne('å›½æœèƒŒåŒ…ä¸»é¡µ')
 	end)
 	wait(function ()
-		if findOne('¹ú·ş±³°üÈ«²¿') then
+		if findOne('å›½æœèƒŒåŒ…å…¨éƒ¨') then
 			return 1
 		end
 		stap({186,164})
 	end, 1)
 	wait(function ()
-		if findOne('¹ú·ş±³°ü×°±¸×Ô¶¯Ñ¡Ôñ') then
+		if findOne('å›½æœèƒŒåŒ…è£…å¤‡è‡ªåŠ¨é€‰æ‹©') then
 			return 1
 		end
 		stap({1081,157})
 	end)
 	wait(function ()
-		if not findOne('¹ú·ş±³°ü×°±¸×Ô¶¯Ñ¡Ôñ') then
+		if not findOne('å›½æœèƒŒåŒ…è£…å¤‡è‡ªåŠ¨é€‰æ‹©') then
 			return 1
 		end
-		stap('¹ú·ş±³°ü×°±¸×Ô¶¯Ñ¡Ôñ')
+		stap('å›½æœèƒŒåŒ…è£…å¤‡è‡ªåŠ¨é€‰æ‹©')
 	end)
-	path.¹ıÂË±³°üÑ¡Ôñ(ui_option.×°±¸ÀàĞÍ, '¹ú·ş')
-	path.¹ıÂË±³°üÑ¡Ôñ(ui_option.×°±¸µÈ¼¶, '¹ú·ş')
-	path.¹ıÂË±³°üÑ¡Ôñ(ui_option.×°±¸Ç¿»¯µÈ¼¶, '¹ú·ş')
+	path.è¿‡æ»¤èƒŒåŒ…é€‰æ‹©(ui_option.è£…å¤‡ç±»å‹, 'å›½æœ')
+	path.è¿‡æ»¤èƒŒåŒ…é€‰æ‹©(ui_option.è£…å¤‡ç­‰çº§, 'å›½æœ')
+	path.è¿‡æ»¤èƒŒåŒ…é€‰æ‹©(ui_option.è£…å¤‡å¼ºåŒ–ç­‰çº§, 'å›½æœ')
 	
 	local weaponType = {
 	'185|231|00CB64',
@@ -1242,33 +1242,33 @@ path.ÇåÀí×°±¸±³°ü = function ()
 	end
 	
 	wait(function ()
-		if findOne('¹ú·ş±³°ü×°±¸×Ô¶¯Ñ¡Ôñ') then
+		if findOne('å›½æœèƒŒåŒ…è£…å¤‡è‡ªåŠ¨é€‰æ‹©') then
 			return 1
 		end
 		stap({334,90})
 	end)
 	
-	-- ¿ÉÄÜÃ»ÓĞÅäÖÃ
+	-- å¯èƒ½æ²¡æœ‰é…ç½®
 	if not wait(function ()
-		if findTap('¹ú·ş×°±¸³öÊÛ') then
+		if findTap('å›½æœè£…å¤‡å‡ºå”®') then
 			return 1
 		end
 	end, .5, 5) then
 		return
 	end
 	wait(function ()
-		if findTap('¹ú·ş³öÊÛÈ·ÈÏ') then
+		if findTap('å›½æœå‡ºå”®ç¡®è®¤') then
 			return 1
 		end
 	end, .5, 5)
 end
 
-path.ÇåÀíÓ¢ĞÛ±³°ü = function (count, filterFunc)
+path.æ¸…ç†è‹±é›„èƒŒåŒ… = function (count, filterFunc)
 	count = count or 1
 
 	wait(function ()
 		stap({1019,666})
-		if findOne('¹ú·ş´«ËÍÓ¢ĞÛ') then return 1 end
+		if findOne('å›½æœä¼ é€è‹±é›„') then return 1 end
 	end)
 	
 	wait(function ()
@@ -1278,18 +1278,18 @@ path.ÇåÀíÓ¢ĞÛ±³°ü = function (count, filterFunc)
 			return 1
 		end
 	end)
-	-- ¹ıÂËµÈ¼¶
+	-- è¿‡æ»¤ç­‰çº§
 	if not filterFunc then
-		path.¹ıÂË±³°üÑ¡Ôñ(ui_option.Ó¢ĞÛµÈ¼¶, '¹ú·şÓ¢ĞÛ')
+		path.è¿‡æ»¤èƒŒåŒ…é€‰æ‹©(ui_option.è‹±é›„ç­‰çº§, 'å›½æœè‹±é›„')
 	else
 		filterFunc()
 	end
 	
-	-- ÌØÊâÉèÖÃ
+	-- ç‰¹æ®Šè®¾ç½®
 	local specialSetting = {
-		'883|605|00CB64', -- Òş²ØÊÕ²ØÓ¢ĞÛ
-		'883|657|00CB64', -- Òş²ØÇ×ÃÜ¶È10
-		'587|657|00CB64', -- Òş²ØMAXµÈ¼¶
+		'883|605|00CB64', -- éšè—æ”¶è—è‹±é›„
+		'883|657|00CB64', -- éšè—äº²å¯†åº¦10
+		'587|657|00CB64', -- éšè—MAXç­‰çº§
 	}
 	for i,v in pairs(specialSetting) do
 		local pos = string.split(v, '|')
@@ -1303,19 +1303,19 @@ path.ÇåÀíÓ¢ĞÛ±³°ü = function (count, filterFunc)
 	for i=1,count do
 		wait(function ()
 			stap({548,34})
-			if findOne('¹ú·ş´«ËÍÓ¢ĞÛ') then return 1 end
+			if findOne('å›½æœä¼ é€è‹±é›„') then return 1 end
 		end)
 		
 		if wait(function ()
 			if longDisappearMomentTap("1052|242|7E411F", nil, nil, 2) then
-				-- Î´ÌîÂú´¦Àí
+				-- æœªå¡«æ»¡å¤„ç†
 				wait(function ()
-					if findTap('¹ú·ş´«ËÍÓ¢ĞÛ') then
+					if findTap('å›½æœä¼ é€è‹±é›„') then
 						return 1
 					end
 				end, .3, 5)
 				wait(function ()
-					if findTap('¹ú·şÓ¢ĞÛ´«ËÍÈ·ÈÏ') then
+					if findTap('å›½æœè‹±é›„ä¼ é€ç¡®è®¤') then
 						return 1
 					end
 				end, .3, 5)			
@@ -1326,78 +1326,78 @@ path.ÇåÀíÓ¢ĞÛ±³°ü = function (count, filterFunc)
 			end
 			stap({1121,273})
 		end) == 0 then
-			log('ÎŞÓ¢ĞÛ´«ËÍ')
-			slog('ÎŞÓ¢ĞÛ´«ËÍ')
+			log('æ— è‹±é›„ä¼ é€')
+			slog('æ— è‹±é›„ä¼ é€')
 			return 
 		end
 		
 		wait(function ()
 			stap({548,34})
-			if findOne('¹ú·ş´«ËÍÓ¢ĞÛ') then return 1 end
+			if findOne('å›½æœä¼ é€è‹±é›„') then return 1 end
 		end)
 		
-		-- ¿ÉÄÜÃ»ÓĞÅäÖÃ
+		-- å¯èƒ½æ²¡æœ‰é…ç½®
 		if not wait(function ()
-			if findTap('¹ú·ş´«ËÍÓ¢ĞÛ') then
+			if findTap('å›½æœä¼ é€è‹±é›„') then
 				return 1
 			end
 		end, .3, 5) then
 			return
 		end
 		wait(function ()
-			if findTap('¹ú·şÓ¢ĞÛ´«ËÍÈ·ÈÏ') then
+			if findTap('å›½æœè‹±é›„ä¼ é€ç¡®è®¤') then
 				return 1
 			end
 		end, .3, 5)
 	end
 end
 
-path.ÇåÀíÉñÆ÷±³°ü = function ()
-	untilAppear('¹ú·ş±³°üÖ÷Ò³')
+path.æ¸…ç†ç¥å™¨èƒŒåŒ… = function ()
+	untilAppear('å›½æœèƒŒåŒ…ä¸»é¡µ')
 	wait(function ()
-		if findOne('¹ú·ş±³°üÈ«²¿') then
+		if findOne('å›½æœèƒŒåŒ…å…¨éƒ¨') then
 			return 1
 		end
 		stap({186,164})
 	end, 1)
 	wait(function ()
-		if findOne('¹ú·ş±³°ü×°±¸×Ô¶¯Ñ¡Ôñ') then
+		if findOne('å›½æœèƒŒåŒ…è£…å¤‡è‡ªåŠ¨é€‰æ‹©') then
 			return 1
 		end
 		stap({1081,157})
 	end)
 	wait(function ()
-		if not findOne('¹ú·ş±³°ü×°±¸×Ô¶¯Ñ¡Ôñ') then
+		if not findOne('å›½æœèƒŒåŒ…è£…å¤‡è‡ªåŠ¨é€‰æ‹©') then
 			return 1
 		end
-		stap('¹ú·ş±³°ü×°±¸×Ô¶¯Ñ¡Ôñ')
+		stap('å›½æœèƒŒåŒ…è£…å¤‡è‡ªåŠ¨é€‰æ‹©')
 	end)
-	path.¹ıÂË±³°üÑ¡Ôñ(ui_option.ÉñÆ÷ĞÇ¼¶, '¹ú·şÉñÆ÷')
-	path.¹ıÂË±³°üÑ¡Ôñ(ui_option.ÉñÆ÷Ç¿»¯, '¹ú·şÉñÆ÷Ç¿»¯')
+	path.è¿‡æ»¤èƒŒåŒ…é€‰æ‹©(ui_option.ç¥å™¨æ˜Ÿçº§, 'å›½æœç¥å™¨')
+	path.è¿‡æ»¤èƒŒåŒ…é€‰æ‹©(ui_option.ç¥å™¨å¼ºåŒ–, 'å›½æœç¥å™¨å¼ºåŒ–')
 	wait(function ()
-		if findOne('¹ú·ş±³°ü×°±¸×Ô¶¯Ñ¡Ôñ') then
+		if findOne('å›½æœèƒŒåŒ…è£…å¤‡è‡ªåŠ¨é€‰æ‹©') then
 			return 1
 		end
 		stap({332,86})
 	end)
-	-- ¿ÉÄÜÃ»ÓĞÅäÖÃ
+	-- å¯èƒ½æ²¡æœ‰é…ç½®
 	if not wait(function ()
-		if findTap('¹ú·şÉñÆ÷³öÊÛ') then
+		if findTap('å›½æœç¥å™¨å‡ºå”®') then
 			return 1
 		end
 	end, .5, 5) then
 		return
 	end
 	wait(function ()
-		if findTap('¹ú·ş³öÊÛÈ·ÈÏ') then
+		if findTap('å›½æœå‡ºå”®ç¡®è®¤') then
 			return 1
 		end
 	end, .5, 5)
 end
--- ¹ıÂËµÈ¼¶»òÕßÀàĞÍ
--- level£º¼¶±ğtable
--- target: Ä¿±êÇ°×º
-path.¹ıÂË±³°üÑ¡Ôñ = function (level, target)
+-- è¿‡æ»¤ç­‰çº§æˆ–è€…ç±»å‹
+-- levelï¼šçº§åˆ«table
+-- target: ç›®æ ‡å‰ç¼€
+path.è¿‡æ»¤èƒŒåŒ…é€‰æ‹© = function (level, target)
 	for i,v in pairs(level) do
 		local target = target..v
 		if current_task[v] then
@@ -1416,8 +1416,8 @@ path.¹ıÂË±³°üÑ¡Ôñ = function (level, target)
 	end
 end
 
--- target: ĞèÒªÑ¡ÔñµÄ
-path.¹ıÂË±³°ü×Ô¶¨ÒåÑ¡Ôñ = function (level, targetName, target)
+-- target: éœ€è¦é€‰æ‹©çš„
+path.è¿‡æ»¤èƒŒåŒ…è‡ªå®šä¹‰é€‰æ‹© = function (level, targetName, target)
 	if type(target) ~= 'table' then target = {target} end
 	for i,v in pairs(level) do
 		local targetPos = targetName..v
@@ -1437,64 +1437,64 @@ path.¹ıÂË±³°ü×Ô¶¨ÒåÑ¡Ôñ = function (level, targetName, target)
 	end
 end
 
-path.Ìø×ª = function (target, config)
+path.è·³è½¬ = function (target, config)
 	wait(function ()
 		if not longAppearMomentDisAppear(target, config, nil, 1) then return 1 end
 		back()
 	end, 2, 5 * 60)
 end
 
--- backFunc: ·µ»Øº¯Êı
-path.±³°ü´¦Àí = function (backFunc)
-	-- Ê¶±ğ±³°üÀàĞÍ
-	slog('ÇåÀí±³°ü¿Õ¼ä')
-	log('ÇåÀí±³°ü¿Õ¼ä!')
+-- backFunc: è¿”å›å‡½æ•°
+path.èƒŒåŒ…å¤„ç† = function (backFunc)
+	-- è¯†åˆ«èƒŒåŒ…ç±»å‹
+	slog('æ¸…ç†èƒŒåŒ…ç©ºé—´')
+	log('æ¸…ç†èƒŒåŒ…ç©ºé—´!')
 	local bagSpaceType
-	local bagKey = {'Ó¢ĞÛ', '×°±¸', 'ÉñÆ÷'}
+	local bagKey = {'è‹±é›„', 'è£…å¤‡', 'ç¥å™¨'}
 	wait(function ()
-		bagSpaceType = findOne('±³°üÂúÀàĞÍ', {keyword = bagKey})
+		bagSpaceType = findOne('èƒŒåŒ…æ»¡ç±»å‹', {keyword = bagKey})
 		if bagSpaceType then
 			bagSpaceType = bagSpaceType[1].text
 			return 1
 		end
 	end)
-	-- ½øÈë±³°ü
-	untilTap('¹ú·ş±³°ü¿Õ¼ä²»×ã')
-	-- ´¦Àí±³°ü
+	-- è¿›å…¥èƒŒåŒ…
+	untilTap('å›½æœèƒŒåŒ…ç©ºé—´ä¸è¶³')
+	-- å¤„ç†èƒŒåŒ…
 	-- print(bagSpaceType)
-	if bagSpaceType:includes({'Ó¢ĞÛ'}) then
-		path.ÇåÀíÓ¢ĞÛ±³°ü()
-	elseif bagSpaceType:includes({'×°±¸'}) then
-		path.ÇåÀí×°±¸±³°ü()
-	elseif bagSpaceType:includes({'ÉñÆ÷'}) then
-		path.ÇåÀíÉñÆ÷±³°ü()
+	if bagSpaceType:includes({'è‹±é›„'}) then
+		path.æ¸…ç†è‹±é›„èƒŒåŒ…()
+	elseif bagSpaceType:includes({'è£…å¤‡'}) then
+		path.æ¸…ç†è£…å¤‡èƒŒåŒ…()
+	elseif bagSpaceType:includes({'ç¥å™¨'}) then
+		path.æ¸…ç†ç¥å™¨èƒŒåŒ…()
 	end
 	backFunc()
 end
 
-path.Éı3ĞÇ¹·Á¸ = function ()
-	path.ÓÎÏ·Ê×Ò³()
-	-- Éı + ´«ËÍ ?
+path.å‡3æ˜Ÿç‹—ç²® = function ()
+	path.æ¸¸æˆé¦–é¡µ()
+	-- å‡ + ä¼ é€ ?
 	setNumberConfig("is_refresh_book_tag", 2)
-	local upgradeCount = current_task.Éı3ĞÇ¹·Á¸¸öÊı
-	local type = current_task.Éı3ĞÇ¹·Á¸ÀàĞÍ
+	local upgradeCount = current_task.å‡3æ˜Ÿç‹—ç²®ä¸ªæ•°
+	local type = current_task.å‡3æ˜Ÿç‹—ç²®ç±»å‹
 	if type == 0 or type == 2 then
-		path.Éı¹·Á¸_3(upgradeCount)
+		path.å‡ç‹—ç²®_3(upgradeCount)
 	end
 	if type == 1 or type == 2 then
-		path.ÓÎÏ·Ê×Ò³()
-		if not path.´ò¿ªÓÒ²àÀ¸('ÓÒ²àÀ¸Ó¢ĞÛ') then
+		path.æ¸¸æˆé¦–é¡µ()
+		if not path.æ‰“å¼€å³ä¾§æ ('å³ä¾§æ è‹±é›„') then
 			return
 		end
-		-- Ö±½ÓÇåÀíÍê3ĞÇµÄ
-		path.ÇåÀíÓ¢ĞÛ±³°ü(1352955539, function ()
-			path.¹ıÂË±³°ü×Ô¶¨ÒåÑ¡Ôñ(ui_option.Ó¢ĞÛµÈ¼¶, '¹ú·şÓ¢ĞÛ', {3})
+		-- ç›´æ¥æ¸…ç†å®Œ3æ˜Ÿçš„
+		path.æ¸…ç†è‹±é›„èƒŒåŒ…(1352955539, function ()
+			path.è¿‡æ»¤èƒŒåŒ…è‡ªå®šä¹‰é€‰æ‹©(ui_option.è‹±é›„ç­‰çº§, 'å›½æœè‹±é›„', {3})
 		end)
 	end
 end
 
-path.Éı¹·Á¸_3 = function (upgradeCount)
-	if not path.´ò¿ªÓÒ²àÀ¸('ÓÒ²àÀ¸Ó¢ĞÛ') then
+path.å‡ç‹—ç²®_3 = function (upgradeCount)
+	if not path.æ‰“å¼€å³ä¾§æ ('å³ä¾§æ è‹±é›„') then
 		return
 	end
 	wait(function ()
@@ -1503,15 +1503,15 @@ path.Éı¹·Á¸_3 = function (upgradeCount)
 		end
 		stap({1085,89})
 	end)
-	-- ¹ıÂËµÈ¼¶
-	path.¹ıÂË±³°ü×Ô¶¨ÒåÑ¡Ôñ(ui_option.Ó¢ĞÛµÈ¼¶, '¹ú·şÓ¢ĞÛ', {2})
+	-- è¿‡æ»¤ç­‰çº§
+	path.è¿‡æ»¤èƒŒåŒ…è‡ªå®šä¹‰é€‰æ‹©(ui_option.è‹±é›„ç­‰çº§, 'å›½æœè‹±é›„', {2})
 	
-	-- ÌØÊâÉèÖÃ
+	-- ç‰¹æ®Šè®¾ç½®
 	local specialSetting = {
-		'883|605|00CB64', -- Òş²ØÊÕ²ØÓ¢ĞÛ
-		'883|657|00CB64', -- Òş²ØÇ×ÃÜ¶È10
-		-- '587|657|00CB64', -- Òş²ØMAXµÈ¼¶
-		'590|604|201F1A' -- ¹Ø±ÕËõĞ¡»­Ãæ
+		'883|605|00CB64', -- éšè—æ”¶è—è‹±é›„
+		'883|657|00CB64', -- éšè—äº²å¯†åº¦10
+		-- '587|657|00CB64', -- éšè—MAXç­‰çº§
+		'590|604|201F1A' -- å…³é—­ç¼©å°ç”»é¢
 	}
 
 	for i,v in pairs(specialSetting) do
@@ -1524,43 +1524,43 @@ path.Éı¹·Á¸_3 = function (upgradeCount)
 	end
 
 	wait(function ()
-		if findOne('¹ú·şÓ¢ĞÛ¾õĞÑ') then
+		if findOne('å›½æœè‹±é›„è§‰é†’') then
 			return 1
 		end
 		stap({485,31})
 	end)
 
-	-- »¹ÓĞ¸ö×ÊÔ´²»×ã
-	local target = {'¹ú·şÓ¢ĞÛÉı¼¶Æó¶ì²»×ã', '¹ú·şÉñÃØÉÌµê¹ºÂò×ÊÔ´²»×ã', '¹ú·şÓ¢ĞÛÉı¼¶Òø»¨²»×ã', 
-								  '¹ú·şÓ¢ĞÛÉı¼¶2', '¹ú·şÓ¢ĞÛÉı¼¶3', '¹ú·şÓ¢ĞÛ×óÉÏ3ĞÇ'}
-	local tkey = {'×ÊÔ´²»×ã', '²»×ã'}
+	-- è¿˜æœ‰ä¸ªèµ„æºä¸è¶³
+	local target = {'å›½æœè‹±é›„å‡çº§ä¼é¹…ä¸è¶³', 'å›½æœç¥ç§˜å•†åº—è´­ä¹°èµ„æºä¸è¶³', 'å›½æœè‹±é›„å‡çº§é“¶èŠ±ä¸è¶³', 
+								  'å›½æœè‹±é›„å‡çº§2', 'å›½æœè‹±é›„å‡çº§3', 'å›½æœè‹±é›„å·¦ä¸Š3æ˜Ÿ'}
+	local tkey = {'èµ„æºä¸è¶³', 'ä¸è¶³'}
 	local curIdx = sgetNumberConfig('upgrade_3x_hero', 0)
 	for i=1,upgradeCount do
 		if i > curIdx then
 			if not wait(function ()
-				if not findOne('¹ú·şÓ¢ĞÛ×óÉÏ3ĞÇ') then
+				if not findOne('å›½æœè‹±é›„å·¦ä¸Š3æ˜Ÿ') then
 					return 1
 				end
 				stap({1063,243})
 			end, .1, 5) then
-				log('ÎŞ2ĞÇÓ¢ĞÛ')
-				slog('ÎŞ2ĞÇÓ¢ĞÛ')
+				log('æ— 2æ˜Ÿè‹±é›„')
+				slog('æ— 2æ˜Ÿè‹±é›„')
 				return
 			end
-			untilTap('¹ú·şÓ¢ĞÛÉı¼¶1')
+			untilTap('å›½æœè‹±é›„å‡çº§1')
 			local t, v
 			if wait(function ()
 				t, v = findOne(target, {rg = {16,73,385,174}, keyword = tkey})
-				if v == '¹ú·şÓ¢ĞÛ×óÉÏ3ĞÇ' then
-					log('Éı¼¶2ĞÇ¸öÊı: '..i..'/'..upgradeCount)
+				if v == 'å›½æœè‹±é›„å·¦ä¸Š3æ˜Ÿ' then
+					log('å‡çº§2æ˜Ÿä¸ªæ•°: '..i..'/'..upgradeCount)
 					return 1
 				end
-				if  v == '¹ú·şÓ¢ĞÛÉı¼¶Æó¶ì²»×ã' or 
-						v == '¹ú·şÉñÃØÉÌµê¹ºÂò×ÊÔ´²»×ã' or 
-						v == '¹ú·şÓ¢ĞÛÉı¼¶Òø»¨²»×ã' then
+				if  v == 'å›½æœè‹±é›„å‡çº§ä¼é¹…ä¸è¶³' or 
+						v == 'å›½æœç¥ç§˜å•†åº—è´­ä¹°èµ„æºä¸è¶³' or 
+						v == 'å›½æœè‹±é›„å‡çº§é“¶èŠ±ä¸è¶³' then
 						-- log(v)
-						log('×ÊÔ´²»×ã')
-						slog('×ÊÔ´²»×ã')
+						log('èµ„æºä¸è¶³')
+						slog('èµ„æºä¸è¶³')
 						return 0
 				end
 				stap({997,664})
@@ -1573,19 +1573,19 @@ path.Éı¹·Á¸_3 = function (upgradeCount)
 	end
 end
 
-path.´ò¿ªÓÒ²àÀ¸ = function (pos)
-	if not findOne('¹ú·şÖ÷Ò³Rank') then
-		log('Î´ÔÚÊ×Ò³')
+path.æ‰“å¼€å³ä¾§æ  = function (pos)
+	if not findOne('å›½æœä¸»é¡µRank') then
+		log('æœªåœ¨é¦–é¡µ')
 		return 
 	end
 	wait(function ()
-		if findOne('¹ú·şÓÒ²àÀ¸´ò¿ª') then
+		if findOne('å›½æœå³ä¾§æ æ‰“å¼€') then
 			return 1
 		end
 		stap({1241,32})
 	end)
 	wait(function ()
-		if not findOne('¹ú·şÓÒ²àÀ¸´ò¿ª') then
+		if not findOne('å›½æœå³ä¾§æ æ‰“å¼€') then
 			return 1
 		end
 		stap(point[pos])
@@ -1593,19 +1593,19 @@ path.´ò¿ªÓÒ²àÀ¸ = function (pos)
 	return 1
 end
 
-path.¹ºÂòÆó¶ì = function ()
-	path.ÓÎÏ·Ê×Ò³()
+path.è´­ä¹°ä¼é¹… = function ()
+	path.æ¸¸æˆé¦–é¡µ()
 	wait(function ()
 		stap({247,214})
 		return findOne('327|239|5B80C4,316|240|BF898F,335|238|4CEAFF')
 	end)
-	-- ¿ªÊ¼¹ºÂò
-	-- ²»ÔÙÏÔÊ¾µã»÷
+	-- å¼€å§‹è´­ä¹°
+	-- ä¸å†æ˜¾ç¤ºç‚¹å‡»
 	local noTipTap = false
 	wait(function ()
 		if findOne('612|638|F4A300,680|637|FBA900') then
-			log('ºìÒ¶ÏûºÄÍê')
-			slog('ºìÒ¶ÏûºÄÍê')
+			log('çº¢å¶æ¶ˆè€—å®Œ')
+			slog('çº¢å¶æ¶ˆè€—å®Œ')
 			return 1
 		end
 		if not noTipTap and findTap('814|549|0E4810,833|551|0F4C12,816|562|1CCF5E,830|561|149F35') then
@@ -1615,87 +1615,87 @@ path.¹ºÂòÆó¶ì = function ()
 	end, .5, nil, true)
 end
 
-path.ÓÎÏ·ÉçÇø = function ()
+path.æ¸¸æˆç¤¾åŒº = function ()
 	wait(function ()
-		stap(point.»î¶¯)
+		stap(point.æ´»åŠ¨)
 		ssleep(1)
-		return not findOne('¹ú·şÖ÷Ò³Rank')
+		return not findOne('å›½æœä¸»é¡µRank')
 	end)
 	wait(function ()
 		
 	end)
-	-- ä¯ÀÀÌû×Ó + µãÔŞ
-	-- Ç©µ½
+	-- æµè§ˆå¸–å­ + ç‚¹èµ
+	-- ç­¾åˆ°
 end
 
-path.ºó¼Ç = function ()
+path.åè®° = function ()
 	wait(function ()
-		stap(point.Ö§Ïß¹ÊÊÂ)
+		stap(point.æ”¯çº¿æ•…äº‹)
 		ssleep(1)
-		return not findOne('¹ú·şÖ÷Ò³Rank')
+		return not findOne('å›½æœä¸»é¡µRank')
 	end)
 
 	wait(function ()
 		stap({1243,415})
 		stap({350,28})
-		return findTap('ºó¼ÇÃ°ÏÕ')
+		return findTap('åè®°å†’é™©')
 	end)
 
-	wait(function () return findTapOnce('ºó¼Ç×¼±¸Õ½¶·') end)
+	wait(function () return findTapOnce('åè®°å‡†å¤‡æˆ˜æ–—') end)
 
-	-- longAppearAndTap('¹ú·ş³¤Ñ¡Ôñ¶ÓÎé', nil, nil, 2)
+	-- longAppearAndTap('å›½æœé•¿é€‰æ‹©é˜Ÿä¼', nil, nil, 2)
 	wait(function ()
-		findTapOnce('¹ú·ş³¤Ñ¡Ôñ¶ÓÎé')
+		findTapOnce('å›½æœé•¿é€‰æ‹©é˜Ÿä¼')
 		return wait(function ()
-			if not findOne('¹ú·ş³¤Ñ¡Ôñ¶ÓÎé') then return 1 end
+			if not findOne('å›½æœé•¿é€‰æ‹©é˜Ÿä¼') then return 1 end
 		end, .5, 5)
 	end)
 
-	local fightCount = current_task.ºó¼Ç´ÎÊı
-	return path.Í¨ÓÃË¢Í¼Ä£Ê½1(fightCount, nil, 'ºó¼Ç')
+	local fightCount = current_task.åè®°æ¬¡æ•°
+	return path.é€šç”¨åˆ·å›¾æ¨¡å¼1(fightCount, nil, 'åè®°')
 end
 
-path.»î¶¯ = function ()
-	local fc = current_task.»î¶¯´ÎÊı
+path.æ´»åŠ¨ = function ()
+	local fc = current_task.æ´»åŠ¨æ¬¡æ•°
 	wait(function ()
-		stap(point.Ö§Ïß¹ÊÊÂ)
+		stap(point.æ”¯çº¿æ•…äº‹)
 		ssleep(1)
-		return not findOne('¹ú·şÖ÷Ò³Rank')
+		return not findOne('å›½æœä¸»é¡µRank')
 	end)
 	local e, w
 	wait(function ()
 		stap({61,187})
 		stap({1059,285})
-		e, w = findOne({'»î¶¯Ê×Ò³', '»î¶¯Ã°ÏÕ'}, {keyword = 'ĞòÄ»'})
+		e, w = findOne({'æ´»åŠ¨é¦–é¡µ', 'æ´»åŠ¨å†’é™©'}, {keyword = 'åºå¹•'})
 		return w
 	end)
-	-- ÅĞ¶¨ÊÇÄÄÒ»ÖÖ»î¶¯
-	if w == '»î¶¯Ã°ÏÕ' then
-		log('»î¶¯-Ä¬ÈÏ¹Ø¿¨')
+	-- åˆ¤å®šæ˜¯å“ªä¸€ç§æ´»åŠ¨
+	if w == 'æ´»åŠ¨å†’é™©' then
+		log('æ´»åŠ¨-é»˜è®¤å…³å¡')
 		wait(function ()
 			stap({1166,661})
-			return findOne('ºó¼Ç×¼±¸Õ½¶·')
+			return findOne('åè®°å‡†å¤‡æˆ˜æ–—')
 		end)
 		wait(function ()
-			findTapOnce('ºó¼Ç×¼±¸Õ½¶·')
+			findTapOnce('åè®°å‡†å¤‡æˆ˜æ–—')
 			return wait(function ()
-			if not findOne('ºó¼Ç×¼±¸Õ½¶·') then return 1 end
+			if not findOne('åè®°å‡†å¤‡æˆ˜æ–—') then return 1 end
 			end, .5, 5)
 		end)
 		wait(function ()
-				findTapOnce('¹ú·ş³¤Ñ¡Ôñ¶ÓÎé')
+				findTapOnce('å›½æœé•¿é€‰æ‹©é˜Ÿä¼')
 				return wait(function ()
-				if not findOne('¹ú·ş³¤Ñ¡Ôñ¶ÓÎé') then return 1 end
+				if not findOne('å›½æœé•¿é€‰æ‹©é˜Ÿä¼') then return 1 end
 			end, 1, 4)
 		end)
-		return path.Í¨ÓÃË¢Í¼Ä£Ê½1(fc, nil, 'ºó¼Ç')
-	elseif w == '»î¶¯Ê×Ò³' then
-		log('»î¶¯-¿ÉÑ¡¹Ø¿¨')
+		return path.é€šç”¨åˆ·å›¾æ¨¡å¼1(fc, nil, 'åè®°')
+	elseif w == 'æ´»åŠ¨é¦–é¡µ' then
+		log('æ´»åŠ¨-å¯é€‰å…³å¡')
 		wait(function ()
 			stap({994,657})
-			return findOne('¹ú·şÓÒÏÂ½Ç', {keyword = 'Õ½¶·¿ªÊ¼'})
+			return findOne('å›½æœå³ä¸‹è§’', {keyword = 'æˆ˜æ–—å¼€å§‹'})
 		end)
-		local level = getUIRealValue('»î¶¯¼¶±ğ', '»î¶¯¼¶±ğ')
-		return path.Õ½¶·ÅÜÍ¼1(nil, level, fc, {175,613,357,714})
+		local level = getUIRealValue('æ´»åŠ¨çº§åˆ«', 'æ´»åŠ¨çº§åˆ«')
+		return path.æˆ˜æ–—è·‘å›¾1(nil, level, fc, {175,613,357,714})
 	end
 end

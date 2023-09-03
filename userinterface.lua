@@ -1,10 +1,10 @@
 sui = {}
--- uiÊÂ¼ş
+-- uiäº‹ä»¶
 suie = {}
 parentUid = 'E7Helper'
-grindUid = 'Ë¢Í¼ÉèÖÃ'
-bagUid = '±³°üÇåÀíÉèÖÃ'
--- bin: bid¡¢bname
+grindUid = 'åˆ·å›¾è®¾ç½®'
+bagUid = 'èƒŒåŒ…æ¸…ç†è®¾ç½®'
+-- bin: bidã€bname
 addButton = function (bin, partid)
   partid = partid or parentUid
   ui.addButton(partid, bin, bin)
@@ -13,7 +13,7 @@ end
 setButton = function (bin, w, h)
   w = w or 100
   h = h or 100
-  -- Ìí¼ÓÊÂ¼şº¯Êı
+  -- æ·»åŠ äº‹ä»¶å‡½æ•°
   ui.setButton(bin, bin, w, h)
 end
 newLayout = function (pid)
@@ -66,110 +66,110 @@ setEnable = function ()
   ui.setEnable(id,true)
 end
 dismiss = function (id) ui.dismiss(id) end
-suie.ÍË³ö = exit
-suie.Æô¶¯ = function ()
-  -- ÊÇ·ñÅäÖÃÁËÇåÀí±³°ü(±ØĞëÅäÖÃ, ²»È»»á³öÎÊÌâ¿¨ËÀ)
-  if not sFileExist('bagConfig.txt') then saveProfile('config.txt') log('ÇëÅäÖÃÂú±³°ü´¦Àí!') suie.ÇåÀí±³°ü() return end
-  suie.¿ªÆôÇ°()
+suie.é€€å‡º = exit
+suie.å¯åŠ¨ = function ()
+  -- æ˜¯å¦é…ç½®äº†æ¸…ç†èƒŒåŒ…(å¿…é¡»é…ç½®, ä¸ç„¶ä¼šå‡ºé—®é¢˜å¡æ­»)
+  if not sFileExist('bagConfig.txt') then saveProfile('config.txt') log('è¯·é…ç½®æ»¡èƒŒåŒ…å¤„ç†!') suie.æ¸…ç†èƒŒåŒ…() return end
+  suie.å¼€å¯å‰()
   if print_config_info then
     print(current_task)
     exit()
   end
-  path.ÓÎÏ·¿ªÊ¼()
+  path.æ¸¸æˆå¼€å§‹()
 end
-suie.¿ªÆôÇ° = function ()
-  -- ±£´æÅäÖÃ
+suie.å¼€å¯å‰ = function ()
+  -- ä¿å­˜é…ç½®
   saveProfile('config.txt')
-  -- ¶ÁÈ¡ËùÓĞÎÄ¼şÊı¾İ
+  -- è¯»å–æ‰€æœ‰æ–‡ä»¶æ•°æ®
   current_task = uiConfigUnion(fileNames)
   ui_config_finish = true
   dismiss(parentUid)
 end
-suie.¿ªÊ¼Ë¢ÊéÇ© = function ()
-  suie.¿ªÆôÇ°()
-  path.Ë¢ÊéÇ©(sgetNumberConfig("refresh_book_tag_count", 0))
+suie.å¼€å§‹åˆ·ä¹¦ç­¾ = function ()
+  suie.å¼€å¯å‰()
+  path.åˆ·ä¹¦ç­¾(sgetNumberConfig("refresh_book_tag_count", 0))
 end
-suie.Ê¹ÓÃËµÃ÷ = function ()
+suie.ä½¿ç”¨è¯´æ˜ = function ()
   runIntent({
     ['action'] = 'android.intent.action.VIEW',
     ['uri'] = open_resource_doc
   })
   exit()
 end
-suie.Ë¢Í¼ÉèÖÃ = function ()
+suie.åˆ·å›¾è®¾ç½® = function ()
   sui.showNotMainUI(sui.showGrindSetting)
 end
-suie.Ë¢ĞÂUI = function ()
+suie.åˆ·æ–°UI = function ()
   for i,v in pairs(fileNames) do sdelfile(v) end
   reScript()
 end
-suie.Ë¢Í¼ÅäÖÃÈ¡Ïû = function ()
+suie.åˆ·å›¾é…ç½®å–æ¶ˆ = function ()
   sui.hiddenNotMainUI(grindUid)
 end
-suie.Ë¢Í¼ÅäÖÃ±£´æ = function ()
+suie.åˆ·å›¾é…ç½®ä¿å­˜ = function ()
   saveProfile('fightConfig.txt')
-  suie.Ë¢Í¼ÅäÖÃÈ¡Ïû()
+  suie.åˆ·å›¾é…ç½®å–æ¶ˆ()
 end
-suie.ÇåÀí±³°ü = function ()
+suie.æ¸…ç†èƒŒåŒ… = function ()
   sui.showNotMainUI(sui.showBagSetting)
 end
-suie.±³°üÅäÖÃÈ¡Ïû = function ()
+suie.èƒŒåŒ…é…ç½®å–æ¶ˆ = function ()
   sui.hiddenNotMainUI(bagUid)
 end
-suie.±³°üÅäÖÃ±£´æ = function ()
+suie.èƒŒåŒ…é…ç½®ä¿å­˜ = function ()
   saveProfile('bagConfig.txt')
-  suie.±³°üÅäÖÃÈ¡Ïû()
+  suie.èƒŒåŒ…é…ç½®å–æ¶ˆ()
 end
-suie.Éı3ĞÇ¹·Á¸¿ªÊ¼ = function ()
-  suie.¿ªÆôÇ°()
-  path.Éı3ĞÇ¹·Á¸()
+suie.å‡3æ˜Ÿç‹—ç²®å¼€å§‹ = function ()
+  suie.å¼€å¯å‰()
+  path.å‡3æ˜Ÿç‹—ç²®()
 end
-suie.¹ºÂòÆó¶ì = function ()
-  suie.¿ªÆôÇ°()
-  path.¹ºÂòÆó¶ì()
+suie.è´­ä¹°ä¼é¹… = function ()
+  suie.å¼€å¯å‰()
+  path.è´­ä¹°ä¼é¹…()
 end
--- Ö÷Ò³
+-- ä¸»é¡µ
 sui.show = function ()
   newLayout()
   newRow()
-  -- ¿ªÔ´ĞÅÏ¢
-  addTextView('Ãâ·Ñ¿ªÔ´£¬ÓĞÎÊÌâ(¿´ÏÂ·½Ê¹ÓÃËµÃ÷ or ¼ÓÈº)\n'..
-              'QQÈº:206490280      '..
-              'QQÆµµÀºÅ:24oyp5x92q')
+  -- å¼€æºä¿¡æ¯
+  addTextView('å…è´¹å¼€æºï¼Œæœ‰é—®é¢˜(çœ‹ä¸‹æ–¹ä½¿ç”¨è¯´æ˜ or åŠ ç¾¤)\n'..
+              'QQç¾¤:206490280      '..
+              'QQé¢‘é“å·:24oyp5x92q')
   newRow()
-  -- ·şÎñÆ÷
-  addTextView('·şÎñÆ÷: ')
-  local servers = ui_option.·şÎñÆ÷
-  addRadioGroup('·şÎñÆ÷', servers)
+  -- æœåŠ¡å™¨
+  addTextView('æœåŠ¡å™¨: ')
+  local servers = ui_option.æœåŠ¡å™¨
+  addRadioGroup('æœåŠ¡å™¨', servers)
   newRow()
-  -- ÈÕ³£¹¦ÄÜÇø
-  local selections = ui_option.ÈÎÎñ
+  -- æ—¥å¸¸åŠŸèƒ½åŒº
+  local selections = ui_option.ä»»åŠ¡
   for i,v in pairs(selections) do
     addCheckBox(v, v)
     if i % 3 == 0 then newRow() end
   end
 
-  -- ĞèÒªÅäÖÃ¼°ÆäËû¹¦ÄÜÇø
+  -- éœ€è¦é…ç½®åŠå…¶ä»–åŠŸèƒ½åŒº
   newRow()
   addTextView('JJC:')
-  addCheckBox('Ò¶×ÓÂòÆ±', 'Ò¶×ÓÂòÆ±')
-  addTextView('Ë¢ĞÂ½»Õ½´ÎÊı:')
-  addEditText('½»Õ½´ÎÊı', '30')
+  addCheckBox('å¶å­ä¹°ç¥¨', 'å¶å­ä¹°ç¥¨')
+  addTextView('åˆ·æ–°äº¤æˆ˜æ¬¡æ•°:')
+  addEditText('äº¤æˆ˜æ¬¡æ•°', '30')
   newRow()
-  addTextView('JJCÃ¿ÖÜ½±Àø: ')
-  addRadioGroup('¾º¼¼³¡Ã¿ÖÜ½±Àø', ui_option.¾º¼¼³¡Ã¿ÖÜ½±Àø)
+  addTextView('JJCæ¯å‘¨å¥–åŠ±: ')
+  addRadioGroup('ç«æŠ€åœºæ¯å‘¨å¥–åŠ±', ui_option.ç«æŠ€åœºæ¯å‘¨å¥–åŠ±)
   newRow()
-  addTextView('JJC´ÎĞò: ')
-  addRadioGroup('¾º¼¼³¡´ÎĞò', ui_option.¾º¼¼³¡´ÎĞò)
-  -- local mission = {'Ê¥Óò', 'Ì½ÏÕ', 'ÌÖ·¥', 'Õ½Õù'}
-  -- addTextView('ÅÉÇ²ÈÎÎñ:')
-  -- addRadioGroup('ÅÉÇ²ÈÎÎñ', mission)
+  addTextView('JJCæ¬¡åº: ')
+  addRadioGroup('ç«æŠ€åœºæ¬¡åº', ui_option.ç«æŠ€åœºæ¬¡åº)
+  -- local mission = {'åœ£åŸŸ', 'æ¢é™©', 'è®¨ä¼', 'æˆ˜äº‰'}
+  -- addTextView('æ´¾é£ä»»åŠ¡:')
+  -- addRadioGroup('æ´¾é£ä»»åŠ¡', mission)
   newRow()
-  addTextView('ÉçÍÅ¾èÔù£º')
-  addRadioGroup('ÉçÍÅ¾èÔùÀàĞÍ', ui_option.ÉçÍÅ¾èÔùÀàĞÍ)
+  addTextView('ç¤¾å›¢æèµ ï¼š')
+  addRadioGroup('ç¤¾å›¢æèµ ç±»å‹', ui_option.ç¤¾å›¢æèµ ç±»å‹)
   newRow()
-  local tag = ui_option.Ë¢±êÇ©ÀàĞÍ
-  addTextView('ÊéÇ©: ')
+  local tag = ui_option.åˆ·æ ‡ç­¾ç±»å‹
+  addTextView('ä¹¦ç­¾: ')
   for i,v in pairs(tag) do 
     if i == 3 then
       addCheckBox(v, v, nil)
@@ -177,31 +177,31 @@ sui.show = function ()
       addCheckBox(v, v, nil, true)
     end
   end
-  -- ²»ÄÜĞŞ¸ÄÖ÷Ìâ
+  -- ä¸èƒ½ä¿®æ”¹ä¸»é¢˜
   newRow()
-  addTextView('´ÎÊı:')
-  addEditText('¸üĞÂ´ÎÊı', '333')
-  addButton('¿ªÊ¼Ë¢ÊéÇ©')
+  addTextView('æ¬¡æ•°:')
+  addEditText('æ›´æ–°æ¬¡æ•°', '333')
+  addButton('å¼€å§‹åˆ·ä¹¦ç­¾')
   newRow()
-  addTextView('Éı3ĞÇ¹·Á¸:')
-  addRadioGroup('Éı3ĞÇ¹·Á¸ÀàĞÍ', ui_option.Éı2ĞÇ¹·Á¸ÀàĞÍ)
+  addTextView('å‡3æ˜Ÿç‹—ç²®:')
+  addRadioGroup('å‡3æ˜Ÿç‹—ç²®ç±»å‹', ui_option.å‡2æ˜Ÿç‹—ç²®ç±»å‹)
   newRow()
-  addEditText('Éı3ĞÇ¹·Á¸¸öÊı','100')
-  addTextView('¸ö')
-  addButton('Éı3ĞÇ¹·Á¸¿ªÊ¼')
-  addTextView('´«ËÍÇ°ÇëÏÈËø¶¨!')
+  addEditText('å‡3æ˜Ÿç‹—ç²®ä¸ªæ•°','100')
+  addTextView('ä¸ª')
+  addButton('å‡3æ˜Ÿç‹—ç²®å¼€å§‹')
+  addTextView('ä¼ é€å‰è¯·å…ˆé”å®š!')
   newRow()
-  addButton('¹ºÂòÆó¶ì')
+  addButton('è´­ä¹°ä¼é¹…')
   newRow()
-  addButton('Ê¹ÓÃËµÃ÷')
+  addButton('ä½¿ç”¨è¯´æ˜')
   addTextView('  |  ')
-  addButton('Æô¶¯')
-  addButton('ÍË³ö')
+  addButton('å¯åŠ¨')
+  addButton('é€€å‡º')
   newRow()
-  addButton('Ë¢ĞÂUI')
+  addButton('åˆ·æ–°UI')
   addTextView('  |  ')
-  addButton('ÇåÀí±³°ü')
-  addButton('Ë¢Í¼ÉèÖÃ')
+  addButton('æ¸…ç†èƒŒåŒ…')
+  addButton('åˆ·å›¾è®¾ç½®')
   ui.show(parentUid, false)
 
   -- load config
@@ -210,18 +210,18 @@ sui.show = function ()
     if ui_config_finish then return true end
   end, .05, nil, true)
 end
--- Õ½¶·ÉèÖÃ
+-- æˆ˜æ–—è®¾ç½®
 sui.showGrindSetting = function ()
   newLayout(grindUid)
-  -- addButton('Ë¢Í¼²âÊÔ', grindUid)
-  local passAll = ui_option.Õ½¶·ÀàĞÍ
+  -- addButton('åˆ·å›¾æµ‹è¯•', grindUid)
+  local passAll = ui_option.æˆ˜æ–—ç±»å‹
   for i,v in pairs(passAll) do
     local cur = i..''
     if cur:includes({1,3,5,6}) then
       addCheckBox(v, v, grindUid)
     else
       addCheckBox(v, v, grindUid)
-      -- ÔİÊ±½ûÓÃ
+      -- æš‚æ—¶ç¦ç”¨
       -- todo
       setDisabled(v)
     end
@@ -230,40 +230,40 @@ sui.showGrindSetting = function ()
     end
   end
   newRow(grindUid)
-  addTextView('²¹³äĞĞ¶¯Á¦:', grindUid)
-  addRadioGroup('²¹³äĞĞ¶¯Á¦ÀàĞÍ', ui_option.²¹³äĞĞ¶¯Á¦ÀàĞÍ, grindUid)
+  addTextView('è¡¥å……è¡ŒåŠ¨åŠ›:', grindUid)
+  addRadioGroup('è¡¥å……è¡ŒåŠ¨åŠ›ç±»å‹', ui_option.è¡¥å……è¡ŒåŠ¨åŠ›ç±»å‹, grindUid)
   newRow(grindUid)
-  addTextView('ÌÖ·¥: ', grindUid)
-  addSpinner('ÌÖ·¥ÀàĞÍ', ui_option.ÌÖ·¥¹Ø¿¨ÀàĞÍ, grindUid)
-  addSpinner('ÌÖ·¥¼¶±ğ', ui_option.ÌÖ·¥¼¶±ğ, grindUid)
-  addTextView('¼¶', grindUid)
-  addEditText('ÌÖ·¥´ÎÊı', '100', grindUid)
-  addTextView('´Î', grindUid)
+  addTextView('è®¨ä¼: ', grindUid)
+  addSpinner('è®¨ä¼ç±»å‹', ui_option.è®¨ä¼å…³å¡ç±»å‹, grindUid)
+  addSpinner('è®¨ä¼çº§åˆ«', ui_option.è®¨ä¼çº§åˆ«, grindUid)
+  addTextView('çº§', grindUid)
+  addEditText('è®¨ä¼æ¬¡æ•°', '100', grindUid)
+  addTextView('æ¬¡', grindUid)
   newRow(grindUid)
-  addTextView('ÃÔ¹¬£º', grindUid)
+  addTextView('è¿·å®«ï¼š', grindUid)
   newRow(grindUid)
-  addTextView('¾«Áé¼ÀÌ³£º', grindUid)
-  addSpinner('¾«Áé¼ÀÌ³ÀàĞÍ', ui_option.¾«Áé¼ÀÌ³¹Ø¿¨ÀàĞÍ, grindUid)
-  addSpinner('¾«Áé¼ÀÌ³¼¶±ğ', ui_option.¾«Áé¼ÀÌ³¼¶±ğ, grindUid)
-  addTextView('¼¶', grindUid)
-  addEditText('¾«Áé¼ÀÌ³´ÎÊı', '100', grindUid)
-  addTextView('´Î', grindUid)
+  addTextView('ç²¾çµç¥­å›ï¼š', grindUid)
+  addSpinner('ç²¾çµç¥­å›ç±»å‹', ui_option.ç²¾çµç¥­å›å…³å¡ç±»å‹, grindUid)
+  addSpinner('ç²¾çµç¥­å›çº§åˆ«', ui_option.ç²¾çµç¥­å›çº§åˆ«, grindUid)
+  addTextView('çº§', grindUid)
+  addEditText('ç²¾çµç¥­å›æ¬¡æ•°', '100', grindUid)
+  addTextView('æ¬¡', grindUid)
   newRow(grindUid)
-  addTextView('ÉîÔ¨£º', grindUid)
+  addTextView('æ·±æ¸Šï¼š', grindUid)
   newRow(grindUid)
   newRow(grindUid)
-  addTextView('ºó¼Ç£º', grindUid)
-  addEditText('ºó¼Ç´ÎÊı', '100', grindUid)
-  addTextView('´Î', grindUid)
+  addTextView('åè®°ï¼š', grindUid)
+  addEditText('åè®°æ¬¡æ•°', '100', grindUid)
+  addTextView('æ¬¡', grindUid)
   newRow(grindUid)
-  addTextView('»î¶¯£º', grindUid)
-  addSpinner('»î¶¯¼¶±ğ', ui_option.»î¶¯¼¶±ğ, grindUid)
-  addTextView('¼¶', grindUid)
-  addEditText('»î¶¯´ÎÊı', '100', grindUid)
-  addTextView('´Î', grindUid)
+  addTextView('æ´»åŠ¨ï¼š', grindUid)
+  addSpinner('æ´»åŠ¨çº§åˆ«', ui_option.æ´»åŠ¨çº§åˆ«, grindUid)
+  addTextView('çº§', grindUid)
+  addEditText('æ´»åŠ¨æ¬¡æ•°', '100', grindUid)
+  addTextView('æ¬¡', grindUid)
   newRow(grindUid)
-  addButton('Ë¢Í¼ÅäÖÃ±£´æ', grindUid)
-  addButton('Ë¢Í¼ÅäÖÃÈ¡Ïû', grindUid)
+  addButton('åˆ·å›¾é…ç½®ä¿å­˜', grindUid)
+  addButton('åˆ·å›¾é…ç½®å–æ¶ˆ', grindUid)
   ui.show(grindUid, false)
   loadProfile('fightConfig.txt')
 end
@@ -275,17 +275,17 @@ sui.hiddenNotMainUI = function (hiddenID)
   dismiss(hiddenID)
   sui.show()
 end
--- ÆäËû¹¦ÄÜ
+-- å…¶ä»–åŠŸèƒ½
 sui.showOtherFunc = function ()
 end
--- ±³°üÇåÀí
+-- èƒŒåŒ…æ¸…ç†
 sui.showBagSetting = function ()
   newLayout(bagUid)
   newRow(bagUid)
-  addTextView('³èÎï±³°ü', bagUid)
+  addTextView('å® ç‰©èƒŒåŒ…', bagUid)
   newRow(bagUid)
-  -- Ä¬ÈÏ: B C D
-  for i,v in pairs(ui_option.³èÎï¼¶±ğ) do
+  -- é»˜è®¤: B C D
+  for i,v in pairs(ui_option.å® ç‰©çº§åˆ«) do
     if v:includes({'B', 'C', 'D'}) then
       addCheckBox(v, v, bagUid, true)
     else
@@ -293,18 +293,18 @@ sui.showBagSetting = function ()
     end
   end
   newRow(bagUid)
-  addTextView('×°±¸±³°ü', bagUid)
+  addTextView('è£…å¤‡èƒŒåŒ…', bagUid)
   newRow(bagUid)
-  -- Ä¬ÈÏ£º
-  for i,v in pairs(ui_option.×°±¸ÀàĞÍ) do
-    if v:includes({'Ò»°ã', '¸ß¼¶', 'Ï¡ÓĞ'}) then
+  -- é»˜è®¤ï¼š
+  for i,v in pairs(ui_option.è£…å¤‡ç±»å‹) do
+    if v:includes({'ä¸€èˆ¬', 'é«˜çº§', 'ç¨€æœ‰'}) then
       addCheckBox(v, v, bagUid, true)
     else
       addCheckBox(v, v, bagUid)
     end
   end
   newRow(bagUid)
-  for i,v in pairs(ui_option.×°±¸µÈ¼¶) do
+  for i,v in pairs(ui_option.è£…å¤‡ç­‰çº§) do
     if v:includes({'28', '42', '57', '71', '72'}) then
       addCheckBox(v, v, bagUid, true)
     else
@@ -315,7 +315,7 @@ sui.showBagSetting = function ()
     end
   end
   newRow(bagUid)
-  for i,v in pairs(ui_option.×°±¸Ç¿»¯µÈ¼¶) do
+  for i,v in pairs(ui_option.è£…å¤‡å¼ºåŒ–ç­‰çº§) do
     if v:includes({'+0', '9'}) then
       addCheckBox(v, v, bagUid, true)
     else
@@ -326,9 +326,9 @@ sui.showBagSetting = function ()
     end
   end
   newRow(bagUid)
-  addTextView('ÉñÆ÷±³°ü', bagUid)
+  addTextView('ç¥å™¨èƒŒåŒ…', bagUid)
   newRow(bagUid)
-  for i,v in pairs(ui_option.ÉñÆ÷ĞÇ¼¶) do 
+  for i,v in pairs(ui_option.ç¥å™¨æ˜Ÿçº§) do 
     if v:includes({'1', '2', '3'}) then
       addCheckBox(v, v, bagUid, true)
     else
@@ -339,7 +339,7 @@ sui.showBagSetting = function ()
     end
   end
   newRow(bagUid)
-  for i,v in pairs(ui_option.ÉñÆ÷Ç¿»¯) do
+  for i,v in pairs(ui_option.ç¥å™¨å¼ºåŒ–) do
     if v:includes({'+0', '10'}) then
       addCheckBox(v, v, bagUid, true)
     else
@@ -350,9 +350,9 @@ sui.showBagSetting = function ()
     end
   end
   newRow(bagUid)
-  addTextView('Ó¢ĞÛµÈ¼¶', bagUid)
+  addTextView('è‹±é›„ç­‰çº§', bagUid)
   newRow(bagUid)
-  for i,v in pairs(ui_option.Ó¢ĞÛµÈ¼¶) do 
+  for i,v in pairs(ui_option.è‹±é›„ç­‰çº§) do 
     if v:includes({'1', '2', '3'}) then
       addCheckBox(v, v, bagUid, true)
     else
@@ -363,8 +363,8 @@ sui.showBagSetting = function ()
     end
   end
   newRow(bagUid)
-  addButton('±³°üÅäÖÃ±£´æ', bagUid)
-  addButton('±³°üÅäÖÃÈ¡Ïû', bagUid)
+  addButton('èƒŒåŒ…é…ç½®ä¿å­˜', bagUid)
+  addButton('èƒŒåŒ…é…ç½®å–æ¶ˆ', bagUid)
   ui.show(bagUid, false)
   loadProfile('bagConfig.txt')
 end
