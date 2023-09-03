@@ -21,9 +21,15 @@
 
 ## 模拟器下载地址
 
-> - MUMU6模拟器(推荐)：[https://mumu.163.com/update/win/](https://mumu.163.com/update/win/)
+> - MUMU12模拟器(推荐)：[https://mumu.163.com/jp/360/](https://mumu.163.com/jp/360/)
 > - 雷电模拟器：[https://www.ldmnq.com/](https://www.ldmnq.com/)
 > - 蓝叠模拟器：[https://www.bluestacks.cn/](https://www.bluestacks.cn/)
+> - 国际版蓝叠模拟器：[https://www.bluestacks.com/download.html](https://www.bluestacks.com/download.html)
+
+## 国服反和谐
+> [教程地址](https://g.nga.cn/read.php?tid=37578061&rand=971) 　 
+> [反和谐补丁(百度网盘)](https://pan.baidu.com/s/14kMrOB8fa5jP06HpKwmb1Q?pwd=dfnt#list/path=%2F) 　
+
 
 ## 模拟器详细设置📺
 
@@ -42,7 +48,7 @@
 1. ### 怎么刷书签?🍃
    > 点击 [开始刷书签] 并且设置好次数就行了。
    
-2. ### 如何刷图(当前仅支持[讨伐、祭坛、后记])
+2. ### 如何刷图(当前仅支持[讨伐、祭坛、后记、活动])
    > 点击刷图设置 -> 选择类型、关卡及次数 -> 刷图配置保存 -> 点击刷图开启 -> 点击启动
 
 ## 常见问题?😀
@@ -56,3 +62,5 @@
    > 脚本中部分功能运行中会需要清理背包: 收取宠物、刷图
 5. ### 竞技场决斗逻辑是什么?
    > 玩家(按照积分来判定的)、NPC(有就直接挑战)
+6. ### 进入游戏后脚本悬浮窗不见了？(MUMU12)
+   > 在MUMU12设置中, 关闭 [后台挂机保活运行]

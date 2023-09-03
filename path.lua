@@ -16,14 +16,14 @@ path.游戏首页 = function ()
 	setControlBarPosNew(0, 1)
 	local clickTarget = {'国服签到右下蓝底', '国服签到右下蓝底2', '国服公告X',
 											 '国服登录第七史诗', '国服放弃战斗', '国服结束',
-											 '国服神秘商店取消',}
+											 '国服神秘商店取消'}
 	if wait(function ()
 		-- 服务器维护中
 		if findOne('国服服务器维护中') then return 'exit' end
 		if findOne('国服主页Rank') and not longAppearMomentDisAppear('国服主页Rank', nil, nil, 1) then
 			return 1
 		end
-		if not findTap(clickTarget) then
+		if not findTapOnce(clickTarget, {keyword = {'结束'}}) then
 			if not isBack then
 				stap(point.回退)
 			else
@@ -1498,6 +1498,7 @@ path.升狗粮_3 = function (upgradeCount)
 		'883|605|00CB64', -- 隐藏收藏英雄
 		'883|657|00CB64', -- 隐藏亲密度10
 		-- '587|657|00CB64', -- 隐藏MAX等级
+		'590|604|201F1A' -- 关闭缩小画面
 	}
 
 	for i,v in pairs(specialSetting) do
@@ -1541,13 +1542,13 @@ path.升狗粮_3 = function (upgradeCount)
 					log('升级2星个数: '..i..'/'..upgradeCount)
 					return 1
 				end
-				if v == '国服英雄升级企鹅不足' or 
-					v == '国服神秘商店购买资源不足' or 
-					v == '国服英雄升级银花不足' then
-					-- log(v)
-					log('资源不足')
-					slog('资源不足')
-					return 0
+				if  v == '国服英雄升级企鹅不足' or 
+						v == '国服神秘商店购买资源不足' or 
+						v == '国服英雄升级银花不足' then
+						-- log(v)
+						log('资源不足')
+						slog('资源不足')
+						return 0
 				end
 				stap({997,664})
 				stap(t)

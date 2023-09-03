@@ -5,8 +5,8 @@ update_source_fallback = update_source
 -- apk level 限制
 is_apk_old = function() return getApkVerInt() < 0 end
 apk_old_warning = "怎么还有人用" .. getApkVerInt()
-release_date = "08.31 23:57"
-release_content = '新活动添加(Re:从零开始的异世界生活)'
+release_date = "09.03 09:54"
+release_content = '修复异常'
 -- 获取workPath
 root_path = getWorkPath() .. '/'
 -- 禁止热更新
