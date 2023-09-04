@@ -5,8 +5,8 @@ update_source_fallback = update_source
 -- apk level 限制
 is_apk_old = function() return getApkVerInt() < 0 end
 apk_old_warning = "怎么还有人用" .. getApkVerInt()
-release_date = "09.03 23:26"
-release_content = '\n刷书签问题'
+release_date = "09.04 11:35"
+release_content = '刷书签问题'
 -- 获取workPath
 root_path = getWorkPath() .. '/'
 -- 禁止热更新
@@ -102,8 +102,8 @@ local scriptStatus = sgetNumberConfig("scriptStatus", 0)
 if scriptStatus == 0 then
   consoleInit()
   initLocalState()
-  slog('最新更新时间: '..release_date)
-  slog('更新内容: '..(release_content or '暂无'))
+  slog(release_date)
+  slog(release_content or '暂无')
   if not hotupdate_disabled then hotUpdate() end
   sui.show()
 else

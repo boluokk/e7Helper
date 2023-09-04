@@ -543,11 +543,7 @@ path.战斗代理 = function (isRepeat, isAgent, currentCount, isActivity)
 		local pos, targetV
 		wait(function ()
 			if currentCount then
-				if isAgent then
-					log('代理中-有宠物: '..currentCount..'/'..global_stage_count)
-				else	
-					log('代理中-无宠物: '..currentCount..'/'..global_stage_count)
-				end
+				log('代理中: '..currentCount..'/'..global_stage_count)
 			else
 				log('代理中..')
 			end
