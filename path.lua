@@ -188,12 +188,12 @@ path.刷书签 = function (rest)
 			 	pos, countTarget= findOne(target, {rg = {540,70,669,718}})
 				if pos then
 					newRg = {1147, pos[2] - 80, 1226, pos[2] + 80}
-					point.ocr_标签类型 = {660, pos[2] - 60, 800, pos[2] + 80}
+					point.ocr_标签类型 = {660, pos[2] - 80, 800, pos[2] + 80}
 					if not wait(function ()
 						if findOne('标签类型', {keyword = {'召唤', '神秘', '书签'}}) then
 							return 1
 						end
-					end, .3, 1) then 
+					end, .3, 2) then 
 						log('标签类型不正确')
 					else
 						untilTap('国服神秘商店购买', {rg = newRg})

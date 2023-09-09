@@ -4,14 +4,14 @@
 
 <p>
     <a style="color: greenyellow" href=https://boluokk.gitee.io/e7-helper/>使用文档(必读)　</a>
-    <a style="color: deepskyblue" href=https://boluokk.gitee.io/e7-helper/>国服反和谐(教程)　</a>
+    <a style="color: deepskyblue" href=https://g.nga.cn/read.php?tid=37578061&rand=743/>国服反和谐(教程)　</a>
     <a style="color: orange;" href=https://qm.qq.com/cgi-bin/qm/qr?k=o6MW-K-Ws6A2-S_WhHEro1JggzREWPzt&jump_from=webapi&authKey=PRSHw0kOjKtnqEVwyXCRHnKKwAWhzXWD/y486deoyZ/AWyNfGLwHIEwjb8gf9yoX>qq交流群:206490280</a>
 </p>
 
 ![](https://img.shields.io/badge/script_size-41KB-blue)
 ![](https://img.shields.io/badge/downloads-4k+-green)
 ![](https://img.shields.io/badge/repo_size-3.54MB-orange)
-![](https://img.shields.io/badge/total_line-3k+-purple)
+![](https://img.shields.io/badge/total_line-4k+-purple)
 
 ![](cover.png)
 
