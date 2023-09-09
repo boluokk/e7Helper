@@ -5,8 +5,8 @@ update_source_fallback = update_source
 -- apk level 限制
 is_apk_old = function() return getApkVerInt() < 0 end
 apk_old_warning = "怎么还有人用" .. getApkVerInt()
-release_date = "09.04 11:35"
-release_content = '刷书签问题'
+release_date = "09.09 14:17"
+release_content = '刷书签问题处理, 吃体力问题'
 -- 获取workPath
 root_path = getWorkPath() .. '/'
 -- 禁止热更新
@@ -84,16 +84,6 @@ require("test")
 -- 或者   1280x720
 local disPlayDPI = 320
 displaySizeWidth, displaySizeHeight = getDisplaySize()
--- if disPlayDPI ~= 320 or ((displaySizeHeight ~= 1280 and displaySizeHeight > 0) and 
---                          (displaySizeHeight ~= 720 and displaySizeHeight > 0)) 
---                      or ((displaySizeWidth ~= 720 and displaySizeWidth > 0) and 
---                          (displaySizeWidth ~= 1280 and displaySizeWidth > 0)) then
---   wait(function ()
---     toast("当前分辨率："..displaySizeWidth.."x"..displaySizeHeight.."\tDPI："..disPlayDPI.."\n"..
---           "请手动配置成(模拟器或者虚拟机设置中)：\n分辨率: 720x1280或者1280x720 \nDPI：320\n之后重启脚本")
---   end, 1, 1)
--- end
-
 -- 异常处理
 setEventCallBack()
 

@@ -14,7 +14,7 @@ path.游戏首页 = function ()
 	setControlBarPosNew(0, 1)
 	local clickTarget = {'国服签到右下蓝底', '国服签到右下蓝底2', '国服公告X',
 											 '国服登录第七史诗', '国服放弃战斗', '国服结束',
-											 '国服神秘商店取消'}
+											 '国服神秘商店取消', '国际服比赛', '新英雄获取确认'}
 	if wait(function ()
 		-- 服务器维护中
 		if findOne('国服服务器维护中') then return 'exit' end
@@ -140,10 +140,14 @@ path.社团奖励 = function ()
 	end
 end
 
--- 会乱购买东西??
--- 添加标签类型识别判定(召唤)
+-- 0.66 誓约
+-- 0.17 神秘
 path.刷书签 = function (rest)
 	rest = rest or 0
+	local startCheck = {'国服神秘商店第一个商品',
+											'国服神秘商店第二个商品',
+											'国服神秘商店第三个商品',
+											'国服神秘商店第四个商品'}
 	setNumberConfig("is_refresh_book_tag", 1)
 	path.游戏首页()
 	local tapPoint1 = point['秘密商店0']
@@ -156,7 +160,8 @@ path.刷书签 = function (rest)
 	end)
 	log('进入神秘商店')
 	untilAppear('国服神秘商店立即更新')
-	untilAppear('国服神秘商店第一个商品') ssleep(.5)
+	-- 第一个商品被购买(bug)
+	untilAppear(startCheck) ssleep(.5)
 	-- 开始挂机刷新书签了
 	-- 国服神秘商店友情书签
 	-- 国服神秘商店誓约书签
@@ -167,12 +172,14 @@ path.刷书签 = function (rest)
 	-- [国服神秘商店神秘奖牌 国服神秘商店誓约书签]  会导致乱买东西?
 	if current_task['神秘奖牌'] then table.insert(target, '神秘') end
 	if current_task['誓约书签'] then table.insert(target, '书签') end
-	if current_task['友情书签'] then table.insert(target, '国服神秘商店友情书签') end
+	if current_task['友情书签'] then table.insert(target, '友情书签') end
 	local refreshCount = current_task['更新次数'] or 334
 	local enoughResources = true
 	local msg
 	local newRg
 	local pos, countTarget
+	msg = '刷新次数: 0/'..refreshCount..'\n神秘: 0*50(0%)\n誓约: 0*5(0%)\n友情: 0*5(0%)'
+	openHUD(msg, '刷标签')
 	for i=1,refreshCount do
 		if i > rest then
 			for i=1,4 do
@@ -181,7 +188,7 @@ path.刷书签 = function (rest)
 			 	pos, countTarget= findOne(target, {rg = {540,70,669,718}})
 				if pos then
 					newRg = {1147, pos[2] - 80, 1226, pos[2] + 80}
-					point.ocr_标签类型 = {660, pos[2] - 80, 760, pos[2] + 80}
+					point.ocr_标签类型 = {660, pos[2] - 60, 800, pos[2] + 80}
 					if not wait(function ()
 						if findOne('标签类型', {keyword = {'召唤', '神秘', '书签'}}) then
 							return 1
@@ -209,7 +216,7 @@ path.刷书签 = function (rest)
 							elseif countTarget == '书签' then
 								g2 = g2 + 1
 								setNumberConfig("g2", g2)
-							elseif countTarget == '国服神秘商店友情书签' then
+							elseif countTarget == '友情书签' then
 								g3 = g3 + 1
 								setNumberConfig("g3", g3)
 							end
@@ -238,7 +245,10 @@ path.刷书签 = function (rest)
 					end)
 				end
 			end
-			msg = '刷新次数: '..i..'/'..refreshCount..'(神秘奖牌: '..g1..'*50, 誓约书签: '..g2..'*5, 友情书签: '..g3..'*5)'
+			msg = '刷新次数: '..i..'/'..refreshCount..
+						'\n神秘: '..g1..'*50('..g1/i..'%)'..
+						'\n誓约: '..g2..'*5('..g2/i..'%)'..
+						'\n友情: '..g3..'*5('..g3/i..'%)'
 			if not enoughResources then
 				log('资源耗尽!')
 				slog('资源耗尽!')
@@ -247,8 +257,8 @@ path.刷书签 = function (rest)
 				break
 			end
 			-- 刷新次数: 1 (神秘奖牌: 5*5, 誓约书签: 10*5, 友情书签: 20*5)
-			log(msg)
-			slog(msg, nil, true)
+			openHUD(msg, '刷标签')
+			slog('\n'..msg, nil, true)
 			if i == refreshCount then
 				path.游戏首页()
 				break
@@ -261,7 +271,8 @@ path.刷书签 = function (rest)
 		end
 		setNumberConfig("refresh_book_tag_count", i)
 	end
-	slog(msg, nil, true)
+	closeHUD()
+	slog('\n'..msg, nil, true)
 end
 
 path.刷竞技场 = function ()

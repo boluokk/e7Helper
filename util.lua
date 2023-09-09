@@ -1568,3 +1568,33 @@ setEventCallBack = function ()
 		end
 	end)
 end
+
+
+
+-- 显示HUD
+openHUD = function (messageFun, configName)
+	hideHUD(logger_ID)
+	if not messageFun then return end
+	logger_ID = createHUD()
+	local msg = type(messageFun) == 'function' and messageFun() or messageFun or '消息为nil'
+	showHUD(logger_ID, 
+					msg,
+					HUD_CONFIG[configName][1],
+					HUD_CONFIG[configName][2],
+					HUD_CONFIG[configName][3],
+					HUD_CONFIG[configName][4],
+					HUD_CONFIG[configName][5],
+					HUD_CONFIG[configName][6],
+					HUD_CONFIG[configName][7],
+					HUD_CONFIG[configName][8],
+					HUD_CONFIG[configName][9],
+					HUD_CONFIG[configName][10],
+					HUD_CONFIG[configName][11],
+					HUD_CONFIG[configName][12],
+					HUD_CONFIG[configName][13]
+					)
+end
+
+closeHUD = function ()
+	openHUD()
+end
