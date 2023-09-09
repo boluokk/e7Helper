@@ -10,8 +10,8 @@
 
 ### 此APP工具源码: [https://gitee.com/boluokk/e7-helper](https://gitee.com/boluokk/e7-helper) （好用就给个star吧, 你的star会是作者的最大帮助）👍
 
-## 最近更新: 
-- 修复bug
+### 最近更新: 
+- 刷标签、使用叶子补充体力问题处理
 
 ## 设备兼容
 
