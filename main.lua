@@ -5,8 +5,8 @@ update_source_fallback = update_source
 -- apk level 限制
 is_apk_old = function() return getApkVerInt() < 0 end
 apk_old_warning = "怎么还有人用" .. getApkVerInt()
-release_date = "09.09 21:17"
-release_content = '红装暂停, '
+release_date = "09.09 21:54"
+release_content = '添加红装暂停、购买体力+旗帜; 移除刷标签类型判定'
 -- 获取workPath
 root_path = getWorkPath() .. '/'
 -- 禁止热更新

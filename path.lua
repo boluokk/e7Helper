@@ -196,22 +196,22 @@ path.刷书签 = function (rest)
 						break 
 					end
 					newRg = {1147, pos[2] - 80, 1226, pos[2] + 80}
-					point.ocr_标签类型 = {660, pos[2] - 60, 800, pos[2] + 80}
-					if not wait(function ()
-						if findOne('标签类型',{keyword = {'召唤', '神秘', '书签', 
-																						 '誓约', '友情', '奖牌'}}) then
-							return 1
-						end
-					end, .3, 2) then 
-						log('标签类型不正确')
-					else
-						untilTap('国服神秘商店购买', {rg = newRg})
-						untilTap('国服神秘商店购买1')
-						-- 等待购买特效消失
-						wait(function ()
-							if not longAppearMomentDisAppear({'国服神秘商店立即更新', '国服神秘商店购买资源不足', '国服一般商店'}, nil, nil, 1.5) then return 1 end
-						end)
-					end
+					-- point.ocr_标签类型 = {660, pos[2] - 60, 800, pos[2] + 80}
+					-- if not wait(function ()
+					-- 	if findOne('标签类型',{keyword = {'召唤', '神秘', '书签', 
+					-- 																	 '誓约', '友情', '奖牌'}}) then
+					-- 		return 1
+					-- 	end
+					-- end, .3, 2) then 
+					-- 	log('标签类型不正确')
+					-- else
+					untilTap('国服神秘商店购买', {rg = newRg})
+					untilTap('国服神秘商店购买1')
+					-- 等待购买特效消失
+					wait(function ()
+						if not longAppearMomentDisAppear({'国服神秘商店立即更新', '国服神秘商店购买资源不足', '国服一般商店'}, nil, nil, 1.5) then return 1 end
+					end)
+					-- end
 				end
 				-- 资源是否耗尽
 				wait(function ()
@@ -815,23 +815,32 @@ path.圣域首页 = function ()
 end
 
 path.友情商店 = function ()
-	log('购买体力')
+	log('购买体力&旗帜')
 	wait(function ()
 		stap(point.商店)
 		ssleep(1)
 		return not findOne('国服主页Rank')
 	end)
 	untilAppear('国服一般商店')
-
-	wait(function ()
-		sswipe({}, {})
-		if findTapOnce('友情商店', {keyword = {'友情'}}) 
-				and findOne("880|668|5DDEA5,866|666|63EAC2") 
-				or findOne("866|667|1E4A45,882|666|1C433B") then
-			return 1 
-		end
+	
+	local target = wait(function ()
+		sswipe({1178,692}, {1178,200})
+		ssleep(1)
+		return findOne('友情商店', {keyword = {'友情'}})
 	end)
 
+	wait(function ()
+		stap({target[1].l, target[1].t + 50})
+		return findOne("880|668|5DDEA5,866|666|63EAC2") or findOne("866|667|1E4A45,882|666|1C433B")
+	end)
+
+	local goods = {'行动力购买', '旗帜购买'}
+	for i=1,#goods do
+		if findTap(goods[i]) and untilTap('友情商店购买') then
+			log(123)
+			longAppearAndTap('国服一般商店', nil, {447,47}, 1.5)
+		end
+	end
 end
 
 path.净化深渊 = function ()
