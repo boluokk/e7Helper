@@ -62,11 +62,7 @@ path.社团开启 = function ()
 				ssleep(1)
 			if not findOne('国服主页Rank') then return 1 end
 	end)
-	wait(function ()
-		if findOne('国服左上骑士团') then ssleep(1) return 1 end
-		stap({447,47})
-	end)
-	
+	longAppearAndTap('国服左上骑士团', nil, {447,47}, 2)
 	if current_task.社团签到 then path.社团签到() end
 	if current_task.社团捐赠 then path.社团捐赠() end
 	if current_task.社团奖励 then path.社团奖励() end
@@ -173,6 +169,11 @@ path.刷书签 = function (rest)
 	if current_task['神秘奖牌'] then table.insert(target, '神秘') end
 	if current_task['誓约书签'] then table.insert(target, '书签') end
 	if current_task['友情书签'] then table.insert(target, '友情书签') end
+	-- 红装暂停
+	if current_task['红装暂停-55级'] then table.insert(target, '55红装') end
+	if current_task['红装暂停-70级'] then table.insert(target, '70红装') end
+	if current_task['红装暂停-85级'] then table.insert(target, '85红装') end
+
 	local refreshCount = current_task['更新次数'] or 334
 	local enoughResources = true
 	local msg
@@ -187,10 +188,18 @@ path.刷书签 = function (rest)
 				-- 第一排神秘会漏掉? todo
 			 	pos, countTarget= findOne(target, {rg = {540,70,669,718}})
 				if pos then
+					if countTarget:find('红装') then
+						-- do something
+						-- 邮件通知?
+						slog('发现 -> '..countTarget)
+						enoughResources = false
+						break 
+					end
 					newRg = {1147, pos[2] - 80, 1226, pos[2] + 80}
-					point.ocr_标签类型 = {660, pos[2] - 80, 800, pos[2] + 80}
+					point.ocr_标签类型 = {660, pos[2] - 60, 800, pos[2] + 80}
 					if not wait(function ()
-						if findOne('标签类型', {keyword = {'召唤', '神秘', '书签'}}) then
+						if findOne('标签类型',{keyword = {'召唤', '神秘', '书签', 
+																						 '誓约', '友情', '奖牌'}}) then
 							return 1
 						end
 					end, .3, 2) then 
@@ -249,15 +258,9 @@ path.刷书签 = function (rest)
 						'\n神秘: '..g1..'*50('..g1/i..'%)'..
 						'\n誓约: '..g2..'*5('..g2/i..'%)'..
 						'\n友情: '..g3..'*5('..g3/i..'%)'
-			if not enoughResources then
-				log('资源耗尽!')
-				slog('资源耗尽!')
-				-- untilTap('国服神秘商店取消')
-				path.游戏首页()
-				break
-			end
-			-- 刷新次数: 1 (神秘奖牌: 5*5, 誓约书签: 10*5, 友情书签: 20*5)
+
 			openHUD(msg, '刷标签')
+			if not enoughResources then path.游戏首页() break end
 			slog('\n'..msg, nil, true)
 			if i == refreshCount then
 				path.游戏首页()
@@ -272,7 +275,6 @@ path.刷书签 = function (rest)
 		setNumberConfig("refresh_book_tag_count", i)
 	end
 	closeHUD()
-	slog('\n'..msg, nil, true)
 end
 
 path.刷竞技场 = function ()
@@ -700,8 +702,8 @@ path.收取邮件 = function ()
 	end, 1, 5 * 60, nil, true)
 end
 
-path.誓约召唤 = function ()
-	if not findOne({'国服召唤小红点'}) then log('无誓约召唤') return 1 end
+path.每日单抽 = function ()
+	if not findOne({'国服召唤小红点'}) then log('无需召唤') return 1 end
 	wait(function ()
 		stap(point.召唤)
 				ssleep(1)
@@ -812,14 +814,24 @@ path.圣域首页 = function ()
 	end)
 end
 
-path.友情体力 = function ()
+path.友情商店 = function ()
 	log('购买体力')
 	wait(function ()
 		stap(point.商店)
-				ssleep(1)
-			if not findOne('国服主页Rank') then return 1 end
+		ssleep(1)
+		return not findOne('国服主页Rank')
 	end)
 	untilAppear('国服一般商店')
+
+	wait(function ()
+		sswipe({}, {})
+		if findTapOnce('友情商店', {keyword = {'友情'}}) 
+				and findOne("880|668|5DDEA5,866|666|63EAC2") 
+				or findOne("866|667|1E4A45,882|666|1C433B") then
+			return 1 
+		end
+	end)
+
 end
 
 path.净化深渊 = function ()

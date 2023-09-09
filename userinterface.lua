@@ -177,6 +177,13 @@ sui.show = function ()
       addCheckBox(v, v, nil, true)
     end
   end
+  newRow()
+  -- 红装
+  local level = ui_option.红装等级
+  addTextView('红装暂停: ')
+  for i,v in pairs(level) do 
+    addCheckBox('红装暂停-'..v, v, nil)
+  end
   -- 不能修改主题
   newRow()
   addTextView('次数:')
