@@ -269,7 +269,7 @@ path.刷书签 = function (rest)
 			-- 如果网络不好会导致两次点击, 改成 sim = 1
 			untilTap('国服神秘商店立即更新', {sim = 1})
 			untilTap('国服神秘商店购买确认')
-			untilAppear('国服神秘商店第一个商品', {sim = .98}) ssleep(.5)
+			untilAppear('国服神秘商店第一个商品', {sim = .98}) ssleep(1)
 			setNumberConfig("exception_count", 1)
 		end
 		setNumberConfig("refresh_book_tag_count", i)
@@ -815,6 +815,10 @@ path.圣域首页 = function ()
 end
 
 path.友情商店 = function ()
+	if not findOne("31|622|0B55DB") then
+		log('无需购买')
+		return 1
+	end
 	log('购买体力&旗帜')
 	wait(function ()
 		stap(point.商店)
@@ -826,18 +830,18 @@ path.友情商店 = function ()
 	local target = wait(function ()
 		sswipe({1178,692}, {1178,200})
 		ssleep(1)
-		return findOne('友情商店', {keyword = {'友情'}})
+		return findOne('友情商店')
 	end)
 
 	wait(function ()
-		stap({target[1].l, target[1].t + 50})
-		return findOne("880|668|5DDEA5,866|666|63EAC2") or findOne("866|667|1E4A45,882|666|1C433B")
+		stap({target[1], target[2] + 40})
+		ssleep(1)
+		return findOne('5面旗帜', {keyword = {'5面旗帜', '旗帜', '5面'}})
 	end)
 
 	local goods = {'行动力购买', '旗帜购买'}
 	for i=1,#goods do
 		if findTap(goods[i]) and untilTap('友情商店购买') then
-			log(123)
 			longAppearAndTap('国服一般商店', nil, {447,47}, 1.5)
 		end
 	end
