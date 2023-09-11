@@ -5,7 +5,7 @@ test = function ()
   -- log(findOne('友情书签'))
   -- openHUD('刷新次数: 1/1000\n神秘: 5*50 (0.17777%) \n誓约: 5*5 (0.66%)\n友情: 15*5 (66%)', '刷标签')
   -- ssleep(1000)
-  log(findOne('国服竞技场配置防御队'))
+  log(findOne('国服传送英雄'))
   -- path.竞技场玩家()
   exit()
 end

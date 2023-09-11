@@ -1321,11 +1321,11 @@ path.清理英雄背包 = function (count, filterFunc)
 	for i=1,count do
 		wait(function ()
 			stap({548,34})
-			if findOne('国服传送英雄') then return 1 end
+			return findOne('国服传送英雄') and findOne('109|656|24A5FD,113|650|50D7FE') -- 左下角硬币
 		end)
 		
 		if wait(function ()
-			if longDisappearMomentTap("1052|242|7E411F", nil, nil, 2) then
+			if longDisappearMomentTap('1052|242|7E411F', nil, nil, 2) then
 				-- 未填满处理
 				wait(function ()
 					if findTap('国服传送英雄') then
@@ -1593,6 +1593,8 @@ path.升狗粮_3 = function (upgradeCount)
 				if findOne('企鹅自动补满') and not findTapOnce('老练企鹅') then
 					stap({997,664}) -- 自动补满按钮
 				end
+				-- 经验溢出
+				stap({531,23})
 				stap(t)
 			end) == 0 then
 				return
