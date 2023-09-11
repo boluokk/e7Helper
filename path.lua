@@ -14,7 +14,8 @@ path.游戏首页 = function ()
 	setControlBarPosNew(0, 1)
 	local clickTarget = {'国服签到右下蓝底', '国服签到右下蓝底2', '国服公告X',
 											 '国服登录第七史诗', '国服放弃战斗', '国服结束',
-											 '国服神秘商店取消', '国际服比赛', '新英雄获取确认'}
+											 '国服神秘商店取消', '国际服比赛', '新英雄获取确认',
+											 '所有取消'}
 	if wait(function ()
 		-- 服务器维护中
 		if findOne('国服服务器维护中') then return 'exit' end
@@ -22,7 +23,7 @@ path.游戏首页 = function ()
 			isBack = true
 			return 1
 		end
-		if not findTapOnce(clickTarget, {keyword = {'结束'}}) then
+		if not findTapOnce(clickTarget, {keyword = {'结束', '取消'}}) then
 			if not isBack then
 				stap(point.回退)
 			else
@@ -293,8 +294,8 @@ end
 path.竞技场玩家 = function ()
 	wait(function ()
 		stap(point.竞技场)
-				ssleep(1)
-			if not findOne('国服主页Rank') then return 1 end
+		ssleep(1)
+		if not findOne('国服主页Rank') then return 1 end
 	end)
 	untilTap('国服竞技场')
 	local r1, r2
@@ -320,11 +321,7 @@ path.竞技场玩家 = function ()
 		untilTap({'国服竞技场领取每周奖励', 'cmp_国际服竞技场领取每周奖励'})
 	end
 	log('进入竞技场')
-	-- 竞技策略
-	-- 个人积分
-	local privatePoints = untilAppear('国服竞技场个人积分', {keyword = {'积分', '积', '分'}})
-	privatePoints = getArenaPoints(privatePoints[1].text)
-	-- log(privatePoints)
+	-- 竞技策略-积分对比(好似没啥用, 去除)
 	-- 交战对手切换
 	wait(function ()
 		stap({1108,116})
@@ -343,25 +340,16 @@ path.竞技场玩家 = function ()
 	wait(function ()
 		wait(function ()
 			findTap('国服竞技场挑战升级')
-			stap({323,27})
-			if findOne('国服竞技场旗帜位置') then return 1 end
-		end)
-		-- 敌人积分
-		local enemyPointsInfo = untilAppear('国服竞技场敌人积分')
-		-- 过滤非敌人积分; 敌人积分转换成数字
-		enemyPointsInfo = table.filter(enemyPointsInfo, function (v)
-			if v.text:find('积分') or v.text:find('积') or v.text:find('分') then
-				local tmp, isChallenge = untilAppear({'国服竞技场已挑战过对手', '国服竞技场挑战',
-				'国服竞技场再次挑战'}, {rg = {886, v.t - 50, 990, v.b + 50}})
-				if isChallenge == '国服竞技场挑战' then v.text = getArenaPoints(v.text) return 1 end
+			stap({{323,27}})
+			if findOne('国服竞技场配置防御队') then
+				longAppearAndTap('国服竞技场配置防御队', nil, {323,27}, 2) -- 2s
+				return 1
 			end
 		end)
-		-- log(enemyPointsInfo)
-		-- 最终需要的: 小于个人积分就行
-		local finalPointsInfo = table.filter(enemyPointsInfo, function (v) return v.text < privatePoints end)
-		-- 没有小于自己的
-		-- 要么手动花费金币刷新，要么等待刷新8分钟
-		if #finalPointsInfo == 0 then
+		local enemy = wait(function ()
+			return findOne('国服竞技场挑战', {rg = {871,149,992,696}})
+		end, .1, 1)
+		if not enemy then
 			if buyChangeCount then
 				local result = untilAppear('国服刷新挑战', {keyword = {'免费', '剩余时间', '时间', '剩余'}})[1]
 				untilTap('国服刷新挑战')
@@ -385,8 +373,7 @@ path.竞技场玩家 = function ()
 				return 1
 			end
 		end
-		finalPointsInfo = finalPointsInfo[1]
-		untilTap('国服竞技场挑战', {rg = {886, finalPointsInfo.t - 80, 990, finalPointsInfo.b + 80}})
+		untilTap('国服竞技场挑战', {rg = {871,149,992,696}})
 		untilTap('国服竞技场战斗开始')
 		if path.竞技场购票() == 1 then
 			return 1
@@ -437,8 +424,11 @@ path.竞技场NPC = function ()
 	while 'qq群206490280' do
 		wait(function ()
 			findTap('国服竞技场挑战升级')
-			stap({323,27})
-			if findOne('国服竞技场旗帜位置') then ssleep(1) return 1 end
+			stap({{323,27}})
+			if findOne('国服竞技场配置防御队') then
+				longAppearAndTap('国服竞技场配置防御队', nil, {323,27}, 2)
+				return 1
+			end
 		end)
 		pos = findOne('国服NPC挑战', {rg = {855,141,996,721}})
 		if not pos and isSwipe == 2 then break end
@@ -845,10 +835,6 @@ path.友情商店 = function ()
 			longAppearAndTap('国服一般商店', nil, {447,47}, 1.5)
 		end
 	end
-end
-
-path.净化深渊 = function ()
-	
 end
 
 path.战斗选择页 = function ()
@@ -1563,8 +1549,13 @@ path.升狗粮_3 = function (upgradeCount)
 	end)
 
 	-- 还有个资源不足
-	local target = {'国服英雄升级企鹅不足', '国服神秘商店购买资源不足', '国服英雄升级银花不足', 
-								  '国服英雄升级2', '国服英雄升级3', '国服英雄左上3星'}
+	local target = {'国服英雄升级企鹅不足', 
+									'国服神秘商店购买资源不足', 
+									'国服英雄升级银花不足', 
+								  '国服英雄升级2', 
+									'国服英雄升级3', 
+									'国服英雄左上3星',
+									'企鹅升级成功'}
 	local tkey = {'资源不足', '不足'}
 	local curIdx = sgetNumberConfig('upgrade_3x_hero', 0)
 	for i=1,upgradeCount do
@@ -1595,7 +1586,13 @@ path.升狗粮_3 = function (upgradeCount)
 						slog('资源不足')
 						return 0
 				end
-				stap({997,664})
+				if v == '企鹅升级成功' then
+					stap({992,664})
+				end
+				-- 老练企鹅 > 自动补满
+				if findOne('企鹅自动补满') and not findTapOnce('老练企鹅') then
+					stap({997,664}) -- 自动补满按钮
+				end
 				stap(t)
 			end) == 0 then
 				return

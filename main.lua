@@ -5,8 +5,8 @@ update_source_fallback = update_source
 -- apk level 限制
 is_apk_old = function() return getApkVerInt() < 0 end
 apk_old_warning = "怎么还有人用" .. getApkVerInt()
-release_date = "09.10 20:35"
-release_content = '已知问题修复'
+release_date = "09.11 14:53"
+release_content = 'JJC逻辑修改, 升3星狗粮优先使用老练企鹅'
 -- 获取workPath
 root_path = getWorkPath() .. '/'
 -- 禁止热更新
