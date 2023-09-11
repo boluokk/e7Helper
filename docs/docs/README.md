@@ -3,7 +3,7 @@ home: true
 heroImage: /logo.jpg
 heroText: E7Helper
 tagline: 一款第七史诗自动化工具
-actionText: 开始使用　👉
+actionText: 开搞　🫵
 actionLink: /zh/guide/
 features:
 - title: 开源免费
