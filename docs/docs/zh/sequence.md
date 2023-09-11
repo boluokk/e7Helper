@@ -11,7 +11,9 @@
 
 #### 软件运行时界面
 
-<video src="https://gitee.com/boluokk/e7-helper/raw/master/docs/docs/zh/sequence.assets/refreshtag.mp4"></video>
+<video id="video"  preload="none" >
+      <source id="mp4" src="https://gitee.com/boluokk/e7-helper/raw/master/docs/docs/zh/sequence.assets/refreshtag.mp4">
+</video>
 
 程序执行流程
 
