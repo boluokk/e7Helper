@@ -1561,8 +1561,6 @@ setEventCallBack = function ()
 			sStopApp(current_server)
 			reScript()
 		else
-			log('exit')
-			slog('exit')
 			initLocalState()
 			console.show()
 		end

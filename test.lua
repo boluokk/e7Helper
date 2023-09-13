@@ -4,9 +4,13 @@ test = function ()
   current_task = uiConfigUnion(fileNames)
   -- log(findOne('友情书签'))
   -- openHUD('刷新次数: 1/1000\n神秘: 5*50 (0.17777%) \n誓约: 5*5 (0.66%)\n友情: 15*5 (66%)', '刷标签')
-  -- ssleep(1000)
-  log(findOne('国服传送英雄'))
-  -- path.竞技场玩家()
+  -- wait(function ()
+  --   sswipe({932,138}, {932,600})
+  --   ssleep(1)
+  --   return findOne(startCheck)
+  -- end)
+  log(findOne('友情书签', {rg = {531,48,649,155}}))
+
   exit()
 end
 if not disable_test then test() end

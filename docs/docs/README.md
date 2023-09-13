@@ -7,7 +7,7 @@ actionText: 开搞　🫵
 actionLink: /zh/guide/
 features:
 - title: 开源免费
-  details: 开源免费, 持续更新。
+  details: 开源免费, 持续更新; 可商用,但是必须标明作者。
 - title: 极小容量+低功耗
   details: 全代码文件41KB大小, 极致缩小文件大小, lua语言编写, 根据游戏特性间隔性处理。
 - title: 热更新

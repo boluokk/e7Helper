@@ -5,8 +5,8 @@ update_source_fallback = update_source
 -- apk level 限制
 is_apk_old = function() return getApkVerInt() < 0 end
 apk_old_warning = "怎么还有人用" .. getApkVerInt()
-release_date = "09.11 23:43"
-release_content = 'JJC逻辑修改, 升3星狗粮优先使用老练企鹅'
+release_date = "09.13 15:26"
+release_content = '刷标签乱购买物品修复'
 -- 获取workPath
 root_path = getWorkPath() .. '/'
 -- 禁止热更新
@@ -92,8 +92,8 @@ local scriptStatus = sgetNumberConfig("scriptStatus", 0)
 if scriptStatus == 0 then
   consoleInit()
   initLocalState()
-  slog(release_date)
-  slog('新版本信息: '..release_content or '暂无')
+  slog('最近更新时间: '..release_date)
+  slog('最近更新内容: '..release_content or '暂无')
   if not hotupdate_disabled then hotUpdate() end
   sui.show()
 else

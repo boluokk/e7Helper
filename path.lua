@@ -14,7 +14,7 @@ path.游戏首页 = function ()
 	setControlBarPosNew(0, 1)
 	local clickTarget = {'国服签到右下蓝底', '国服签到右下蓝底2', '国服公告X',
 											 '国服登录第七史诗', '国服放弃战斗', '国服结束',
-											 '国服神秘商店取消', '国际服比赛', '新英雄获取确认',
+											 '神秘商店取消', '国际服比赛', '新英雄获取确认',
 											 '所有取消'}
 	if wait(function ()
 		-- 服务器维护中
@@ -158,7 +158,7 @@ path.刷书签 = function (rest)
 	log('进入神秘商店')
 	untilAppear('国服神秘商店立即更新')
 	-- 第一个商品被购买(bug)
-	untilAppear(startCheck) ssleep(.5)
+	untilAppear(startCheck)
 	-- 开始挂机刷新书签了
 	-- 国服神秘商店友情书签
 	-- 国服神秘商店誓约书签
@@ -166,57 +166,69 @@ path.刷书签 = function (rest)
 	local g1 = sgetNumberConfig("g1", 0)
 	local g2 = sgetNumberConfig("g2", 0)
 	local g3 = sgetNumberConfig("g3", 0)
-	-- [国服神秘商店神秘奖牌 国服神秘商店誓约书签]  会导致乱买东西?
-	if current_task['神秘奖牌'] then table.insert(target, '神秘') end
-	if current_task['誓约书签'] then table.insert(target, '书签') end
-	if current_task['友情书签'] then table.insert(target, '友情书签') end
-	-- 红装暂停
+		-- 红装暂停
 	if current_task['红装暂停-55级'] then table.insert(target, '55红装') end
 	if current_task['红装暂停-70级'] then table.insert(target, '70红装') end
 	if current_task['红装暂停-85级'] then table.insert(target, '85红装') end
+	-- [国服神秘商店神秘奖牌 国服神秘商店誓约书签]  会导致乱买东西?
+	-- 模拟器太卡, 尽力处理
+	if current_task['神秘奖牌'] then table.insert(target, '神秘') end
+	if current_task['誓约书签'] then table.insert(target, '书签') end
+	if current_task['友情书签'] then table.insert(target, '友情书签') end
 
 	local refreshCount = current_task['更新次数'] or 334
 	local enoughResources = true
 	local msg
 	local newRg
-	local pos, countTarget
+	local pos, countTarget, curFindCount -- 当前识别次数, 最高 4
 	msg = '刷新次数: 0/'..refreshCount..'\n神秘: 0*50(0%)\n誓约: 0*5(0%)\n友情: 0*5(0%)'
 	openHUD(msg, '刷标签')
 	for i=1,refreshCount do
+		curFindCount = 1
 		if i > rest then
-			for i=1,4 do
-				-- 可能会出现乱买, 相似度不够高?
-				-- 第一排神秘会漏掉? todo
+			while curFindCount <= 4 do
 			 	pos, countTarget= findOne(target, {rg = {540,70,669,718}})
-				if pos then
+				if pos then         
 					if countTarget:find('红装') then
 						-- do something
 						-- 邮件通知?
+						-- qq通知?
 						slog('发现 -> '..countTarget)
 						enoughResources = false
 						break 
 					end
 					newRg = {1147, pos[2] - 80, 1226, pos[2] + 80}
-					-- point.ocr_标签类型 = {660, pos[2] - 60, 800, pos[2] + 80}
-					-- if not wait(function ()
-					-- 	if findOne('标签类型',{keyword = {'召唤', '神秘', '书签', 
-					-- 																	 '誓约', '友情', '奖牌'}}) then
-					-- 		return 1
-					-- 	end
-					-- end, .3, 2) then 
-					-- 	log('标签类型不正确')
-					-- else
 					untilTap('国服神秘商店购买', {rg = newRg})
-					untilTap('国服神秘商店购买1')
-					-- 等待购买特效消失
-					wait(function ()
-						if not longAppearMomentDisAppear({'国服神秘商店立即更新', '国服神秘商店购买资源不足', '国服一般商店'}, nil, nil, 1.5) then return 1 end
-					end)
-					-- end
+					-- 再检查一次, 真的是书签?
+					-- 返回当上面重新识别
+					untilAppear('国服神秘商店购买1')
+					if wait(function ()
+						return findOne(countTarget)
+					end, .3, 5) then
+						-- 确定是书签
+						untilTap('国服神秘商店购买1')
+					else
+						-- 否则重置刷新次数, 取消
+						log('非书签, 准备取消重试..')
+						curFindCount = 0
+						untilTap('神秘商店取消')
+					end
+					-- 等待购买特效消失, 会导致乱买东西
+					longDisappearTap(countTarget, {rg = {531,48,649,155}}, nil, 1, 5)
+					if curFindCount == 0 then
+						curFindCount = 1
+						wait(function ()
+							sswipe({932,138}, {932,600})
+							ssleep(1)
+							return findOne(startCheck)
+						end)
+					end
 				end
 				-- 资源是否耗尽
 				wait(function ()
-					local r1, r2 = findOne({'国服神秘商店购买资源不足', '国服神秘商店立即更新', '国服一般商店'}, {sim = 1})
+					local r1, r2 = findOne({'国服神秘商店购买资源不足', 
+																	'国服神秘商店立即更新', 
+																	'国服一般商店'}, {sim = 1})
 					if r2 == '国服神秘商店立即更新' then
 						-- 统计获得物品次数
 						if countTarget then
@@ -244,21 +256,20 @@ path.刷书签 = function (rest)
 					end
 				end)
 				-- 写死判定，可能会connection导致滑动失效
-				if i == 2 and enoughResources then
+				if curFindCount == 2 and enoughResources then
 					wait(function ()
-						if findOne({'国服神秘商店第二个商品',
-												'国服神秘商店第三个商品',
-												'国服神秘商店第四个商品'}, {sim = .99}) then
-							return 1
-						end
 						sswipe({858,578}, {858,150})
+						return findOne({'神秘商店最后一个商品', 
+														'神秘商店最后二个商品', 
+														'神秘商店最后三个商品'})
 					end)
 				end
+				curFindCount = curFindCount + 1
 			end
 			msg = '刷新次数: '..i..'/'..refreshCount..
-						'\n神秘: '..g1..'*50('..g1/i..'%)'..
-						'\n誓约: '..g2..'*5('..g2/i..'%)'..
-						'\n友情: '..g3..'*5('..g3/i..'%)'
+						'\n神秘: '..g1..'*50('..(g1/i*100)..'%)'..
+						'\n誓约: '..g2..'*5('..(g2/i*100)..'%)'..
+						'\n友情: '..g3..'*5('..(g3/i*100)..'%)'
 
 			openHUD(msg, '刷标签')
 			if not enoughResources then path.游戏首页() break end
@@ -339,10 +350,13 @@ path.竞技场玩家 = function ()
 	local buyChangeCount = true
 	wait(function ()
 		wait(function ()
-			findTap('国服竞技场挑战升级')
+			-- 解决弹出 亲密度问题
+			findTap({'国服竞技场挑战升级', 
+							 '国服战斗完成竞技场确定', 
+							 '国服战斗完成确定'}, {tapInterval = 1})
 			stap({{323,27}})
 			if findOne('国服竞技场配置防御队') then
-				longAppearAndTap('国服竞技场配置防御队', nil, {323,27}, 2) -- 2s
+				longAppearAndTap('国服竞技场配置防御队', nil, {323,27}, 1) 
 				return 1
 			end
 		end)
@@ -365,7 +379,7 @@ path.竞技场玩家 = function ()
 				refreshCount  = refreshCount - 1
 				-- 金币是否耗尽
 				local tmp, v = untilAppear({'国服神秘商店购买资源不足', '国服竞技场配置防御队'})
-				if v == '国服神秘商店购买资源不足' then log('资源不足') untilTap('国服神秘商店取消') return 1 end
+				if v == '国服神秘商店购买资源不足' then log('资源不足') untilTap('神秘商店取消') return 1 end
 				-- 更新完对手, 开始新的一轮
 				return
 			else
@@ -423,10 +437,13 @@ path.竞技场NPC = function ()
 	local isSwipe = 1
 	while 'qq群206490280' do
 		wait(function ()
-			findTap('国服竞技场挑战升级')
+			-- 解决弹出 亲密度问题
+			findTap({'国服竞技场挑战升级', 
+							 '国服战斗完成竞技场确定', 
+							 '国服战斗完成确定'}, {tapInterval = 1})
 			stap({{323,27}})
 			if findOne('国服竞技场配置防御队') then
-				longAppearAndTap('国服竞技场配置防御队', nil, {323,27}, 2)
+				longAppearAndTap('国服竞技场配置防御队', nil, {323,27}, 1) -- 2s
 				return 1
 			end
 		end)
@@ -533,6 +550,7 @@ path.战斗代理 = function (isRepeat, isAgent, currentCount, isActivity)
 			log('代理中.')
 			-- NPC对话点击 
 			stap({615,23})
+			-- 会弹出亲密度
 			if findTap({'国服战斗完成竞技场确定', 
 									'国服战斗完成确定'}, {tapInterval = 1}) then 
 				return 1
