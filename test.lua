@@ -9,7 +9,7 @@ test = function ()
   --   ssleep(1)
   --   return findOne(startCheck)
   -- end)
-  log(findOne('友情书签', {rg = {531,48,649,155}}))
+   log(findOne('国服背包主页'))
 
   exit()
 end
