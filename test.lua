@@ -8,9 +8,8 @@ test = function ()
   --   sswipe({932,138}, {932,600})
   --   ssleep(1)
   --   return findOne(startCheck)
-  -- end)
-   log(findOne('国服背包主页'))
-
+  -- -- end)
+  log(findOne({'未记载的故事','管理队伍', '级别光圈'}))
   exit()
 end
 if not disable_test then test() end

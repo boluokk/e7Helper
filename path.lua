@@ -932,7 +932,7 @@ path.战斗滑图 = function (levelTarget)
 				newTextValReCount = 0
 			end
 		end
-		p = findOne('国服级别光圈')
+		p = findOne('级别光圈')
 		if p then p = {p[1], p[2] + 50} stap(p) ssleep(1) end
 	end, 0, 5 * 60)
 
@@ -1050,8 +1050,8 @@ path.通用刷图模式1 = function (fightCount, isActivity, levelTarget)
 						end)
 						if levelTarget == '后记' then
 							-- 第一次不会到未记载的故事
-							local rvb, res = untilAppear({'国服未记载的故事', '国服左上准备战斗'})
-							if res == '国服未记载的故事' then
+							local rvb, res = untilAppear({'未记载的故事', '管理队伍'})
+							if res == '未记载的故事' then
 								wait(function ()
 									findTapOnce('后记准备战斗')
 									return wait(function ()
@@ -1060,8 +1060,8 @@ path.通用刷图模式1 = function (fightCount, isActivity, levelTarget)
 								end)
 							end
 						else
-							local rvb, res = untilAppear({'国服级别光圈', '国服左上准备战斗'})
-							if res == '国服级别光圈' then
+							local rvb, res = untilAppear({'级别光圈', '管理队伍'})
+							if res == '级别光圈' then
 								path.战斗滑图(levelTarget)
 							end
 						end
@@ -1425,9 +1425,7 @@ path.清理神器背包 = function ()
 		return
 	end
 	wait(function ()
-		if findTap('国服出售确认') then
-			return 1
-		end
+		return findTap('国服出售确认')
 	end, .5, 5)
 end
 -- 过滤等级或者类型
