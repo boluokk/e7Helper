@@ -186,7 +186,7 @@ path.刷书签 = function (rest)
 	for i=1,refreshCount do
 		curFindCount = 1
 		if i > rest then
-			while curFindCount <= 4 do
+			while curFindCount <= 6 do
 			 	pos, countTarget= findOne(target, {rg = {540,70,669,718}})
 				if pos then         
 					if countTarget:find('红装') then
@@ -256,7 +256,7 @@ path.刷书签 = function (rest)
 					end
 				end)
 				-- 写死判定，可能会connection导致滑动失效
-				if curFindCount == 2 and enoughResources then
+				if curFindCount == 3 and enoughResources then
 					wait(function ()
 						sswipe({858,578}, {858,150})
 						return findOne({'神秘商店最后一个商品', 
