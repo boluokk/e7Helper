@@ -27,6 +27,8 @@ md5 = hashlib.md5()
 
 # 会自动将文件复制到你的懒人精灵下(自动创建项目)
 def copy():
+    if input("确定复制吗") != 'y':
+        return
     mkDir(fileMapping, projectPath)
     print('复制成功!')
     print('即将打开项目文件夹..')
@@ -53,12 +55,19 @@ def copyFile(mapperStr, dest):
         if v.rfind(mapperStr) != -1:
             files.append(v)
     for v in files:
+        print(v)
         content = ''
-        # 一般文本文件都是UTF-8, 但是懒人IDE比较特殊只能GB18030
-        with open(os.path.join(os.getcwd(), v), mode="r", encoding="UTF-8") as f:
-            content = f.read()
-        with open(os.path.join(dest, v), mode="w", encoding="GB18030") as f:
-            f.write(content)
+        if v.rfind('.rc') != -1:
+            with open(os.path.join(os.getcwd(), v), mode='rb') as f:
+                content = f.read()
+            with open(os.path.join(dest, re.search(r"([^\\]+)\.[^.]+$", v).group()), mode='wb') as f:
+                f.write(content)
+        else:
+            # 一般文本文件都是UTF-8, 但是懒人IDE比较特殊只能GB18030
+            with open(os.path.join(os.getcwd(), v), mode="r", encoding="UTF-8") as f:
+                content = f.read()
+            with open(os.path.join(dest, v), mode="w", encoding="GB18030") as f:
+                f.write(content)
 
 
 # 保存文件
