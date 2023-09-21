@@ -36,7 +36,4 @@
 ```
 
 ### 捐助
-<div style="display: flex;height: 250px">
-    <img src="wechat.png">
-    <img src="alipay.jpg">
-</div>
+![](qr.png)
