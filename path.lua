@@ -214,9 +214,8 @@ path.刷书签 = function (rest)
 						untilTap('神秘商店取消')
 					end
 					-- 等待购买特效消失, 会导致乱买东西
-					longDisappearTap(countTarget, {rg = {531,48,649,155}}, nil, 1, 5)
+					longDisappearTap(countTarget, {rg = {531,48,649,155}}, nil, 1.5, 5)
 					if curFindCount == 0 then
-						curFindCount = 1
 						wait(function ()
 							sswipe({932,138}, {932,600})
 							ssleep(1)
@@ -231,7 +230,7 @@ path.刷书签 = function (rest)
 																	'国服一般商店'}, {sim = 1})
 					if r2 == '国服神秘商店立即更新' then
 						-- 统计获得物品次数
-						if countTarget then
+						if countTarget and curFindCount ~= 0 then
 							if countTarget == '神秘' then
 								g1 = g1 + 1
 								setNumberConfig("g1", g1)
