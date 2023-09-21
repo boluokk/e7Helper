@@ -354,7 +354,7 @@ path.竞技场玩家 = function ()
 			findTap({'国服竞技场挑战升级', 
 							 '国服战斗完成竞技场确定', 
 							 '国服战斗完成确定'}, {tapInterval = 1})
-			stap({{323,27}})
+			stap({323,27})
 			if findOne('国服竞技场配置防御队') then
 				longAppearAndTap('国服竞技场配置防御队', nil, {323,27}, 1) 
 				return 1
@@ -441,7 +441,7 @@ path.竞技场NPC = function ()
 			findTap({'国服竞技场挑战升级', 
 							 '国服战斗完成竞技场确定', 
 							 '国服战斗完成确定'}, {tapInterval = 1})
-			stap({{323,27}})
+			stap({323,27})
 			if findOne('国服竞技场配置防御队') then
 				longAppearAndTap('国服竞技场配置防御队', nil, {323,27}, 1) -- 2s
 				return 1
@@ -823,10 +823,6 @@ path.圣域首页 = function ()
 end
 
 path.友情商店 = function ()
-	if not findOne("31|622|0B55DB") then
-		log('无需购买')
-		return 1
-	end
 	log('购买体力&旗帜')
 	wait(function ()
 		stap(point.商店)
@@ -1693,9 +1689,7 @@ path.后记 = function ()
 	-- longAppearAndTap('国服长选择队伍', nil, nil, 2)
 	wait(function ()
 		findTapOnce('国服长选择队伍')
-		return wait(function ()
-			if not findOne('国服长选择队伍') then return 1 end
-		end, .5, 5)
+		return longDisappearTap('国服长选择队伍', nil, nil, 1.5, 2)
 	end)
 
 	local fightCount = current_task.后记次数
@@ -1730,10 +1724,8 @@ path.活动 = function ()
 			end, .5, 5)
 		end)
 		wait(function ()
-				findTapOnce('国服长选择队伍')
-				return wait(function ()
-				if not findOne('国服长选择队伍') then return 1 end
-			end, 1, 4)
+			findTapOnce('国服长选择队伍')
+			return longDisappearTap('国服长选择队伍', nil, nil, 1.5, 2)
 		end)
 		return path.通用刷图模式1(fc, nil, '后记')
 	elseif w == '活动首页' then

@@ -265,7 +265,7 @@ longDisappearTap = function (target, config, pos, timeout, waitTimeOut)
 	local timeout = timeout or 1.5
 	timeout = timeout * 1000
 	local r
-	wait(function ()
+	return wait(function ()
 		if pos then stap(pos, 0) end
 		r = findOne(target, config)
 		if not r and time() - t > timeout then return true end
