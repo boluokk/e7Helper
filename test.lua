@@ -9,7 +9,7 @@ test = function ()
   --   ssleep(1)
   --   return findOne(startCheck)
   -- -- end)
-  log(findOne({'未记载的故事','管理队伍', '级别光圈'}))
+  log(findOne({'国服圣域企鹅巢穴'}))
   exit()
 end
 if not disable_test then test() end

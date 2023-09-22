@@ -82,7 +82,7 @@ end
 path.社团捐赠 = function ()
 	wait(function ()
 		stap({1090,414})
-		if findOne("500|130|FFFFFF,513|121|FFFFFF,520|132|FFFFFF,544|128|FFFFFF,538|137|FFFFFF") then
+		if findOne("319|331|28B6FF,314|344|2DC3F4") then
 			return 1
 		end
 	end)
@@ -248,8 +248,7 @@ path.刷书签 = function (rest)
 						-- 提示有东西没有买完
 						enoughResources = false
 						if countTarget then
-							local curTagName = countTarget:split('商店')[2]
-							slog('金币不足导致, 有物品没有购买成功: '..curTagName)
+							slog('金币不足导致, 有物品没有购买成功: '..countTarget)
 						end
 						return 1 
 					end
@@ -762,7 +761,10 @@ end
 
 path.圣域精灵之森领取 = function ()
 	log('精灵之森处理')
-	local target = {'国服圣域企鹅蛋', '国服圣域精灵之泉', '国服圣域种植地', '国服圣域种植地收获'}
+	local target = {'国服圣域企鹅蛋', 
+									'国服圣域精灵之泉', 
+									'国服圣域种植地', 
+									'国服圣域种植地收获'}
 	if findTap('国服圣域精灵之森小红点') then
 		-- untilAppear('建筑升级状态')
 		wait(function ()
