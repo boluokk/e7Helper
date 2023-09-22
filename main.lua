@@ -5,7 +5,7 @@ update_source_fallback = update_source
 -- apk level 限制
 is_apk_old = function() return getApkVerInt() < 0 end
 apk_old_warning = "怎么还有人用" .. getApkVerInt()
-release_date = "09.22 14:15"
+release_date = "09.22 14:16"
 release_content = '已知问题修复'
 -- 获取workPath
 root_path = getWorkPath() .. '/'
@@ -14,7 +14,7 @@ hotupdate_disabled = true
 -- log 日志显示在左下角
 -- true stoat 打印
 -- false print 打印
-logger_display_left_bottom = false
+logger_display_left_bottom = true
 -- 打印当前执行到哪里了(会输出某个图色名)
 detail_log_message = not logger_display_left_bottom
 -- 禁用测试
