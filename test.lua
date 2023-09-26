@@ -10,6 +10,8 @@ test = function ()
   --   return findOne(startCheck)
   -- -- end)
   log(findOne({'国服圣域企鹅巢穴'}))
+  local intervalTime = (1 * 60 * 1000) + time()
+  wait(function () log("挂机倒计时: "..getTime(intervalTime)) end, 1, 1 * 60)
   exit()
 end
 if not disable_test then test() end

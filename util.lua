@@ -434,78 +434,78 @@ getScreen = function()
 	return {width = width, height = height}
 end
 screen = getScreen()
-gesture = function(fingers)
-	if #fingers == 0 then fingers = {fingers} end
-	local gesture = Gesture:new() -- 创建一个手势滑动对象
-	for _, finger in pairs(fingers) do
-		local path = Path:new()
-		for _, point in pairs(finger.point) do path:addPoint(point[1], point[2]) end
-		path:setDurTime(finger.duration or 1000)
-		path:setStartTime(finger.start or 100)
-		gesture:addPath(path)
-	end
-	gesture:dispatch()
-end
-Path = {}
-function Path:new(o)
-	o = o or {startTime = 0, durTime = 0, point = {}}
-	setmetatable(o, self)
-	self.__index = self
-	return o
-end
-function Path:setStartTime(t) self.startTime = t end
-function Path:setDurTime(t) self.durTime = t end
-function Path:addPoint(x, y)
-	table.insert(self.point, x)
-	table.insert(self.point, y)
-end
-Gesture = {}
-function Gesture:new(o)
-	o = o or {path = {}}
-	setmetatable(o, self)
-	self.__index = self
-	return o
-end
-function Gesture:addPath(path) table.insert(self.path, path) end
+-- gesture = function(fingers)
+-- 	if #fingers == 0 then fingers = {fingers} end
+-- 	local gesture = Gesture:new() -- 创建一个手势滑动对象
+-- 	for _, finger in pairs(fingers) do
+-- 		local path = Path:new()
+-- 		for _, point in pairs(finger.point) do path:addPoint(point[1], point[2]) end
+-- 		path:setDurTime(finger.duration or 1000)
+-- 		path:setStartTime(finger.start or 100)
+-- 		gesture:addPath(path)
+-- 	end
+-- 	gesture:dispatch()
+-- end
+-- Path = {}
+-- function Path:new(o)
+-- 	o = o or {startTime = 0, durTime = 0, point = {}}
+-- 	setmetatable(o, self)
+-- 	self.__index = self
+-- 	return o
+-- end
+-- function Path:setStartTime(t) self.startTime = t end
+-- function Path:setDurTime(t) self.durTime = t end
+-- function Path:addPoint(x, y)
+-- 	table.insert(self.point, x)
+-- 	table.insert(self.point, y)
+-- end
+-- Gesture = {}
+-- function Gesture:new(o)
+-- 	o = o or {path = {}}
+-- 	setmetatable(o, self)
+-- 	self.__index = self
+-- 	return o
+-- end
+-- function Gesture:addPath(path) table.insert(self.path, path) end
 
-gestureDispatchOnePath = function(path, id)
-	local point = path.point
-	if #point < 2 then return end
-	local start_time = time()
-	local timeline = {}
-	local length = 0
-	local x, y, px, py
-	px = point[1]
-	py = point[2]
-	sleep(path.startTime)
-	for i = 2, #point / 2 do
-		x = point[i * 2]
-		y = point[i * 2 + 1]
-		length = length + math.sqrt((x - px) ^ 2 + (y - py) ^ 2)
-		table.insert(timeline, length)
-		px, py = x, y
-	end
-	touchDown(id, point[1], point[2])
-	for i = 1,#point do
-		x = point[i]
-		y = point[i+1]
-		-- print("x = "..x)
-		-- print("y = "..y)
-		timeline[i] = timeline[i] / length * path.durTime
-		touchMoveEx(id, x, y, timeline[i])
-		if time() - start_time > path.durTime then break end
-	end
-	sleep(max(0, time() - start_time - path.durTime))
-	ssleep(1)
-	touchUp(id)
-end
+-- gestureDispatchOnePath = function(path, id)
+-- 	local point = path.point
+-- 	if #point < 2 then return end
+-- 	local start_time = time()
+-- 	local timeline = {}
+-- 	local length = 0
+-- 	local x, y, px, py
+-- 	px = point[1]
+-- 	py = point[2]
+-- 	sleep(path.startTime)
+-- 	for i = 2, #point / 2 do
+-- 		x = point[i * 2]
+-- 		y = point[i * 2 + 1]
+-- 		length = length + math.sqrt((x - px) ^ 2 + (y - py) ^ 2)
+-- 		table.insert(timeline, length)
+-- 		px, py = x, y
+-- 	end
+-- 	touchDown(id, point[1], point[2])
+-- 	for i = 1,#point do
+-- 		x = point[i]
+-- 		y = point[i+1]
+-- 		-- print("x = "..x)
+-- 		-- print("y = "..y)
+-- 		timeline[i] = timeline[i] / length * path.durTime
+-- 		touchMoveEx(id, x, y, timeline[i])
+-- 		if time() - start_time > path.durTime then break end
+-- 	end
+-- 	sleep(max(0, time() - start_time - path.durTime))
+-- 	ssleep(1)
+-- 	touchUp(id)
+-- end
 
-function Gesture:dispatch()
-	for id, path in pairs(self.path) do
-		-- log(71, id, path)
-		beginThread(gestureDispatchOnePath, path, id)
-	end
-end
+-- function Gesture:dispatch()
+-- 	for id, path in pairs(self.path) do
+-- 		-- log(71, id, path)
+-- 		beginThread(gestureDispatchOnePath, path, id)
+-- 	end
+-- end
 
 read = function (path, needDecode)
 	local resource = readFile(root_path..path)
@@ -922,28 +922,10 @@ table.randomWithTableIn = function (arr, many)
 	return t
 end
 
-filterImgSuffix = function (t)
-	local c = {}
-	if type(t) ~= "table" then return t end
-	if t[1] then
-		for i=1,#t do table.insert(c, splitStr(t[i],"img_")[2]) end
-	else
-		for _,v in pairs(t) do c[splitStr(_,"img_")[2]] = v end
-	end
-	return c
-end
-
--- 获取倒数时间
-getTimeBase = function (secound)
-	return secound + math.floor(time() / 1000)
-end
-
 -- 获取相差时间(结束时间， 开始时间)
-getTime = function (startTime, isMinus)
+getTime = function (startTime)
 	local sec = tonumber(startTime) or 0
-	if isMinus then
-		sec = startTime - math.floor(time() / 1000)
-	end
+	sec = math.floor((startTime - time()) / 1000)
 	local day = math.floor(sec / 60 / 60 / 24)
 	local hour = math.floor(sec / 60 / 60 % 24)
 	local min = math.floor(sec / 60 % 60)

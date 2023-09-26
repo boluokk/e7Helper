@@ -43,18 +43,27 @@ path.任务队列 = function ()
 		'社团捐赠'})
 	end)
 	local curTaskIndex = sgetNumberConfig("current_task_index", 0)
-	for i,v in pairs(allTask) do
-		if i > curTaskIndex and current_task[v] then
-			-- 0 表示异常
-			-- 1 或者 nil 表示 ok
-			-- 2 表示重做
-			if path[v]() == 2 then path.游戏首页() path[v]() end
-			slog(v)
-			setNumberConfig("exception_count", 1)
-			path.游戏首页()
+	local intervalTime = current_task['运行间隔时间']
+	repeat
+		for i,v in pairs(allTask) do
+			if i > curTaskIndex and current_task[v] then
+				-- 0 表示异常
+				-- 1 或者 nil 表示 ok
+				-- 2 表示重做
+				if path[v]() == 2 then path.游戏首页() path[v]() end
+				slog(v)
+				setNumberConfig("exception_count", 1)
+				path.游戏首页()
+			end
+			setNumberConfig('current_task_index', i)
 		end
-		setNumberConfig('current_task_index', i)
-	end
+		-- 开始休息
+		if intervalTime ~= 0 then
+			local intervalSecTime = (intervalTime * 60 * 1000) + time()
+			wait(function () log("挂机时间: "..getTime(intervalSecTime)..' (你的star是作者的最大帮助)') end, 1, intervalTime * 60)
+		end
+		setNumberConfig('current_task_index', 0)
+	until intervalTime == 0
 end
 
 path.社团开启 = function ()

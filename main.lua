@@ -5,8 +5,8 @@ update_source_fallback = update_source
 -- apk level 限制
 is_apk_old = function() return getApkVerInt() < 0 end
 apk_old_warning = "怎么还有人用" .. getApkVerInt()
-release_date = "09.22 14:17"
-release_content = '已知问题修复'
+release_date = "09.26 09:11"
+release_content = '添加定时功能'
 -- 获取workPath
 root_path = getWorkPath() .. '/'
 -- 禁止热更新
@@ -24,7 +24,8 @@ capture_interval = 0
 -- 游戏代理识图间隔
 game_running_capture_interval = 3
 -- 所有配置文件名称
-fileNames = {'config.txt', 'fightConfig.txt', 'bagConfig.txt'}
+fileNames = {'config.txt', 'fightConfig.txt', 
+             'bagConfig.txt','functionSetting.txt'}
 -- 点击延迟
 tap_interval = 0
 -- app运行时间
@@ -73,17 +74,15 @@ open_resource_doc = 'https://boluokk.gitee.io/e7-helper'
 global_stage_count = 0
 -- 打印配置信息
 print_config_info = false
+-- 分辨率 720x1280
+-- 或者   1280x720
+local disPlayDPI = 320
+displaySizeWidth, displaySizeHeight = getDisplaySize()
 require("point")
 require('path')
 require("util")
 require("userinterface")
 require("test")
--- 分辨率提示
--- DPI 320
--- 分辨率 720x1280
--- 或者   1280x720
-local disPlayDPI = 320
-displaySizeWidth, displaySizeHeight = getDisplaySize()
 -- 异常处理
 setEventCallBack()
 
