@@ -5,6 +5,7 @@ parentUID = '第七史诗助手 '..release_date..' '..displaySizeWidth..'x'..dis
 grindUID = '刷图设置'
 bagUID = '背包清理设置'
 functionSettingUID = '功能设置页'
+AdvSettingUID = '高级设置页'
 
 -- bin: bid、bname
 addButton = function (bin, partid)
@@ -107,7 +108,10 @@ suie.刷新UI = function ()
   reScript()
 end
 suie.功能设置 = function ()
-  sui.showNotMainUI(sui.functionSetting)
+  sui.showNotMainUI(sui.showFunctionSetting)
+end
+suie.高级设置 = function ()
+  sui.showNotMainUI(sui.showAdvSetting)
 end
 suie.功能设置保存 = function ()
   saveProfile('functionSetting.txt')
@@ -115,6 +119,13 @@ suie.功能设置保存 = function ()
 end
 suie.功能设置取消 = function ()
    sui.hiddenNotMainUI(functionSettingUID)
+end
+suie.高级配置取消 = function ()
+  sui.hiddenNotMainUI(AdvSettingUID)
+end
+suie.高级配置保存 = function ()
+  saveProfile('advSetting.txt')
+  suie.功能设置取消()
 end
 suie.刷图配置取消 = function ()
   sui.hiddenNotMainUI(grindUID)
@@ -176,7 +187,7 @@ sui.show = function ()
   addButton('清理背包')
   addButton('刷图设置')
   newRow()
-  addButton('XXX')
+  addButton('高级设置')
   addTextView(('|'))
   addButton('购买企鹅')
   addButton('功能设置')
@@ -268,7 +279,6 @@ end
 -- 背包清理
 sui.showBagSetting = function ()
   newLayout(bagUID)
-  newRow(bagUID)
   addTextView('宠物背包', bagUID)
   newRow(bagUID)
   -- 默认: B C D
@@ -356,7 +366,7 @@ sui.showBagSetting = function ()
   loadProfile('bagConfig.txt')
 end
 -- 功能设置
-sui.functionSetting = function ()
+sui.showFunctionSetting = function ()
   newLayout(functionSettingUID)
   addTextView('<刷书签设置>', functionSettingUID)
   newRow(functionSettingUID)
@@ -399,6 +409,12 @@ sui.functionSetting = function ()
   newRow(functionSettingUID)
   addTextView('<社团设置>', functionSettingUID)
   newRow(functionSettingUID)
+  local teamMission = ui_option.社团任务
+  for i,v in pairs(teamMission) do
+    if i % 4 == 0 then newRow(functionSettingUID) end
+    addCheckBox(v, v, functionSettingUID, true)
+  end
+  newRow(functionSettingUID)
   addTextView('社团捐赠：', functionSettingUID)
   addRadioGroup('社团捐赠类型', ui_option.社团捐赠类型, functionSettingUID)
   newRow(functionSettingUID)
@@ -418,4 +434,18 @@ sui.functionSetting = function ()
 
   ui.show(functionSettingUID, false)
   loadProfile('functionSetting.txt')
+end
+-- 高级设置
+sui.showAdvSetting = function ()
+  newLayout(AdvSettingUID)
+  addTextView('卡死重试次数 ', AdvSettingUID)
+  addEditText('重试次数', '5', AdvSettingUID)
+  -- newRow(AdvSettingUID)
+  -- addTextView('qq消息通知 ', AdvSettingUID)
+  -- addEditText('重试次数', '5', AdvSettingUID)
+  newRow(AdvSettingUID)
+  addButton('高级配置保存', AdvSettingUID)
+  addButton('高级配置取消', AdvSettingUID)
+
+  ui.show(AdvSettingUID, false)
 end

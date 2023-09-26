@@ -66,7 +66,7 @@ path.任务队列 = function ()
 	until intervalTime == 0
 end
 
-path.社团开启 = function ()
+path.社团任务 = function ()
 	wait(function ()
 		stap(point.社团)
 				ssleep(1)
@@ -76,7 +76,54 @@ path.社团开启 = function ()
 	if current_task.社团签到 then path.社团签到() end
 	if current_task.社团捐赠 then path.社团捐赠() end
 	if current_task.社团奖励 then path.社团奖励() end
-	
+	if current_task.团战奖励 then path.团战奖励() end
+	if current_task.世界首领战 then path.世界首领战() end
+end
+
+path.世界首领战 = function ()
+	wait(function ()
+		stap({1112,209})
+		return findOne("304|413|FFFFFF,316|430|FFFFFF")
+	end)
+	if findTap('世界首领战') then
+		for i=1,2 do
+			wait(function ()
+				stap({338,116})
+				return findOne('世界首领准备战斗')
+			end)
+			untilTap('世界首领准备战斗')
+			-- untilTap('世界首领选择队伍')
+			if not wait(function () return findTap('世界首领选择队伍') end, .1, 2) then
+				break
+			end
+			untilTap('世界首领组成队伍')
+			untilAppear('世界首领战斗开始')
+			-- 添加队伍
+			wait(function ()
+				stap({164,653})
+				return not findOne("37|480|FFFFFF,353|480|FFFFFF,668|479|FFFFFF")
+			end)
+			untilTap('世界首领战斗开始')
+			wait(function ()
+				stap({1079,31})
+				return findOne('世界首领全部开启')
+			end, .5, 60)
+			longDisappearTap('世界首领全部开启', nil, {641,618}, 1)
+			untilTap('世界首领完成确定')
+		end
+	end
+end
+
+path.团战奖励 = function ()
+	if findTap('团战奖励') then
+		untilTap('团战奖励确定')
+		wait(function ()
+			stap({34,31})
+			return wait(function ()
+				return findOne('骑士团右问号')
+			end, .1, 2)
+		end)
+	end
 end
 
 path.社团签到 = function ()
@@ -192,7 +239,7 @@ path.刷书签 = function (rest)
 	local pos, countTarget, curFindCount -- 当前识别次数, 最高 4
 	msg = '刷新次数: 0/'..refreshCount..'\n神秘: 0*50(0%)\n誓约: 0*5(0%)\n友情: 0*5(0%)'
 	openHUD(msg, '刷标签')
-	for i=1,refreshCount do
+	for i=1,(refreshCount + 1) do
 		curFindCount = 1
 		if i > rest then
 			while curFindCount <= 6 do
@@ -273,6 +320,7 @@ path.刷书签 = function (rest)
 				end
 				curFindCount = curFindCount + 1
 			end
+			if i > refreshCount then path.游戏首页() break end
 			msg = '刷新次数: '..i..'/'..refreshCount..
 						'\n神秘: '..g1..'*50('..(g1/i*100)..'%)'..
 						'\n誓约: '..g2..'*5('..(g2/i*100)..'%)'..
@@ -281,10 +329,6 @@ path.刷书签 = function (rest)
 			openHUD(msg, '刷标签')
 			if not enoughResources then path.游戏首页() break end
 			slog('\n'..msg, nil, true)
-			if i == refreshCount then
-				path.游戏首页()
-				break
-			end
 			-- 如果网络不好会导致两次点击, 改成 sim = 1
 			untilTap('国服神秘商店立即更新', {sim = 1})
 			untilTap('国服神秘商店购买确认')

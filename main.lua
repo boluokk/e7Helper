@@ -5,8 +5,8 @@ update_source_fallback = update_source
 -- apk level 限制
 is_apk_old = function() return getApkVerInt() < 0 end
 apk_old_warning = "怎么还有人用" .. getApkVerInt()
-release_date = "09.26 09:11"
-release_content = '添加定时功能'
+release_date = "09.26 19:55"
+release_content = '修复已知问题, 添加部分功能'
 -- 获取workPath
 root_path = getWorkPath() .. '/'
 -- 禁止热更新
@@ -25,7 +25,8 @@ capture_interval = 0
 game_running_capture_interval = 3
 -- 所有配置文件名称
 fileNames = {'config.txt', 'fightConfig.txt', 
-             'bagConfig.txt','functionSetting.txt'}
+             'bagConfig.txt','functionSetting.txt',
+             'advSetting.txt'}
 -- 点击延迟
 tap_interval = 0
 -- app运行时间
@@ -97,18 +98,18 @@ if scriptStatus == 0 then
   sui.show()
 else
   setNumberConfig("scriptStatus", 0)
+  -- 加载本地配置
+  current_task = uiConfigUnion(fileNames)
+  local configReTryCount = current_task['重试次数'] or 5
   -- 多次异常关闭脚本
   -- 退出游戏还是重启游戏?
-  if exception_count > 3 then 
+  if exception_count > configReTryCount then 
     slog('连续3次异常退出') 
     setNumberConfig("exception_count", 1) 
     exit() 
   else
     setNumberConfig("exception_count", exception_count + 1)
   end 
-  -- 加载本地配置
-  -- current_task = read('config.txt', true)
-  current_task = uiConfigUnion(fileNames)
   if is_refresh_book_tag == 1 then
     path.刷书签(sgetNumberConfig("refresh_book_tag_count", 0))
   elseif is_refresh_book_tag == 2 then
