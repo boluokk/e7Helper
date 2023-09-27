@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<lcproj projname="script" appname="e7Helper" autorotate="true" autorun="1" autorunscript="0" cputype="2" is_acc_mode="0" isdebugapkplugin="0" jmpjdcheck="1" localmode="true" pkgname="org.boluo.e7" pluginapkpath="" rgbmode="false" sel="1" showfloatcontrol="1" showhome="1" targetsize="0x0" updateurl="" useocr="1" useoldmenu="0" ver="58" icon="E:\todo_files\game_script\E7\test\78955.png">
+<lcproj projname="script" appname="e7Helper" autorotate="true" autorun="1" autorunscript="0" cputype="2" is_acc_mode="0" isdebugapkplugin="0" jmpjdcheck="1" localmode="true" pkgname="org.boluo.e7" pluginapkpath="" rgbmode="false" sel="1" showfloatcontrol="1" showhome="1" targetsize="0x0" updateurl="" useocr="1" useoldmenu="0" ver="59" icon="E:\todo_files\game_script\E7\test\78955.png">
     <lua entry="main.lua">
         <file name="util.lua"/>
         <file name="point.lua"/>

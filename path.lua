@@ -228,8 +228,8 @@ path.刷书签 = function (rest)
 	if current_task['红装暂停-85级'] then table.insert(target, '85红装') end
 	-- [国服神秘商店神秘奖牌 国服神秘商店誓约书签]  会导致乱买东西?
 	-- 模拟器太卡, 尽力处理
-	if current_task['神秘奖牌'] then table.insert(target, '神秘') end
-	if current_task['誓约书签'] then table.insert(target, '书签') end
+	table.insert(target, '神秘')
+	table.insert(target, '书签')
 	if current_task['友情书签'] then table.insert(target, '友情书签') end
 
 	local refreshCount = current_task['更新次数'] or 334

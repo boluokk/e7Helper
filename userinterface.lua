@@ -377,6 +377,7 @@ sui.showFunctionSetting = function ()
       addCheckBox(v, v, functionSettingUID)
     else 
       addCheckBox(v, v, functionSettingUID, true)
+      ui.setEnable(v, false)
     end
   end
   newRow(functionSettingUID)
