@@ -5,8 +5,8 @@ update_source_fallback = update_source
 -- apk level 限制
 is_apk_old = function() return getApkVerInt() < 0 end
 apk_old_warning = "怎么还有人用" .. getApkVerInt()
-release_date = "09.27 20:12"
-release_content = '强制神秘、誓约书签默认勾选'
+release_date = "09.28 09:16"
+release_content = '添加免费书签'
 -- 获取workPath
 root_path = getWorkPath() .. '/'
 -- 禁止热更新

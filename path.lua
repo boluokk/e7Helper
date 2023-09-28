@@ -1792,3 +1792,8 @@ path.活动 = function ()
 		return path.战斗跑图1(nil, level, fc, {175,613,357,714})
 	end
 end
+
+path.免费书签 = function ()
+	current_task['更新次数'] = 0
+	path.刷书签(0)
+end
