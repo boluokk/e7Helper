@@ -1104,7 +1104,11 @@ path.通用刷图模式1 = function (fightCount, isActivity, levelTarget)
 							if res == '未记载的故事' then
 								untilAppear('后记准备战斗')
 								wait(function ()
-									return findTapOnce('后记准备战斗')
+									if findTapOnce('后记准备战斗') then
+										return wait(function ()
+											return not findOne('后记准备战斗')
+										end, 1, 5)
+									end
 								end)
 							end
 						else
@@ -1740,16 +1744,23 @@ path.后记 = function ()
 
 	untilAppear('后记准备战斗')
 	ssleep(1)
-
+	
 	wait(function ()
-		return findTapOnce('后记准备战斗')
+		if findTapOnce('后记准备战斗') then
+			return wait(function ()
+				return not findOne('后记准备战斗')
+			end, 1, 5)
+		end
 	end)
 
 	untilAppear('国服长选择队伍')
-	ssleep(1)
 
 	wait(function ()
-		return findTapOnce('国服长选择队伍')
+		if findTapOnce('国服长选择队伍') then
+			return wait(function ()
+				return not findOne('国服长选择队伍')
+			end, 1, 5)
+		end
 	end)
 
 	local fightCount = current_task.后记次数
@@ -1780,12 +1791,19 @@ path.活动 = function ()
 		untilAppear('后记准备战斗')
 		ssleep(1)
 		wait(function ()
-			return findTapOnce('后记准备战斗')
+			if findTapOnce('后记准备战斗') then
+				return wait(function ()
+					return not findOne('后记准备战斗')
+				end, 1, 5)
+			end
 		end)
 		untilAppear('国服长选择队伍')
-		ssleep(1)
 		wait(function ()
-			return findTapOnce('国服长选择队伍')
+			if findTapOnce('国服长选择队伍') then
+				return wait(function ()
+					return not findOne('国服长选择队伍')
+				end, 1, 5)
+			end
 		end)
 		return path.通用刷图模式1(fc, nil, '后记')
 	elseif w == '活动首页' then
