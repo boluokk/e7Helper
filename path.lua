@@ -15,7 +15,7 @@ path.游戏首页 = function ()
 	local clickTarget = {'国服签到右下蓝底', '国服签到右下蓝底2', '国服公告X',
 											 '国服登录第七史诗', '国服放弃战斗', '国服结束',
 											 '神秘商店取消', '国际服比赛', '新英雄获取确认',
-											 '所有取消'}
+											 '所有取消', '代理暂停'}
 	if wait(function ()
 		-- 服务器维护中
 		if findOne('国服服务器维护中') then return 'exit' end
@@ -1102,11 +1102,9 @@ path.通用刷图模式1 = function (fightCount, isActivity, levelTarget)
 							-- 第一次不会到未记载的故事
 							local rvb, res = untilAppear({'未记载的故事', '管理队伍'})
 							if res == '未记载的故事' then
+								untilAppear('后记准备战斗')
 								wait(function ()
-									findTapOnce('后记准备战斗')
-									return wait(function ()
-										if not findOne('后记准备战斗') then return 1 end
-									end, .5, 5)
+									return findTapOnce('后记准备战斗')
 								end)
 							end
 						else
@@ -1738,12 +1736,20 @@ path.后记 = function ()
 		return findTap('后记冒险')
 	end)
 
-	wait(function () return findTapOnce('后记准备战斗') end)
+	-- wait(function () return findTapOnce('后记准备战斗') end)
 
-	-- longAppearAndTap('国服长选择队伍', nil, nil, 2)
+	untilAppear('后记准备战斗')
+	ssleep(1)
+
 	wait(function ()
-		findTapOnce('国服长选择队伍')
-		return longDisappearTap('国服长选择队伍', nil, nil, 1.5, 2)
+		return findTapOnce('后记准备战斗')
+	end)
+
+	untilAppear('国服长选择队伍')
+	ssleep(1)
+
+	wait(function ()
+		return findTapOnce('国服长选择队伍')
 	end)
 
 	local fightCount = current_task.后记次数
@@ -1771,15 +1777,15 @@ path.活动 = function ()
 			stap({1166,661})
 			return findOne('后记准备战斗')
 		end)
+		untilAppear('后记准备战斗')
+		ssleep(1)
 		wait(function ()
-			findTapOnce('后记准备战斗')
-			return wait(function ()
-			if not findOne('后记准备战斗') then return 1 end
-			end, .5, 5)
+			return findTapOnce('后记准备战斗')
 		end)
+		untilAppear('国服长选择队伍')
+		ssleep(1)
 		wait(function ()
-			findTapOnce('国服长选择队伍')
-			return longDisappearTap('国服长选择队伍', nil, nil, 1.5, 2)
+			return findTapOnce('国服长选择队伍')
 		end)
 		return path.通用刷图模式1(fc, nil, '后记')
 	elseif w == '活动首页' then
