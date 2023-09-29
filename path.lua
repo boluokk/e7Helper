@@ -1096,7 +1096,13 @@ path.通用刷图模式1 = function (fightCount, isActivity, levelTarget)
 				path.背包处理(function ()
 						wait(function ()
 							stap({487,18})
-							return findOne('国服返回箭头')
+							return longAppear('国服返回箭头')
+						end)
+						wait(function ()
+							if longAppear({'未记载的故事', '管理队伍', '级别光圈'}) then
+								return 1
+							end
+							stap({60,29})
 						end)
 						if levelTarget == '后记' then
 							-- 第一次不会到未记载的故事

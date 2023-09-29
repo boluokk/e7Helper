@@ -259,6 +259,19 @@ longAppearAndTap = function (target, config, pos, timeout)
 	end, .1)
 end
 
+longAppear = function (target, config, appearTime, timeout)
+	local t = time()
+	local appearTime = appearTime or 1
+	appearTime = appearTime * 1000
+	local timeout = timeout or 3
+	local r
+	return wait(function ()
+		r = findOne(target, config)
+		if r and time() - t > appearTime then return true end
+		if not r then t = time() end
+	end, .1, timeout)
+end
+
 -- 消失多久[持续性，会到timeout才会退出]
 longDisappearTap = function (target, config, pos, timeout, waitTimeOut)
 	local t = time()
