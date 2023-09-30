@@ -615,7 +615,11 @@ path.战斗代理 = function (isRepeat, isAgent, currentCount, isActivity)
 		local pos, targetV
 		wait(function ()
 			if currentCount then
-				log('代理中: '..currentCount..'/'..global_stage_count)
+				if isAgent then
+					log('代理中(有宠物): '..currentCount..'/'..global_stage_count)
+				else
+					log('代理中(无宠物): '..currentCount..'/'..global_stage_count)
+				end
 			else
 				log('代理中..')
 			end
@@ -1747,9 +1751,6 @@ path.后记 = function ()
 	end)
 
 	-- wait(function () return findTapOnce('后记准备战斗') end)
-
-	untilAppear('后记准备战斗')
-	ssleep(1)
 	
 	wait(function ()
 		if findTapOnce('后记准备战斗') then
@@ -1759,7 +1760,6 @@ path.后记 = function ()
 		end
 	end)
 
-	untilAppear('国服长选择队伍')
 
 	wait(function ()
 		if findTapOnce('国服长选择队伍') then
@@ -1794,8 +1794,6 @@ path.活动 = function ()
 			stap({1166,661})
 			return findOne('后记准备战斗')
 		end)
-		untilAppear('后记准备战斗')
-		ssleep(1)
 		wait(function ()
 			if findTapOnce('后记准备战斗') then
 				return wait(function ()
@@ -1803,7 +1801,6 @@ path.活动 = function ()
 				end, 1, 5)
 			end
 		end)
-		untilAppear('国服长选择队伍')
 		wait(function ()
 			if findTapOnce('国服长选择队伍') then
 				return wait(function ()
