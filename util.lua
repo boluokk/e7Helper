@@ -117,6 +117,24 @@ findOne = function (target, config)
 			if cmpColorEx(point['cmp_国服Connection'], 1) == 0 then keepCapture() return true end
 		end, 1, nil, true)
 	end
+
+	if cmpColorEx(point['cmp_网络断开连接'], .98) == 1 then 
+		releaseCapture()
+		local disconnectCount = 0
+		-- 次数过多, 消息通知?
+		-- qq通知
+		-- 邮箱通知
+		wait(function ()
+			disconnectCount = disconnectCount + 1
+			log('已经断开连接..')
+			reWaitTime()
+			if cmpColorEx(point['cmp_网络断开连接'], .98) == 0 then keepCapture() return true end
+			if disconnectCount == 10 then
+				sendCloudMessage('游戏可能已经断开连接了, 请上线检查!')
+			end
+			tap(640,319)
+		end, 2, nil, true)
+	end
 	-- 维护公告关闭掉
 	local retX, retY = findMultiColor(310,67,972,227,point.国服维护公告[1],point.国服维护公告[2],0,.95)
 	if retX ~= -1 then
@@ -1322,8 +1340,9 @@ hotUpdate = function()
   local expectmd5 = f:read() or '1'
   f:close()
   if #expectmd5 ~= #'b966ddd58fd64b2f963a0c6b61b463ce' and update_source ~= update_source_fallback then
-    log(2405)
-    update_source = update_source_fallback
+		log('换源中..')
+		ssleep(2)
+		update_source = update_source_fallback
     return hotUpdate()
   end
   if expectmd5 == loadConfig("lr_md5", "2") then
@@ -1343,7 +1362,7 @@ hotUpdate = function()
   end
   installLrPkg(path)
   saveConfig("lr_md5", expectmd5)
-  sleep(1000)
+  ssleep(1)
   -- log(5, expectmd5, loadConfig("lr_md5", "2"))
   log("已更新至最新")
   return reScript()
@@ -1562,8 +1581,6 @@ setEventCallBack = function ()
 	end)
 end
 
-
-
 -- 显示HUD
 openHUD = function (messageFun, configName)
 	hideHUD(logger_ID)
@@ -1590,4 +1607,9 @@ end
 
 closeHUD = function ()
 	openHUD()
+end
+
+-- 发送消息通知
+sendCloudMessage = function (msg)
+	
 end
