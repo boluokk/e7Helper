@@ -12,7 +12,7 @@ update_source_fallback = table.remove(update_source_arr, math.random(1, #update_
 -- apk level 限制
 is_apk_old = function() return getApkVerInt() < 0 end
 apk_old_warning = "怎么还有人用" .. getApkVerInt()
-release_date = "10.03 00:51"
+release_date = "10.03 00:53"
 release_content = '选择队伍问题修复'
 -- 获取workPath
 root_path = getWorkPath() .. '/'
