@@ -13,7 +13,11 @@ from datetime import datetime
 # 懒人精灵项目路径
 projectPath = r'E:\todo_files\game_script\E7\test'
 # 懒人精灵项目打包路径
-packagePath = r'F:\懒人精灵\懒人精灵3.8.6.2\out\script.lr'
+packagePath = r'F:\懒人精灵\懒人精灵3.8.7.1\懒人精灵3.8.7.1\out\script.lr'
+
+# https://gitcode.net/otato001/e7hepler.git
+# https://gitea.com/boluoii/e7Helper.git
+# git remote set-url --add --push origin https://gitcode.net/otato001/e7hepler.git
 
 # 文件映射
 fileMapping = {
@@ -161,8 +165,9 @@ def saveAndPush():
     inputText = '\"{} {}\"'.format(datetime.now().strftime("%Y.%m.%d %H:%M"), inputText)
     os.system('git commit -m {}'.format(inputText))
     os.system('git push')
-    print('push 成功!')
-
+    print('push 代码文件成功!')
+    os.system('cd release && git push')
+    print('push 脚本文件成功!')
 
 # 远程拉去最新代码
 def updateLocal():

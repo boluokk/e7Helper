@@ -1,11 +1,18 @@
 -- 系统时间
 time = systemTime
-update_source = 'https://gitee.com/boluokk/e7-helper/raw/master/release/'
-update_source_fallback = update_source
+-- https://gitee.com/boluokk/e7-helper/raw/master/release/ 废弃(被屏蔽了)
+-- https://gitcode.net/otato001/e7hepler/-/raw/master/
+-- https://gitea.com/boluoii/e7Helper/raw/branch/master/
+update_source_arr = {
+  'https://gitea.com/boluoii/e7Helper/raw/branch/master/',
+  'https://gitcode.net/otato001/e7hepler/-/raw/master/',
+}
+update_source = table.remove(update_source_arr, math.random(1, #update_source_arr))
+update_source_fallback = table.remove(update_source_arr, math.random(1, #update_source_arr))
 -- apk level 限制
 is_apk_old = function() return getApkVerInt() < 0 end
 apk_old_warning = "怎么还有人用" .. getApkVerInt()
-release_date = "10.01 14:43"
+release_date = "10.03 00:39"
 release_content = '选择队伍问题修复'
 -- 获取workPath
 root_path = getWorkPath() .. '/'
@@ -24,9 +31,7 @@ capture_interval = 0
 -- 游戏代理识图间隔
 game_running_capture_interval = 3
 -- 所有配置文件名称
-fileNames = {'config.txt', 'fightConfig.txt', 
-             'bagConfig.txt','functionSetting.txt',
-             'advSetting.txt'}
+fileNames = {'config.txt', 'fightConfig.txt', 'bagConfig.txt', 'functionSetting.txt', 'advSetting.txt'}
 -- 点击延迟
 tap_interval = 0
 -- app运行时间
@@ -60,7 +65,7 @@ exception_count = sgetNumberConfig('exception_count', 1)
 -- 当前账号任务
 current_task = {}
 -- 检查游戏状态 10s
-check_game_status_interval = 10000
+check_game_status_interval = 10 * 1000
 -- 检查图色识别时间
 getMillisecond = function (secound) return secound * 1000 end
 -- 单位秒
