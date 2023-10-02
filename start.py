@@ -134,7 +134,7 @@ def saveAndPush():
     inputText = input('输入更新内容: ')
     isFindTarget = False
     if isChangeDoc:
-        docPath = os.path.join(os.getcwd(), 'docs', 'docs', 'zh', 'guide.md')
+        docPath = os.path.join(os.getcwd(), 'docsResource', 'docs', 'zh', 'guide.md')
         with open(docPath, "r", encoding='UTF-8') as f:
             lines = f.readlines()
             ss = ""
@@ -147,7 +147,7 @@ def saveAndPush():
                 ss += line
         with open(docPath, "w", encoding='UTF-8') as f:
             f.write(ss)
-        os.system('cd docs && npm run build')
+        os.system('cd docsResource && npm run build')
         print('文档构建成功!')
         copyDocument()
     # 更新 script.lr 和 script.lr.md5 文件
@@ -171,8 +171,8 @@ def updateLocal():
 
 
 def copyDocument():
-    target = os.getcwd() + '/document'
-    start = os.getcwd() + '/docs/docs/.vuepress/dist'
+    target = os.getcwd() + '/docs'
+    start = os.getcwd() + '/docsResource/docs/.vuepress/dist'
     if os.path.exists(target):
         shutil.rmtree(target)
     shutil.copytree(start, target)
