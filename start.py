@@ -7,6 +7,7 @@
 import hashlib
 import os
 import re
+import shutil
 from datetime import datetime
 
 # 懒人精灵项目路径
@@ -148,6 +149,7 @@ def saveAndPush():
             f.write(ss)
         os.system('cd docs && npm run build')
         print('文档构建成功!')
+        copyDocument()
     # 更新 script.lr 和 script.lr.md5 文件
     with open(os.path.join(r'./release', 'script.lr.md5'), mode='w', encoding='UTF-8') as f:
         f.write(newMD5)
@@ -166,6 +168,14 @@ def saveAndPush():
 def updateLocal():
     os.system('git pull')
     copy()
+
+
+def copyDocument():
+    target = os.getcwd() + '/document'
+    start = os.getcwd() + '/docs/docs/.vuepress/dist'
+    if os.path.exists(target):
+        shutil.rmtree(target)
+    shutil.copytree(start, target)
 
 
 if __name__ == '__main__':
