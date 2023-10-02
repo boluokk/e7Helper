@@ -106,15 +106,15 @@ def saveAndPush():
         # 读取文件, 写入到git所在文件夹中
         for v in curFileAbsPath:
             if v.rfind('.rc') != -1:
-                print('非文本文件')
-                print(v)
+                # print('非文本文件')
+                # print(v)
                 with open(v, mode='rb') as f:
                     content = f.read()
                 with open(os.path.join(os.getcwd(), re.search(r"([^\\]+)\.[^.]+$", v).group()), mode='wb') as f:
                     f.write(content)
             else:
-                print('文本文件')
-                print(v)
+                # print('文本文件')
+                # print(v)
                 with open(v, mode='r', encoding='GB18030') as f:
                     content = f.read()
                 with open(os.path.join(os.getcwd(), re.search(r"([^\\]+)\.[^.]+$", v).group()), mode='w',
