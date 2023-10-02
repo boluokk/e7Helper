@@ -166,8 +166,9 @@ def saveAndPush():
     os.system('git commit -m {}'.format(inputText))
     os.system('git push')
     print('push 代码文件成功!')
-    os.system('cd release && git push')
+    os.system('cd release && git add . && git commit -m {} && git push'.format(inputText))
     print('push 脚本文件成功!')
+
 
 # 远程拉去最新代码
 def updateLocal():
