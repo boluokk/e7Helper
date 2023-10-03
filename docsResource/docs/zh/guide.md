@@ -1,6 +1,6 @@
 ## 必读
 
-### 下载: [下载链接(密码6666)](https://wwos.lanzouj.com/ioVOc117nsqh)
+### 下载: [下载链接(密码6666)](https://wwos.lanzouj.com/ijA8I1akj9ni)
 
 ### QQ频道(反馈及建议): 24oyp5x92q
 
@@ -8,10 +8,10 @@
 
 ### 感谢贡献: [tkkcc](https://github.com/tkkcc)
 
-### 此APP工具源码: [https://gitee.com/boluokk/e7-helper](https://gitee.com/boluokk/e7-helper) （好用就给个star吧, 你的star会是作者的最大帮助）👍
+### 此APP工具源码: [地址](https://github.com/boluokk/e7Helper) （好用就给个star吧, 你的star会是作者的最大帮助）👍
 
 ### 最近更新: 
-- 更新文档
+- 更新框架
 
 ## 设备兼容
 

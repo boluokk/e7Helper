@@ -13,7 +13,7 @@ module.exports = {
             {
                 text: '下载链接📩',
                 items: [
-                    {text: '下载链接(密码6666)', link: 'https://wwos.lanzouj.com/ioVOc117nsqh'}
+                    {text: '下载链接(密码6666)', link: 'https://wwos.lanzouj.com/ijA8I1akj9ni'}
                 ]
             },
             {
