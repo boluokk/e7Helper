@@ -12,8 +12,8 @@ update_source_fallback = table.remove(update_source_arr, math.random(1, #update_
 -- apk level 限制
 is_apk_old = function() return getApkVerInt() < 0 end
 apk_old_warning = "怎么还有人用" .. getApkVerInt()
-release_date = "10.03 00:53"
-release_content = '选择队伍问题修复'
+release_date = "10.03 15:23"
+release_content = '添加更新源, 升级框架'
 -- 获取workPath
 root_path = getWorkPath() .. '/'
 -- 禁止热更新
@@ -75,7 +75,7 @@ other_ssleep_interval = 1
 -- 单任务休息时间
 single_task_rest_time = 5
 -- 开源说明手册地址
-open_resource_doc = 'https://boluokk.gitee.io/e7-helper'
+open_resource_doc = 'https://boluokk.github.io/e7Helper/'
 -- 全局关卡次数(用来代理的时候提示: 代理中 1/100)
 global_stage_count = 0
 -- 打印配置信息
@@ -91,7 +91,10 @@ require("userinterface")
 require("test")
 -- 异常处理
 setEventCallBack()
-
+-- 用户配置是否关闭热更
+if not hotupdate_disabled then
+  hotupdate_disabled = uiConfigUnion({'advSetting.txt'})['关闭热更']
+end
 local scriptStatus = sgetNumberConfig("scriptStatus", 0)
 -- 热更新开始
 if scriptStatus == 0 then

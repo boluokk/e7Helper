@@ -138,7 +138,7 @@ suie.清理背包 = function ()
   sui.showNotMainUI(sui.showBagSetting)
 end
 suie.背包配置取消 = function ()
-  sui.hiddenNotMainUI(functionSettingUID)
+  sui.hiddenNotMainUI(bagUID)
 end
 suie.背包配置保存 = function ()
   saveProfile('bagConfig.txt')
@@ -151,6 +151,15 @@ end
 suie.购买企鹅 = function ()
   suie.开启前()
   path.购买企鹅()
+end
+suie.手动热更 = function ()
+  local hotUpdateUrl = ui.getValue("手动热更地址")
+  if hotUpdateUrl and hotUpdateUrl:find('http') then
+    update_source = hotUpdateUrl
+    hotUpdate()
+  else
+    log('热更地址格式错误!')
+  end
 end
 -- 主页
 sui.show = function ()
@@ -445,8 +454,17 @@ sui.showAdvSetting = function ()
   -- addTextView('qq消息通知 ', AdvSettingUID)
   -- addEditText('重试次数', '5', AdvSettingUID)
   newRow(AdvSettingUID)
+  addTextView('手动热更地址 ', AdvSettingUID)
+  addEditText('手动热更地址', 'https://gitcode.net/otato001/e7hepler/-/raw/master/', AdvSettingUID)
+  newRow(AdvSettingUID)
+  addButton('手动热更', AdvSettingUID)
+  newRow(AdvSettingUID)
+  addTextView('热更设置 ', AdvSettingUID)
+  addCheckBox('关闭热更', '关闭热更', AdvSettingUID)
+  newRow(AdvSettingUID)
   addButton('高级配置保存', AdvSettingUID)
   addButton('高级配置取消', AdvSettingUID)
 
   ui.show(AdvSettingUID, false)
+  loadProfile('advSetting.txt')
 end
