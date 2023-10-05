@@ -12,8 +12,8 @@ update_source_fallback = table.remove(update_source_arr, math.random(1, #update_
 -- apk level 限制
 is_apk_old = function() return getApkVerInt() < 0 end
 apk_old_warning = "怎么还有人用" .. getApkVerInt()
-release_date = "10.03 15:35"
-release_content = '添加更新源, 升级框架'
+release_date = "10.05 13:51"
+release_content = '添加活动选择'
 -- 获取workPath
 root_path = getWorkPath() .. '/'
 -- 禁止热更新
@@ -112,7 +112,7 @@ else
   -- 多次异常关闭脚本
   -- 退出游戏还是重启游戏?
   if exception_count > configReTryCount then 
-    slog('连续3次异常退出') 
+    slog('连续'..configReTryCount..'次异常退出') 
     setNumberConfig("exception_count", 1) 
     exit() 
   else

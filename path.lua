@@ -15,7 +15,7 @@ path.游戏首页 = function ()
 	local clickTarget = {'国服签到右下蓝底', '国服签到右下蓝底2', '国服公告X',
 											 '国服登录第七史诗', '国服放弃战斗', '国服结束',
 											 '神秘商店取消', '国际服比赛', '新英雄获取确认',
-											 '所有取消', '代理暂停'}
+											 '所有取消', '代理中大厅', '代理暂停'}
 	if wait(function ()
 		-- 服务器维护中
 		if findOne('国服服务器维护中') then return 'exit' end
@@ -650,7 +650,7 @@ path.战斗代理 = function (isRepeat, isAgent, currentCount, isActivity)
 			end
 			-- 其他一些处理
 			-- if findOne('国服神兽技能', {sim = .9}) then stap({903,664}) end
-			if findTap('国服我的通缉名单') then log('点击通缉名单') end
+			if findTap('我的通缉名单') then log('点击通缉名单') end
 			if findTap('申请好友取消') then log('好友申请取消') end
 			if findTap('紧急任务确认') then log('紧急任务确认') end
 		end, game_running_capture_interval, 9999 * 10 * 60) -- 不影响
@@ -1781,33 +1781,58 @@ path.活动 = function ()
 		return not findOne('国服主页Rank')
 	end)
 	local e, w
+	local whichAct = current_task['活动指定'] or 1
 	wait(function ()
 		stap({61,187})
-		stap({1059,285})
-		e, w = findOne({'活动首页', '活动冒险'}, {keyword = '序幕'})
+		-- 活动辨别
+		if whichAct == 0 then
+			stap({1059,285})
+		elseif whichAct == 1 then
+			stap({998,468})
+		end
+
+		e, w = findOne({'活动冒险', '活动首页'}, {keyword = '序幕'})
 		return w
+	end)
+	wait(function ()
+		stap({1166,661})
+		return findOne('后记准备战斗')
+	end)
+	wait(function ()
+		if findTapOnce('后记准备战斗') then
+			return wait(function ()
+				return not findOne('后记准备战斗')
+			end, 1, 5)
+		end
 	end)
 	-- 判定是哪一种活动
 	if w == '活动冒险' then
 		log('活动-默认关卡')
-		wait(function ()
-			stap({1166,661})
-			return findOne('后记准备战斗')
-		end)
-		wait(function ()
-			if findTapOnce('后记准备战斗') then
-				return wait(function ()
-					return not findOne('后记准备战斗')
-				end, 1, 5)
-			end
-		end)
-		wait(function ()
-			if findTapOnce('国服长选择队伍') then
-				return wait(function ()
-					return not findOne('国服长选择队伍')
-				end, 1, 5)
-			end
-		end)
+		local tmpv, curPassType = untilAppear({'选择难度初级', '辅助英雄队长'})
+		if curPassType == '辅助英雄队长' then
+			wait(function ()
+				if findTapOnce('国服长选择队伍') then
+					return wait(function ()
+						return not findOne('国服长选择队伍')
+					end, 1, 5)
+				end
+			end)
+		elseif curPassType == '选择难度初级' then
+			wait(function ()
+				if findTapOnce('国服长选择队伍') then
+					return wait(function ()
+						return not findOne('选择难度初级')
+					end, 1, 5)
+				end
+			end)
+			wait(function ()
+				if findTapOnce('国服长选择队伍') then
+					return wait(function ()
+						return not findOne('国服长选择队伍')
+					end, 1, 5)
+				end
+			end)
+		end
 		return path.通用刷图模式1(fc, nil, '后记')
 	elseif w == '活动首页' then
 		log('活动-可选关卡')
