@@ -439,7 +439,7 @@ path.竞技场玩家 = function ()
 			end
 		end
 		untilTap('国服竞技场挑战', {rg = {871,149,992,696}})
-		untilTap('国服竞技场战斗开始')
+		untilTap('国服竞技场战斗开始', {sim = .98})
 		if path.竞技场购票() == 1 then
 			return 1
 		end
@@ -487,14 +487,15 @@ path.竞技场NPC = function ()
 	local pos
 	local isSwipe = 1
 	while 'qq群206490280' do
+		local curHomePage = {"657|115|0B733C", "768|113|0557AC", "873|114|1D1D9D"}
 		wait(function ()
 			-- 解决弹出 亲密度问题
 			findTap({'国服竞技场挑战升级', 
 							 '国服战斗完成竞技场确定', 
 							 '国服战斗完成确定'}, {tapInterval = 1})
 			stap({323,27})
-			if findOne('国服竞技场配置防御队') then
-				longAppearAndTap('国服竞技场配置防御队', nil, {323,27}, 1) -- 2s
+			if findOne(curHomePage) then
+				longAppearAndTap(curHomePage, nil, {323,27}, 1) -- 2s
 				return 1
 			end
 		end)
@@ -515,7 +516,7 @@ path.竞技场NPC = function ()
 				stap(pos)
 				if not findOne('国服JJC左下剑') then return 1 end
 			end)
-			untilTap('国服竞技场战斗开始')
+			untilTap('国服竞技场战斗开始', {sim = .98})
 			-- 购票
 			if path.竞技场购票() == 1 then
 				break
