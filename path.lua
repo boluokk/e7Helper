@@ -24,13 +24,13 @@ path.游戏首页 = function ()
 			return 1
 		end
 		if not findTapOnce(clickTarget, {keyword = {'结束', '取消'}}) then
-			if not isBack then
+			-- if not isBack then
 				stap(point.回退)
-			else
-				back()
-			end
+			-- else
+				-- back()
+			-- end
 		end
-	end, .5, 7 * 60) == 'exit' then
+	end, 1, 7 * 60) == 'exit' then
 		slog('服务器维护中...')
 		exit()
 	end
