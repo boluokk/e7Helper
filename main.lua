@@ -12,8 +12,8 @@ update_source_fallback = table.remove(update_source_arr, math.random(1, #update_
 -- apk level 限制
 is_apk_old = function() return getApkVerInt() < 0 end
 apk_old_warning = "怎么还有人用" .. getApkVerInt()
-release_date = "10.17 17:47"
-release_content = 'B服退出问题修复'
+release_date = "10.17 22:52"
+release_content = '修复一些问题'
 -- 获取workPath
 root_path = getWorkPath() .. '/'
 -- 禁止热更新
@@ -45,7 +45,7 @@ server_pkg_name = {
 -- 当前服务器
 current_server = "国服"
 -- wait 间隔
-wait_interval = .7
+wait_interval = .3
 -- 是否异常退出
 is_exception_quit = false
 -- UI配置完毕
@@ -69,7 +69,7 @@ check_game_status_interval = 10 * 1000
 -- 检查图色识别时间
 getMillisecond = function (secound) return secound * 1000 end
 -- 单位秒
-check_game_identify_timeout = getMillisecond(20)
+check_game_identify_timeout = getMillisecond(15)
 -- 其他ssleep间隔
 other_ssleep_interval = 1
 -- 单任务休息时间

@@ -1322,6 +1322,7 @@ getStringLength = function(inputstr)
 	return length
 end
 
+downloadProgress = function(pos) stoast("下载进度："..pos) end
 
 hotUpdate = function()
   stoast("正在检查更新...")
@@ -1331,7 +1332,7 @@ hotUpdate = function()
   local md5url = url .. '.md5'
   local path = getWorkPath() .. '/newScript.lr'
   local md5path = path .. '.md5'
-  if downloadFile(md5url, md5path) == -1 then
+  if downloadFile(md5url, md5path, downloadProgress) == -1 then
     stoast("下载校验数据失败")
     ssleep(3)
     return
@@ -1350,7 +1351,7 @@ hotUpdate = function()
     return
   end
   -- log(3, expectmd5, loadConfig("lr_md5", "2"))
-  if downloadFile(url, path) == -1 then
+  if downloadFile(url, path, downloadProgress) == -1 then
     stoast("下载最新脚本失败")
     ssleep(3)
     return
