@@ -188,7 +188,7 @@ if __name__ == '__main__':
     # 保存文件
     # 复制到懒人精灵
     # copy()
-    # 保存并且上传到gitee
+    # 保存并且上传到git
     saveAndPush()
     # pull远程到本地
     # updateLocal()

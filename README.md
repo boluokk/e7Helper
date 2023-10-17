@@ -34,6 +34,3 @@
 1、在懒人IDE中打包脚本文件
 2、运行 start.py 中的 saveAndPush()函数
 ```
-
-### 捐助
-![](qr.png)
