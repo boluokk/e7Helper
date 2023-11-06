@@ -225,7 +225,7 @@ sui.showGrindSetting = function ()
   local passAll = ui_option.战斗类型
   for i,v in pairs(passAll) do
     local cur = i..''
-    if cur:includes({1,3,5,6}) then
+    if cur:includes({1,3,5,6,7}) then
       addCheckBox(v, v, grindUID)
     else
       addCheckBox(v, v, grindUID)
@@ -240,6 +240,8 @@ sui.showGrindSetting = function ()
   newRow(grindUID)
   addTextView('补充行动力:', grindUID)
   addRadioGroup('补充行动力类型', ui_option.补充行动力类型, grindUID)
+  newRow(grindUID)
+  addCheckBox('宠物重复战斗', '宠物重复战斗', grindUID, true)
   newRow(grindUID)
   addTextView('讨伐: ', grindUID)
   addSpinner('讨伐类型', ui_option.讨伐关卡类型, grindUID)
@@ -271,6 +273,9 @@ sui.showGrindSetting = function ()
   addTextView('级', grindUID)
   addEditText('活动次数', '100', grindUID)
   addTextView('次', grindUID)
+  newRow(grindUID)
+  addTextView('主线重复刷：', grindUID)
+  addEditText('主线重复刷次数', '100', grindUID)
   newRow(grindUID)
   addButton('刷图配置保存', grindUID)
   addButton('刷图配置取消', grindUID)

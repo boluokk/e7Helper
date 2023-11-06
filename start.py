@@ -189,7 +189,7 @@ if __name__ == '__main__':
     # 复制到懒人精灵
     # copy()
     # 保存并且上传到git
-    # saveAndPush()
+    saveAndPush()
     # pull远程到本地
     # updateLocal()
     pass

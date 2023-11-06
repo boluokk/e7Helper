@@ -4,6 +4,7 @@ time = systemTime
 -- https://gitcode.net/otato001/e7hepler/-/raw/master/
 -- https://gitea.com/boluoii/e7Helper/raw/branch/master/
 update_source_arr = {
+  'https://gitee.com/boluokk/e7_helper/raw/master/',
   'https://gitea.com/boluoii/e7Helper/raw/branch/master/',
   'https://gitcode.net/otato001/e7hepler/-/raw/master/',
 }
@@ -12,8 +13,8 @@ update_source_fallback = table.remove(update_source_arr, math.random(1, #update_
 -- apk level 限制
 is_apk_old = function() return getApkVerInt() < 0 end
 apk_old_warning = "怎么还有人用" .. getApkVerInt()
-release_date = "10.17 22:52"
-release_content = '修复一些问题'
+release_date = "11.06 21:30"
+release_content = '已知问题修复;添加重复刷主线功能'
 -- 获取workPath
 root_path = getWorkPath() .. '/'
 -- 禁止热更新

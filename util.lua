@@ -398,8 +398,8 @@ log = function(...)
 end
 
 slog = function (msg, level, clear)
-	msg = msg or ''
-	level = level or 3
+	local msg = msg or ''
+	local level = level or 3
 	if clear then console.clearLog() end
 	local a = os.date('%Y-%m-%d %H:%M:%S')
 	msg = a..': '..msg
@@ -1560,11 +1560,11 @@ end
 consoleInit = function()
   console.clearLog()
 	local screen = getScreen()
-  -- console.setPos(round(screen.height * 0.05), round(screen.height * 0.05),
-  --                round(screen.height * 0.9), round(screen.height * 0.9))
   local resolution = screen.width .. 'x' .. screen.height
   local title = getApkVerInt() .. ' ' .. release_date .. '  ' .. resolution
   console.setTitle(is_apk_old() and apk_old_warning or title)
+	-- 无法显示日志bug
+	console.show(false)
   console.dismiss()
 end
 

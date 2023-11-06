@@ -363,7 +363,7 @@ path.竞技场玩家 = function ()
 	local r1, r2
 	wait(function ()
 		stap({386,17})
-		r1, r2 = findOne({'国服竞技场配置防御队', 
+		r1, r2 = findOne({'左上问号1', 
 											'国服竞技场每周结算时间', 
 											'国服竞技场每周排名奖励'})
 		if r1 then return 1 end
@@ -406,8 +406,8 @@ path.竞技场玩家 = function ()
 							 '国服战斗完成竞技场确定', 
 							 '国服战斗完成确定'}, {tapInterval = 1})
 			stap({323,27})
-			if findOne('国服竞技场配置防御队') then
-				longAppearAndTap('国服竞技场配置防御队', nil, {323,27}, 1) 
+			if findOne('左上问号1') then
+				longAppearAndTap('左上问号1', nil, {323,27}, 1) 
 				return 1
 			end
 		end)
@@ -429,7 +429,7 @@ path.竞技场玩家 = function ()
 				untilTap('国服竞技场切换对手确定')
 				refreshCount  = refreshCount - 1
 				-- 金币是否耗尽
-				local tmp, v = untilAppear({'国服神秘商店购买资源不足', '国服竞技场配置防御队'})
+				local tmp, v = untilAppear({'国服神秘商店购买资源不足', '左上问号1'})
 				if v == '国服神秘商店购买资源不足' then log('资源不足') untilTap('神秘商店取消') return 1 end
 				-- 更新完对手, 开始新的一轮
 				return
@@ -440,9 +440,7 @@ path.竞技场玩家 = function ()
 		end
 		untilTap('国服竞技场挑战', {rg = {871,149,992,696}})
 		untilTap('国服竞技场战斗开始', {sim = .98})
-		if path.竞技场购票() == 1 then
-			return 1
-		end
+		if path.竞技场购票() == 1 then return 1 end
 		path.战斗代理()
 	end, .5, nil, true)
 end
@@ -461,9 +459,8 @@ path.竞技场NPC = function ()
 	end)
 	local p, v
 	wait(function ()
-		p, v = findOne({'国服JJC左下剑', 
-								 '国服竞技场每周排名奖励'})
-		if v == '国服JJC左下剑' then
+		p, v = findOne({'左上问号1', '国服竞技场每周排名奖励'})
+		if v == '左上问号1' then
 			return 1
 		end
 		if v == '国服竞技场每周排名奖励' then
@@ -483,7 +480,6 @@ path.竞技场NPC = function ()
 		end
 		stap({1048,216})
 	end)
-
 	local pos
 	local isSwipe = 1
 	while 'qq群206490280' do
@@ -514,7 +510,7 @@ path.竞技场NPC = function ()
 			-- 开始刷NPC
 			wait(function ()
 				stap(pos)
-				if not findOne('国服JJC左下剑') then return 1 end
+				if not findOne('左上问号1') then return 1 end
 			end)
 			untilTap('国服竞技场战斗开始', {sim = .98})
 			-- 购票
@@ -533,11 +529,8 @@ path.竞技场购票 = function ()
 	local buyTicket = current_task['叶子买票']
 	local t,v
 	wait (function ()
-		stap({615,23})
-		t, v = findOne({'国服竞技场购买票页面', '国服Auto'})
-		if v then
-			return 1
-		end
+		t, v = findOne({'国服竞技场购买票页面', '国服Auto', '未戴装备不在显示', '未配置英雄'})
+		if v then return 1 else stap({615,23}) end
 	end)
 	-- 是否使用叶子兑换5张票
 	-- 是否使用砖石兑换5张票 暂不支持
@@ -559,6 +552,11 @@ path.竞技场购票 = function ()
 	if v == '国服竞技场购买票页面' and not buyTicket then
 		log('不购票')
 		return 1
+	end
+
+	if v == '未戴装备不在显示' or v == '未配置英雄' then
+		untilTap(v)
+		return path.竞技场购票()
 	end
 end
 
@@ -913,7 +911,7 @@ end
 path.战斗选择页 = function ()
 	wait(function ()
 		stap(point.战斗)
-				ssleep(1)
+			ssleep(1)
 			if not findOne('国服主页Rank') then return 1 end
 	end)
 	untilAppear('国服战斗类型页')
@@ -1195,7 +1193,7 @@ end
 path.托管处理 = function (isActivity)
 	log('托管处理')
 	local greenPos
-	local isAgent
+	local petAgent = current_task.宠物重复战斗
 	-- 活动的位置可能不一样
 	local trg = isActivity or {563,528,685,584}
 	if not wait(function ()
@@ -1205,15 +1203,19 @@ path.托管处理 = function (isActivity)
 		log('未找到托管')
 		slog('未找到托管')
 	else
-		isAgent = 1
+		local s
 		wait(function ()
-			if findOne('国服重复战斗绿色', {rg = trg, sim = .9}) then 
-				return 1 
+			s = findOne('国服重复战斗绿色', {rg = trg, sim = .9})
+			if petAgent and s then 
+				return 1
+			end
+			if not petAgent and not s then
+				return 1
 			end
 			stap(greenPos)
 		end)
 	end
-	return isAgent
+	return petAgent
 end
 
 -- 跑图模式2
@@ -1771,6 +1773,34 @@ path.后记 = function ()
 	end)
 
 	local fightCount = current_task.后记次数
+	return path.通用刷图模式1(fightCount, nil, '后记')
+end
+
+path.主线重复刷 = function ()
+	wait(function ()
+		stap(point.冒险)
+		ssleep(1)
+		return not findOne('国服主页Rank')
+	end)
+
+	wait(function ()
+		if findTapOnce('后记准备战斗') then
+			return wait(function ()
+				return not findOne('后记准备战斗')
+			end, 1, 5)
+		end
+	end)
+
+
+	wait(function ()
+		if findTapOnce('国服长选择队伍') then
+			return wait(function ()
+				return not findOne('国服长选择队伍')
+			end, 1, 5)
+		end
+	end)
+
+	local fightCount = current_task.主线重复刷次数
 	return path.通用刷图模式1(fightCount, nil, '后记')
 end
 
