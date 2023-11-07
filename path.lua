@@ -510,7 +510,7 @@ path.竞技场NPC = function ()
 			-- 开始刷NPC
 			wait(function ()
 				stap(pos)
-				if not findOne('左上问号1') then return 1 end
+				if findOne('左上问号1') then return 1 end
 			end)
 			untilTap('国服竞技场战斗开始', {sim = .98})
 			-- 购票

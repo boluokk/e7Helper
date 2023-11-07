@@ -1,5 +1,3 @@
-## 必读
-
 ### 下载: [下载链接(密码6666)](https://wwos.lanzouj.com/ijA8I1akj9ni)
 
 ### QQ频道(反馈及建议): 24oyp5x92q
