@@ -23,9 +23,13 @@ loadConfig = function(k, v)
 end
 
 getTargetName = function (str)
+	if point['cmp_'..current_server..str] then return 'cmp_'..current_server..str end
 	if point['cmp_'..str] then return 'cmp_'..str end
+	if point['mul_'..current_server..str] then return 'mul_'..current_server..str end
 	if point['mul_'..str] then return 'mul_'..str end
+	if point['ocr_'..current_server..str] then return 'ocr_'..current_server..str end
 	if point['ocr_'..str] then return 'ocr_'..str end
+	if point['img_'..current_server..str] then return 'img_'..current_server..str end
 	if point['img_'..str] then return 'img_'..str end
 	return str
 end
@@ -155,7 +159,7 @@ findOne = function (target, config)
 		if tar == "" then return end
 		originTar = tar
 		tar = getTargetName(tar)
-		if detail_log_message then log(originTar) end
+		if detail_log_message then log(tar) end
 		if tar:find('img_') then
 			ret,x,y = findPicEx(config.rg[1], config.rg[2], config.rg[3], config.rg[4], tar..config.imgEnd, config.sim)
 			if x ~= -1 then return {x, y}, originTar end
@@ -201,7 +205,6 @@ findOne = function (target, config)
 	end
 	
 end
-
 
 findTap = function (target, config)
 	local r,w = findOne(target, config)
@@ -376,6 +379,7 @@ wait = function (func, interval, TIMEOUT, disableRestartGame)
 			log('超时重试')
 			slog('超时重试')
 			setNumberConfig("scriptStatus", 3)
+			sendCloudMessage('超时重启前截图')
 			path.游戏首页()
 			reScript()
 		end
@@ -386,26 +390,23 @@ end
 -- log_history = {}
 log = function(...)
 	local arg = {...}
-	for _, v in pairs(arg) do
-		if type(v) == 'table' then
-			print(v)
-			for k,v in pairs(v) do print(v) end 
-		else
-			if logger_display_left_bottom then stoast(v) else print(v) end
+	local res = ''
+	for k, v in pairs(arg) do 
+		if type(v) == 'string' then
+			res = res..v.." "
 		end
 	end
-	
+	if logger_display_left_bottom then stoast(res) else print(res) end
 end
 
 slog = function (msg, level, clear)
 	local msg = msg or ''
-	local level = level or 3
+	local level = level or 1
 	if clear then console.clearLog() end
 	local a = os.date('%Y-%m-%d %H:%M:%S')
 	msg = a..': '..msg
 	console.println(level, msg)
 end
-
 
 sswipe = function (s, e)
 	touchDown(1, s[1], s[2])
@@ -1557,14 +1558,27 @@ initLocalState = function (datas, state)
 	end
 end
 
+-- 获取水平宽度
+getDisplayRotateByWidth = function ()
+	local rotate = getDisplayRotate()
+	local x,y = getDisplaySize()
+	if rotate == 0 then
+		return x
+	end
+	if rotate == 1 then
+		return y
+	end
+end
+
 consoleInit = function()
   console.clearLog()
 	local screen = getScreen()
   local resolution = screen.width .. 'x' .. screen.height
-  local title = getApkVerInt() .. ' ' .. release_date .. '  ' .. resolution
+  local title = getApkVerInt() .. ' ' .. release_date .. ' ' .. resolution
+	console.setPos(10,10, getDisplayRotateByWidth() * 7, -2)
   console.setTitle(is_apk_old() and apk_old_warning or title)
 	-- 无法显示日志bug
-	console.show(false)
+	console.show(true)
   console.dismiss()
 end
 
@@ -1611,6 +1625,35 @@ closeHUD = function ()
 end
 
 -- 发送消息通知
-sendCloudMessage = function (msg)
-	
+sendCloudMessage = function (message)
+	-- qq消息通知
+	qqNotify(message)
+end
+
+qqNotify = function (info)
+	local qq_iamges_url = current_task['qq消息通知'] -- or 'http://192.168.137.1:9527/api/script/message/images'
+	if not qq_iamges_url or #qq_iamges_url == 0 then return end
+	qq_iamges_url = 'http://'..qq_iamges_url..':9527/api/script/message/images' 
+	local to = current_task['qq消息发送给谁'] --or "1352955539"
+	if not to then return else to = to..'' end
+	if #to == 0 then return end
+	local param = "image=" .. encodeUrl(captureImageReturnBase64()) .. "&info=" .. encodeUrl(info) ..
+        "&to=" .. encodeUrl(to)
+	log('发送qq消息:', info, to)
+	asynHttpPost(function (rep, code)
+		if (code ~= 200) then
+			return log('发送qq消息异常')
+		end
+		local ret = jsonLib.decode(rep)
+		if (ret.code ~= 200) then
+			log(rep)
+		end
+	end, 
+	qq_iamges_url, param)
+end
+
+captureImageReturnBase64 = function ()
+	local tempImagePath = root_path..'tempimage.jpg'
+	snapShot(tempImagePath)
+	return getFileBase64(tempImagePath)
 end

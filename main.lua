@@ -10,11 +10,12 @@ update_source_arr = {
 }
 update_source = table.remove(update_source_arr, math.random(1, #update_source_arr))
 update_source_fallback = table.remove(update_source_arr, math.random(1, #update_source_arr))
+click_start_tip = '你的star, 是作者的最大帮助'
 -- apk level 限制
 is_apk_old = function() return getApkVerInt() < 0 end
 apk_old_warning = "怎么还有人用" .. getApkVerInt()
-release_date = "11.07 22:36"
-release_content = 'JJC不挑战问题修复'
+release_date = "11.14 15:37"
+release_content = '国际服UI改动修复'
 -- 获取workPath
 root_path = getWorkPath() .. '/'
 -- 禁止热更新
@@ -44,7 +45,7 @@ server_pkg_name = {
   ['国际服'] = 'com.stove.epic7.google',
 }
 -- 当前服务器
-current_server = "国服"
+current_server = "国际服"
 -- wait 间隔
 wait_interval = .3
 -- 是否异常退出
@@ -101,6 +102,7 @@ local scriptStatus = sgetNumberConfig("scriptStatus", 0)
 if scriptStatus == 0 then
   consoleInit()
   initLocalState()
+  slog(click_start_tip, 3)
   slog('最近更新时间: '..release_date)
   slog('最近更新内容: '..release_content or '暂无')
   if not hotupdate_disabled then hotUpdate() end

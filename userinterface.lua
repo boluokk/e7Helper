@@ -306,6 +306,10 @@ sui.showBagSetting = function ()
     end
   end
   newRow(bagUID)
+  addTextView('出售-萃取优先度', bagUID)
+  newRow(bagUID)
+  addRadioGroup('出售萃取优先度', ui_option.出售萃取优先度, bagUID)
+  newRow(bagUID)
   addTextView('装备背包', bagUID)
   newRow(bagUID)
   -- 默认：
@@ -469,9 +473,14 @@ sui.showAdvSetting = function ()
   addTextView('热更设置 ', AdvSettingUID)
   addCheckBox('关闭热更', '关闭热更', AdvSettingUID)
   newRow(AdvSettingUID)
+  addTextView('qq消息通知(服务器地址) ', AdvSettingUID)
+  addEditText('qq消息通知', '', AdvSettingUID)
+  newRow(AdvSettingUID)
+  addTextView('qq消息发送给谁(QQ号) ', AdvSettingUID)
+  addEditText('qq消息发送给谁', '', AdvSettingUID)
+  newRow(AdvSettingUID)
   addButton('高级配置保存', AdvSettingUID)
   addButton('高级配置取消', AdvSettingUID)
-
   ui.show(AdvSettingUID, false)
   loadProfile('advSetting.txt')
 end

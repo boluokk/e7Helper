@@ -8,27 +8,27 @@ end
 -- isBack: 通过按back来回退
 path.游戏首页 = function ()
 	current_server = getUIRealValue('服务器', '服务器')
+	local isBack = true
 	if not sAppIsRunning(current_server) or not sAppIsFront(current_server) then
 		open(server_pkg_name[current_server])
 	end
 	setControlBarPosNew(0, 1)
-	local clickTarget = {'国服签到右下蓝底', '国服签到右下蓝底2', '国服公告X',
-											 '国服登录第七史诗', '国服放弃战斗', '国服结束',
-											 '神秘商店取消', '国际服比赛', '新英雄获取确认',
-											 '所有取消', '代理中大厅', '代理暂停'}
+	local clickTarget = {'国服签到右下蓝底', '国服签到右下蓝底2', '国服公告X', '国服竞技场挑战升级',
+										 	 '国服放弃战斗', '国服结束', '神秘商店取消', '国际服比赛', 
+											 '新英雄获取确认', '所有取消', '代理中大厅'}
 	if wait(function ()
 		-- 服务器维护中
 		if findOne('国服服务器维护中') then return 'exit' end
-		if findOne('国服主页Rank') and not longAppearMomentDisAppear('国服主页Rank', nil, nil, 1) then
-			isBack = true
+		if findOne('国服主页Rank') and not longAppearMomentDisAppear('国服主页Rank', nil, nil, 2) then
 			return 1
 		end
+		if findOne('国服登录第七史诗') then isBack = false end
 		if not findTapOnce(clickTarget, {keyword = {'结束', '取消'}}) then
-			-- if not isBack then
+			if not isBack then
 				stap(point.回退)
-			-- else
-				-- back()
-			-- end
+			else
+				back()
+			end
 		end
 	end, 1, 7 * 60) == 'exit' then
 		slog('服务器维护中...')
@@ -52,15 +52,17 @@ path.任务队列 = function ()
 				-- 2 表示重做
 				if path[v]() == 2 then path.游戏首页() path[v]() end
 				slog(v)
+				sendCloudMessage(v..'退出前截图')
 				setNumberConfig("exception_count", 1)
 				path.游戏首页()
 			end
 			setNumberConfig('current_task_index', i)
 		end
 		-- 开始休息
+		sendCloudMessage('任务完成开始挂机..')
 		if intervalTime ~= 0 then
 			local intervalSecTime = (intervalTime * 60 * 1000) + time()
-			wait(function () log("挂机时间: "..getTime(intervalSecTime)..' (你的star是作者的最大帮助)') end, 1, intervalTime * 60)
+			wait(function () log("挂机时间: "..getTime(intervalSecTime)) end, 1, intervalTime * 60)
 		end
 		setNumberConfig('current_task_index', 0)
 	until intervalTime == 0
@@ -380,14 +382,14 @@ path.竞技场玩家 = function ()
 			stap(pos)
 			if findOne(point.国服竞技场每周奖励判定[rankIndex + 1]) then return 1 end
 		end)
-		untilTap({'国服竞技场领取每周奖励', 'cmp_国际服竞技场领取每周奖励'})
+		untilTap({'国服竞技场领取每周奖励', '国际服竞技场领取每周奖励'})
 	end
 	log('进入竞技场')
 	-- 竞技策略-积分对比(好似没啥用, 去除)
 	-- 交战对手切换
 	wait(function ()
 		stap({1108,116})
-		if findOne({'国服竞技场挑战', 
+		if findOne({'竞技场挑战', 
 								'国服竞技场再次挑战', 
 								'国服竞技场已挑战过对手'}, 
 								{rg = {879,146,990,686}}) then
@@ -412,7 +414,7 @@ path.竞技场玩家 = function ()
 			end
 		end)
 		local enemy = wait(function ()
-			return findOne('国服竞技场挑战', {rg = {871,149,992,696}})
+			return findOne('竞技场挑战', {rg = {871,149,992,696}})
 		end, .1, 1)
 		if not enemy then
 			if buyChangeCount then
@@ -438,7 +440,7 @@ path.竞技场玩家 = function ()
 				return 1
 			end
 		end
-		untilTap('国服竞技场挑战', {rg = {871,149,992,696}})
+		untilTap('竞技场挑战', {rg = {871,149,992,696}})
 		untilTap('国服竞技场战斗开始', {sim = .98})
 		if path.竞技场购票() == 1 then return 1 end
 		path.战斗代理()
@@ -717,11 +719,14 @@ path.成就领取 = function ()
 				end
 			end
 		else
-			wait(function ()
-				findTap('国服成就领取绿色')
-				if findOne('国服成就前往灰色') then log(11) return 1 end
-				stap({574,40})
-			end)
+			-- wait(function ()
+			-- 	findTap('国服成就领取绿色')
+			-- 	if findOne('国服成就前往灰色') then log(11) return 1 end
+			-- 	stap({574,40})
+			-- end)
+			if findOne('全部领取红点') then
+				longDisappearTap('全部领取红点', nil, {863,102}, 1.5, 15)
+			end
 		end
 	end
 end
@@ -730,6 +735,8 @@ path.宠物礼盒 = function ()
 	if findOne('国服宠物礼盒') then untilTap('国服宠物礼盒') else log('无宠物礼盒') end
 end
 
+-- 国际服和国服位置不一样，但是拿邮件方式基本一致似乎
+-- todo
 path.收取邮件 = function ()
 	if not findOne({'国服邮件', '国服邮件2'}) then log('无邮件') return 1 end
 	wait(function ()
@@ -917,7 +924,7 @@ path.战斗选择页 = function ()
 	untilAppear('国服战斗类型页')
 	wait(function ()
 		stap({280,260})
-		if not findOne('国服迷宫主页', {sim = 1}) then return 1 end
+		if not findOne('国服迷宫主页', {sim = 1}) then ssleep(1) return 1 end
 	end)
 end
 
@@ -1298,6 +1305,7 @@ path.宠物背包清理 = function ()
 end
 
 path.清理装备背包 = function ()
+	local sellAndExtractPriority = current_task['出售萃取优先度'] or 0
 	wait(function ()
 		stap({341,88})
 		return findOne('国服背包主页')
@@ -1350,6 +1358,21 @@ path.清理装备背包 = function ()
 	end)
 	
 	-- 可能没有配置
+	-- 优先度判定
+	-- 0 出售优先，1 萃取优先
+	if sellAndExtractPriority == 0 then
+			return path.装备出售优先()
+	elseif sellAndExtractPriority == 1 then
+		if findOne('国际服萃取出售') then
+			return path.装备萃取优先()
+		else
+			return path.装备出售优先()
+		end
+	end
+
+end
+
+path.装备出售优先 = function ()
 	if not wait(function ()
 		if findTap('国服装备出售') then
 			return 1
@@ -1359,6 +1382,21 @@ path.清理装备背包 = function ()
 	end
 	wait(function ()
 		if findTap('国服出售确认') then
+			return 1
+		end
+	end, .5, 5)
+end
+
+path.装备萃取优先 = function ()
+	if not wait(function ()
+		if findTap('国际服萃取出售') then
+			return 1
+		end
+	end, .5, 5) then
+		return
+	end
+	wait(function ()
+		if findTap('国际服萃取出售确定') then
 			return 1
 		end
 	end, .5, 5)
@@ -1695,6 +1733,7 @@ path.打开右侧栏 = function (pos)
 			return 1
 		end
 		stap({1241,32})
+		ssleep(1)
 	end)
 	wait(function ()
 		if not findOne('国服右侧栏打开') then
@@ -1720,7 +1759,7 @@ path.购买企鹅 = function ()
 			slog('红叶消耗完')
 			return 1
 		end
-		if not noTipTap and findTap('814|549|0E4810,833|551|0F4C12,816|562|1CCF5E,830|561|149F35') then
+		if not noTipTap and findTap('购买企鹅不再提示') then
 			noTipTap = true
 		end
 		stap({903,280})
@@ -1764,13 +1803,7 @@ path.后记 = function ()
 	end)
 
 
-	wait(function ()
-		if findTapOnce('国服长选择队伍') then
-			return wait(function ()
-				return not findOne('国服长选择队伍')
-			end, 1, 5)
-		end
-	end)
+	path.长队伍点击处理()
 
 	local fightCount = current_task.后记次数
 	return path.通用刷图模式1(fightCount, nil, '后记')
@@ -1791,14 +1824,7 @@ path.主线重复刷 = function ()
 		end
 	end)
 
-
-	wait(function ()
-		if findTapOnce('国服长选择队伍') then
-			return wait(function ()
-				return not findOne('国服长选择队伍')
-			end, 1, 5)
-		end
-	end)
+	path.长队伍点击处理()
 
 	local fightCount = current_task.主线重复刷次数
 	return path.通用刷图模式1(fightCount, nil, '后记')
@@ -1841,28 +1867,9 @@ path.活动 = function ()
 		log('活动-默认关卡')
 		local tmpv, curPassType = untilAppear({'选择难度初级', '辅助英雄队长'})
 		if curPassType == '辅助英雄队长' then
-			wait(function ()
-				if findTapOnce('国服长选择队伍') then
-					return wait(function ()
-						return not findOne('国服长选择队伍')
-					end, 1, 5)
-				end
-			end)
+			path.长队伍点击处理()
 		elseif curPassType == '选择难度初级' then
-			wait(function ()
-				if findTapOnce('国服长选择队伍') then
-					return wait(function ()
-						return not findOne('选择难度初级')
-					end, 1, 5)
-				end
-			end)
-			wait(function ()
-				if findTapOnce('国服长选择队伍') then
-					return wait(function ()
-						return not findOne('国服长选择队伍')
-					end, 1, 5)
-				end
-			end)
+			path.长队伍点击处理()
 		end
 		return path.通用刷图模式1(fc, nil, '后记')
 	elseif w == '活动首页' then
@@ -1879,4 +1886,15 @@ end
 path.免费书签 = function ()
 	current_task['更新次数'] = 0
 	path.刷书签(0)
+end
+
+path.长队伍点击处理 = function ()
+	wait(function ()
+		if findOne('国服长选择队伍') and longAppear('国服长选择队伍') then 
+			findTapOnce('国服长选择队伍')
+			return wait(function ()
+				return not findOne('国服长选择队伍')
+			end, 1, 5)
+		end
+	end)
 end
