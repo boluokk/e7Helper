@@ -365,7 +365,7 @@ path.竞技场玩家 = function ()
 	local r1, r2
 	wait(function ()
 		stap({386,17})
-		r1, r2 = findOne({'左上问号1', 
+		r1, r2 = findOne({'左上3字问号', 
 											'国服竞技场每周结算时间', 
 											'国服竞技场每周排名奖励'})
 		if r1 then return 1 end
@@ -408,8 +408,8 @@ path.竞技场玩家 = function ()
 							 '国服战斗完成竞技场确定', 
 							 '国服战斗完成确定'}, {tapInterval = 1})
 			stap({323,27})
-			if findOne('左上问号1') then
-				longAppearAndTap('左上问号1', nil, {323,27}, 1) 
+			if findOne('左上3字问号') then
+				longAppearAndTap('左上3字问号', nil, {323,27}, 1) 
 				return 1
 			end
 		end)
@@ -431,7 +431,7 @@ path.竞技场玩家 = function ()
 				untilTap('国服竞技场切换对手确定')
 				refreshCount  = refreshCount - 1
 				-- 金币是否耗尽
-				local tmp, v = untilAppear({'国服神秘商店购买资源不足', '左上问号1'})
+				local tmp, v = untilAppear({'国服神秘商店购买资源不足', '左上3字问号'})
 				if v == '国服神秘商店购买资源不足' then log('资源不足') untilTap('神秘商店取消') return 1 end
 				-- 更新完对手, 开始新的一轮
 				return
@@ -461,8 +461,8 @@ path.竞技场NPC = function ()
 	end)
 	local p, v
 	wait(function ()
-		p, v = findOne({'左上问号1', '国服竞技场每周排名奖励'})
-		if v == '左上问号1' then
+		p, v = findOne({'左上3字问号', '国服竞技场每周排名奖励'})
+		if v == '左上3字问号' then
 			return 1
 		end
 		if v == '国服竞技场每周排名奖励' then
@@ -512,7 +512,7 @@ path.竞技场NPC = function ()
 			-- 开始刷NPC
 			wait(function ()
 				stap(pos)
-				if findOne('左上问号1') then return 1 end
+				if findOne('左上3字问号') then return 1 end
 			end)
 			untilTap('国服竞技场战斗开始', {sim = .98})
 			-- 购票
@@ -921,7 +921,15 @@ path.战斗选择页 = function ()
 			ssleep(1)
 			if not findOne('国服主页Rank') then return 1 end
 	end)
-	untilAppear('国服战斗类型页')
+	wait(function ()
+		if findOne('左上2字问号') then
+			if findOne('迷宫关卡banner页') then
+				return 1
+			end
+			sswipe({176,374}, {800,374})
+		end
+	end, 1)
+
 	wait(function ()
 		stap({280,260})
 		if not findOne('国服迷宫主页', {sim = 1}) then ssleep(1) return 1 end

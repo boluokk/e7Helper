@@ -112,12 +112,15 @@ findOne = function (target, config)
 		reWaitTime()
 		return
 	end
+
 	-- 提交神经网络
 	if cmpColorEx(point['cmp_国服Connection'], 1) == 1 then
 		releaseCapture()
 		wait(function ()
 			log('connection..')
 			reWaitTime()
+			-- B服特殊判定
+			if cmpColorEx(point['cmp_B服退出判定'], 1) == 1 then tap(528,417) return end
 			if cmpColorEx(point['cmp_国服Connection'], 1) == 0 then keepCapture() return true end
 		end, 1, nil, true)
 	end
