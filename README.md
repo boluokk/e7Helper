@@ -15,11 +15,13 @@
 ![](https://img.shields.io/badge/total_line-4k+-purple)
 <p></p>
 
-<div style="display: flex; align-content: center;justify-content: center;">
-<img src="./media/qqnotify.gif">
-<img src="./media/flushtag.gif">
-</div>
 <p><img src="cover.png"></p>
+</div>
+
+### 部分内容
+<div align="center">
+    <img src="./media/qqnotify.gif">
+    <img src="./media/flushtag.gif">
 </div>
 
 ### 开发
