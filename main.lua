@@ -14,7 +14,7 @@ click_start_tip = '你的star, 是作者的最大帮助'
 -- apk level 限制
 is_apk_old = function() return getApkVerInt() < 0 end
 apk_old_warning = "怎么还有人用" .. getApkVerInt()
-release_date = "11.16 23:40"
+release_date = "11.18 21:58"
 release_content = 'NPC竞技场挑战-修复'
 -- 获取workPath
 root_path = getWorkPath() .. '/'
