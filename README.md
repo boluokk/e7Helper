@@ -6,7 +6,7 @@
 <a style="color: mediumvioletred" href=https://www.bilibili.com/video/BV1214y1k7XB/?spm_id_from=333.337.search-card.all.click&vd_source=0a11f3e57dadf1233d83ab558c971e40/>第七史诗配装器　</a>| 
 <a href=https://qm.qq.com/cgi-bin/qm/qr?k=o6MW-K-Ws6A2-S_WhHEro1JggzREWPzt&jump_from=webapi&authKey=PRSHw0kOjKtnqEVwyXCRHnKKwAWhzXWD/y486deoyZ/AWyNfGLwHIEwjb8gf9yoX>qq交流群:206490280 </a> | 
 <a href="https://github.com/boluokk/e7QQBot">QQ消息提示项目地址</a>
-
+<p></p>
 
 
 ![](https://img.shields.io/badge/script_size-41KB-blue)
