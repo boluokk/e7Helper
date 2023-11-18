@@ -24,6 +24,11 @@
     <img src="./media/flushtag.gif">
 </div>
 
+### 交流群
+<div align="center">
+    <img src="media/qqgroup.png">
+</div>
+
 ### 开发
 
 1、下载懒人精灵IDE(3.8.6.2)
