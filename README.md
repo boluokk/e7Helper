@@ -10,13 +10,16 @@
 
 
 ![](https://img.shields.io/badge/script_size-41KB-blue)
-![](https://img.shields.io/badge/downloads-6k+-green)
+![](https://img.shields.io/badge/downloads-7k+-green)
 ![](https://img.shields.io/badge/repo_size-3.54MB-orange)
 ![](https://img.shields.io/badge/total_line-4k+-purple)
 <p></p>
 
-![](qqnotify.gif)
-![](cover.png)
+<div style="display: flex; align-content: center;justify-content: center;">
+<img src="./media/qqnotify.gif">
+<img src="./media/flushtag.gif">
+</div>
+<p><img src="cover.png"></p>
 </div>
 
 ### 开发
@@ -26,9 +29,18 @@
 2、编码调试
 
 ```python
-1、将整个项目 clone 下来
-2、填写 start.py 中的 projectPath 和 packagePath
-3、运行 copy() 函数
+1、将整个项目
+clone
+下来
+2、填写
+start.py
+中的
+projectPath
+和
+packagePath
+3、运行
+copy()
+函数
 4、开始编码调试
 ```
 
@@ -36,5 +48,9 @@
 
 ```python
 1、在懒人IDE中打包脚本文件
-2、运行 start.py 中的 saveAndPush()函数
+2、运行
+start.py
+中的
+saveAndPush()
+函数
 ```
