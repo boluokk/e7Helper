@@ -14,8 +14,8 @@ click_start_tip = '你的star, 是作者的最大帮助'
 -- apk level 限制
 is_apk_old = function() return getApkVerInt() < 0 end
 apk_old_warning = "怎么还有人用" .. getApkVerInt()
-release_date = "11.18 21:58"
-release_content = 'NPC竞技场挑战-修复'
+release_date = "11.19 17:30"
+release_content = '修复一些问题'
 -- 获取workPath
 root_path = getWorkPath() .. '/'
 -- 禁止热更新
@@ -33,7 +33,11 @@ capture_interval = 0
 -- 游戏代理识图间隔
 game_running_capture_interval = 3
 -- 所有配置文件名称
-fileNames = {'config.txt', 'fightConfig.txt', 'bagConfig.txt', 'functionSetting.txt', 'advSetting.txt'}
+fileNames = {'config.txt', 
+             'fightConfig.txt', 
+             'bagConfig.txt', 
+             'functionSetting.txt', 
+             'advSetting.txt'}
 -- 点击延迟
 tap_interval = 0
 -- app运行时间
@@ -97,11 +101,13 @@ setEventCallBack()
 if not hotupdate_disabled then
   hotupdate_disabled = uiConfigUnion({'advSetting.txt'})['关闭热更']
 end
+
 local scriptStatus = sgetNumberConfig("scriptStatus", 0)
 -- 热更新开始
 if scriptStatus == 0 then
   consoleInit()
   initLocalState()
+  initPostCheckProcess()
   slog(click_start_tip, 3)
   slog('最近更新时间: '..release_date)
   slog('最近更新内容: '..release_content or '暂无')
@@ -113,7 +119,7 @@ else
   current_task = uiConfigUnion(fileNames)
   local configReTryCount = current_task['重试次数'] or 5
   -- 多次异常关闭脚本
-  -- 退出游戏还是重启游戏?
+  -- 退出游戏还是重启游戏 ?
   if exception_count > configReTryCount then 
     slog('连续'..configReTryCount..'次异常退出') 
     setNumberConfig("exception_count", 1) 

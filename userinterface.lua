@@ -75,10 +75,8 @@ suie.启动 = function ()
   if not sFileExist('bagConfig.txt') then saveProfile('config.txt') log('请配置满背包处理!') suie.清理背包() return end
   if not sFileExist('functionSetting.txt') then saveProfile('config.txt') log('请配置功能设置!') suie.功能设置() return end
   suie.开启前()
-  if print_config_info then
-    print(current_task)
-    exit()
-  end
+  if print_config_info then print(current_task) exit() end
+  if current_task['开启日志'] then logger_display_left_bottom = false detail_log_message = true end
   path.游戏开始()
 end
 suie.开启前 = function ()
@@ -470,7 +468,7 @@ sui.showAdvSetting = function ()
   newRow(AdvSettingUID)
   addButton('手动热更', AdvSettingUID)
   newRow(AdvSettingUID)
-  addTextView('热更设置 ', AdvSettingUID)
+  addCheckBox('开启日志', '开启日志', AdvSettingUID)
   addCheckBox('关闭热更', '关闭热更', AdvSettingUID)
   newRow(AdvSettingUID)
   addTextView('qq消息通知(服务器地址) ', AdvSettingUID)

@@ -7,7 +7,7 @@ test = function ()
   -- log(findOne({'未记载的故事', '管理队伍', '国服返回箭头'})) 
   -- sendCloudMessage()
   -- ssleep(10)
-  log(findTapOnce('申请好友取消'))
+  print(table.unpack({1,2,{123,11},4}))
   exit()
 end
 if not disable_test then test() end

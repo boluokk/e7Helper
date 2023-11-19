@@ -162,7 +162,8 @@ findOne = function (target, config)
 		if tar == "" then return end
 		originTar = tar
 		tar = getTargetName(tar)
-		if detail_log_message then log(tar) end
+		running = tar
+		if detail_log_message then log('[', table.unpack(target), ']') end
 		if tar:find('img_') then
 			ret,x,y = findPicEx(config.rg[1], config.rg[2], config.rg[3], config.rg[4], tar..config.imgEnd, config.sim)
 			if x ~= -1 then return {x, y}, originTar end
@@ -393,13 +394,11 @@ end
 -- log_history = {}
 log = function(...)
 	local arg = {...}
-	local res = ''
-	for k, v in pairs(arg) do 
-		if type(v) == 'string' then
-			res = res..v.." "
-		end
-	end
-	if logger_display_left_bottom then stoast(res) else print(res) end
+	local l = table.join({
+		map(tostring, running, ' ', table.unpack(map(table2string, arg))),
+	}, ' ')
+	local t = os.date('%Y.%m.%d %H:%M:%S')
+	if logger_display_left_bottom then stoast(table.unpack(arg)) else console.println(1, t..' '..l) end
 end
 
 slog = function (msg, level, clear)
@@ -1562,26 +1561,16 @@ initLocalState = function (datas, state)
 end
 
 -- 获取水平宽度
-getDisplayRotateByWidth = function ()
-	local rotate = getDisplayRotate()
-	local x,y = getDisplaySize()
-	if rotate == 0 then
-		return x
-	end
-	if rotate == 1 then
-		return y
-	end
-end
 
 consoleInit = function()
   console.clearLog()
 	local screen = getScreen()
   local resolution = screen.width .. 'x' .. screen.height
   local title = getApkVerInt() .. ' ' .. release_date .. ' ' .. resolution
-	console.setPos(10,10, getDisplayRotateByWidth() * 7, -2)
   console.setTitle(is_apk_old() and apk_old_warning or title)
+	console.setPos(10, 10, screen.width * .8, screen.height * .9)
 	-- 无法显示日志bug
-	console.show(true)
+	console.show()
   console.dismiss()
 end
 
@@ -1659,4 +1648,12 @@ captureImageReturnBase64 = function ()
 	local tempImagePath = root_path..'tempimage.jpg'
 	snapShot(tempImagePath)
 	return getFileBase64(tempImagePath)
+end
+
+initPostCheckProcess = function ()
+	if displaySizeWidth ~= 720 and displaySizeWidth ~= 1280 or
+	   displaySizeHeight ~= 720 and displaySizeHeight ~= 1280	then
+		slog('当前分辨率: '..displaySizeWidth..'x'..displaySizeHeight)
+		slog('需要设置为: 1280x720 或者 720x1280')
+	end
 end
