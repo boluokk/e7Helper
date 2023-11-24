@@ -22,15 +22,13 @@ loadConfig = function(k, v)
   return y
 end
 
+local prefix = '国际服'
+local prefixArr = {'cmp_', 'mul_', 'orc_', 'img_'}
 getTargetName = function (str)
-	if point['cmp_'..current_server..str] then return 'cmp_'..current_server..str end
-	if point['cmp_'..str] then return 'cmp_'..str end
-	if point['mul_'..current_server..str] then return 'mul_'..current_server..str end
-	if point['mul_'..str] then return 'mul_'..str end
-	if point['ocr_'..current_server..str] then return 'ocr_'..current_server..str end
-	if point['ocr_'..str] then return 'ocr_'..str end
-	if point['img_'..current_server..str] then return 'img_'..current_server..str end
-	if point['img_'..str] then return 'img_'..str end
+	for i=1,#prefixArr do
+		if point[prefixArr[i]..prefix..str] then return prefixArr[i]..prefix..str end
+		if point[prefixArr[i]..str] then return prefixArr[i]..str end	
+	end
 	return str
 end
 
@@ -143,7 +141,7 @@ findOne = function (target, config)
 		end, 2, nil, true)
 	end
 	-- 维护公告关闭掉
-	local retX, retY = findMultiColor(310,67,972,227,point.国服维护公告[1],point.国服维护公告[2],0,.95)
+	local retX, retY = findMultiColor(310,67,972,227, point.国服维护公告[1], point.国服维护公告[2], 0, .95)
 	if retX ~= -1 then
 		tap(retX, retY)
 		ssleep(1)

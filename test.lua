@@ -7,7 +7,7 @@ test = function ()
   -- log(findOne({'未记载的故事', '管理队伍', '国服返回箭头'})) 
   -- sendCloudMessage()
   -- ssleep(10)
-  print(table.unpack({1,2,{123,11},4}))
+  print(findOne({'竞技场挑战', '国服竞技场再次挑战', '国服竞技场已挑战过对手'}, {rg = {879,146,990,686}}))
   exit()
 end
 if not disable_test then test() end
