@@ -1209,9 +1209,9 @@ path.托管处理 = function (isActivity)
 	-- 活动的位置可能不一样
 	local trg = isActivity or {563,528,685,584}
 	if not wait(function ()
-		greenPos = findOne('国服是否可自动挂机', {rg = trg, sim = .85})
+		greenPos = findOne('国服是否可自动挂机', {rg = trg, sim = .8})
 		if greenPos then return 1 end
-	end, .1, 1) then
+	end, .1, 1.5) then
 		log('未找到托管')
 		slog('未找到托管')
 	else
@@ -1224,7 +1224,7 @@ path.托管处理 = function (isActivity)
 			if not petAgent and not s then
 				return 1
 			end
-			stap(greenPos)
+			stap({greenPos[1] - 55, greenPos[2]})
 		end)
 	end
 	return petAgent

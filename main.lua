@@ -14,8 +14,8 @@ click_start_tip = '你的star, 是作者的最大帮助'
 -- apk level 限制
 is_apk_old = function() return getApkVerInt() < 0 end
 apk_old_warning = "怎么还有人用" .. getApkVerInt()
-release_date = "11.24 19:56"
-release_content = '国服ui修复'
+release_date = "11.25 12:34"
+release_content = '国服ui修复-2'
 -- 获取workPath
 root_path = getWorkPath() .. '/'
 -- 禁止热更新

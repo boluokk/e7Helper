@@ -23,7 +23,7 @@ loadConfig = function(k, v)
 end
 
 local prefix = '国际服'
-local prefixArr = {'cmp_', 'mul_', 'orc_', 'img_'}
+local prefixArr = {'cmp_', 'mul_', 'ocr_', 'img_'}
 getTargetName = function (str)
 	for i=1,#prefixArr do
 		if point[prefixArr[i]..prefix..str] then return prefixArr[i]..prefix..str end
