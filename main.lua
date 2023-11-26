@@ -14,8 +14,8 @@ click_start_tip = '你的star, 是作者的最大帮助'
 -- apk level 限制
 is_apk_old = function() return getApkVerInt() < 0 end
 apk_old_warning = "怎么还有人用" .. getApkVerInt()
-release_date = "11.25 13:29"
-release_content = '派遣任务重新进行修复'
+release_date = "11.26 18:06"
+release_content = '添加游戏崩溃,游戏每日更新检测处理'
 -- 获取workPath
 root_path = getWorkPath() .. '/'
 -- 禁止热更新

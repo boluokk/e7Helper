@@ -75,7 +75,7 @@ findOne = function (target, config)
 	-- 间隔时间查看游戏是否在运行
 	if time() - app_is_run > check_game_status_interval then
 		if not sAppIsRunning(current_server) then
-			log("程序未运行。")
+			log("程序未运行.."..current_server)
 			open(server_pkg_name[current_server])
 		end
 		if not sAppIsFront(current_server) then
@@ -134,12 +134,11 @@ findOne = function (target, config)
 			log('已经断开连接..')
 			reWaitTime()
 			if cmpColorEx(point['cmp_网络断开连接'], .98) == 0 then keepCapture() return true end
-			if disconnectCount == 10 then
-				sendCloudMessage('游戏可能已经断开连接了, 请上线检查!')
-			end
+			if disconnectCount == 10 then sendCloudMessage('游戏可能已经断开连接了, 请上线检查!') end
 			tap(640,319)
 		end, 2, nil, true)
 	end
+
 	-- 维护公告关闭掉
 	local retX, retY = findMultiColor(310,67,972,227, point.国服维护公告[1], point.国服维护公告[2], 0, .95)
 	if retX ~= -1 then
@@ -154,7 +153,6 @@ findOne = function (target, config)
 	end
 	
 	-- 账号被顶之类的 todo 
-		
 	for i=1,#target do
 		tar = target[i]
 		if tar == "" then return end
@@ -369,8 +367,14 @@ wait = function (func, interval, TIMEOUT, disableRestartGame)
 	end
 	
 	waitTimeout = time()
+	local game_stop_check = function ()
+		local t,a = findOne({'国服主页Rank', '国服公告X', '国服登录第七史诗'})
+		if a and not longAppearMomentDisAppear(a, nil, nil, 5) then
+			restartGame('游戏崩溃或每日更新')
+		end
+	end
 	while "q:1352955539" do
-		local r = func()
+		local r = func(game_stop_check)
 		if r then TIMEOUTSECOND = nil return r end
 		ssleep(interval)
 		if TIMEOUT and time() + 0 > TIMEOUT then TIMEOUTSECOND = nil TIMEOUT = nil break end
@@ -378,15 +382,19 @@ wait = function (func, interval, TIMEOUT, disableRestartGame)
 		-- 重启脚本 + 回退到首页
 		if not TIMEOUT and not disableRestartGame
 									 and time() - waitTimeout > check_game_identify_timeout then
-			log('超时重试')
-			slog('超时重试')
-			setNumberConfig("scriptStatus", 3)
-			sendCloudMessage('超时重启前截图')
-			path.游戏首页()
-			reScript()
+			restartGame('超时重试')
 		end
 	end
 	
+end
+
+restartGame = function (message)
+	log(message)
+	slog(message)
+	setNumberConfig("scriptStatus", 3)
+	sendCloudMessage(message..'截图')
+	path.游戏首页()
+	reScript()
 end
 
 -- log_history = {}
@@ -1568,7 +1576,7 @@ consoleInit = function()
   console.setTitle(is_apk_old() and apk_old_warning or title)
 	console.setPos(10, 10, screen.width * .8, screen.height * .9)
 	-- 无法显示日志bug
-	console.show()
+	console.show(true)
   console.dismiss()
 end
 

@@ -582,7 +582,6 @@ path.战斗代理 = function (isRepeat, isAgent, currentCount, isActivity)
 		end)
 	end
 	
-	
 	if isRepeat then
 		wait(function ()
 			if findOne('国服二倍速') then return 1 end
@@ -594,7 +593,7 @@ path.战斗代理 = function (isRepeat, isAgent, currentCount, isActivity)
 	-- 等待结束
 	-- 每次限定超时战斗为5分钟
 	if not isRepeat then
-		wait(function ()
+		wait(function (game_stop_check)
 			-- 部分会有一个结束前置页, 直接点击掉
 			log('代理中.')
 			-- NPC对话点击 
@@ -604,6 +603,8 @@ path.战斗代理 = function (isRepeat, isAgent, currentCount, isActivity)
 									'国服战斗完成确定'}, {tapInterval = 1}) then 
 				return 1
 			end
+			-- 程序崩溃或者每日更新检测
+			game_stop_check()
 		end, game_running_capture_interval, 10 * 60)
 	else
 		local targetKey = {'战斗开始', '确认', '重新进行', '选择队伍'}
@@ -611,7 +612,7 @@ path.战斗代理 = function (isRepeat, isAgent, currentCount, isActivity)
 										'国服行动力不足', '国服右下角', '国服右下角活动', 
 										'国服战斗失败', '国服战斗问号'} -- 好友申请、紧急任务可能会进来
 		local pos, targetV
-		wait(function ()
+		wait(function (game_stop_check)
 			if currentCount then
 				if isAgent then
 					log('代理中(有宠物): '..currentCount..'/'..global_stage_count)
@@ -651,6 +652,8 @@ path.战斗代理 = function (isRepeat, isAgent, currentCount, isActivity)
 			if findTap('我的通缉名单') then log('点击通缉名单') end
 			if findTap('申请好友取消') then log('好友申请取消') end
 			if findTap('紧急任务确认') then log('紧急任务确认') end
+			-- 程序崩溃或者每日更新检测
+			game_stop_check()
 		end, game_running_capture_interval, 9999 * 10 * 60) -- 不影响
 	end
 	log('战斗代理完成')
