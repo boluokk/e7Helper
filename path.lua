@@ -1695,10 +1695,10 @@ path.升狗粮_3 = function (upgradeCount)
 				slog('无2星英雄')
 				return
 			end
-			untilTap('国服英雄升级1')
+			untilTap({'国服英雄升级1', '企鹅返还'})
 			local t, v
 			if wait(function ()
-				t, v = findOne(target, {rg = {16,73,385,174}, keyword = tkey})
+				t, v = findOne(target, {rg = {93,77,462,177}, keyword = tkey})
 				if v == '国服英雄左上3星' then
 					log('升级2星个数: '..i..'/'..upgradeCount)
 					return 1
