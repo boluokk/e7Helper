@@ -1686,7 +1686,7 @@ path.升狗粮_3 = function (upgradeCount)
 	for i=1,upgradeCount do
 		if i > curIdx then
 			if not wait(function ()
-				if not findOne('国服英雄左上3星') then
+				if not findOne('国服英雄左上3星', {rg = {88,65,604,175}}) then
 					return 1
 				end
 				stap({1063,243})
@@ -1698,7 +1698,7 @@ path.升狗粮_3 = function (upgradeCount)
 			untilTap({'国服英雄升级1', '企鹅返还'})
 			local t, v
 			if wait(function ()
-				t, v = findOne(target, {rg = {93,77,600,177}, keyword = tkey})
+				t, v = findOne(target, {rg = {88,65,604,175}, keyword = tkey})
 				if v == '国服英雄左上3星' then
 					log('升级2星个数: '..i..'/'..upgradeCount)
 					return 1
