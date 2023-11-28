@@ -1576,7 +1576,7 @@ consoleInit = function()
   console.setTitle(is_apk_old() and apk_old_warning or title)
 	console.setPos(10, 10, screen.width * .8, screen.height * .9)
 	-- 无法显示日志bug
-	console.show(true)
+	console.show(false)
   console.dismiss()
 end
 

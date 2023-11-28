@@ -1046,7 +1046,7 @@ path.战斗跑图1 = function (typeTarget, levelTarget, fightCount, isActivity)
 		return 0
 	end
 
-	path.通用刷图模式1(fightCount, isActivity, levelTarget)
+	return path.通用刷图模式1(fightCount, isActivity, levelTarget)
 end
 
 -- 跑图模式1
@@ -1100,9 +1100,7 @@ path.通用刷图模式1 = function (fightCount, isActivity, levelTarget)
 				if path.补充体力() == 0 then return 0 end
 				-- 需要点击进图
 				wait(function ()
-					if findOne(staticTarget) then
-						return 1
-					end
+					if findOne(staticTarget) then return 1 end
 					if findOne(rightBottomRegion, {keyword = '战斗开始'}) then
 						stap({1150,659})
 					end
@@ -1178,9 +1176,9 @@ path.补充体力 = function ()
 			pos = findOne('国服行动力叶子', {rg = targetRg})
 			if pos then stap(pos) return 1 end
 		end, .1, 3) then
-		slog('未能补充行动力')
-		return 0
-	end
+			slog('未能补充行动力')
+			return 0
+		end
 	end
 	if energyType == 1 then
 		-- 存在叶子
@@ -1189,8 +1187,8 @@ path.补充体力 = function ()
 			pos = findOne({'国服行动力叶子', '国服行动力砖石'}, {rg = targetRg})
 			if pos then stap(pos) return 1 end
 		end) then
-		slog('未能补充行动力')
-		return 0
+			slog('未能补充行动力')
+			return 0
 		end
 	end
 	-- 点击确认
@@ -1198,7 +1196,7 @@ path.补充体力 = function ()
 	-- untilTap('国服竞技场购买票')
 	if not wait(function ()
 		if findTap('国服竞技场购买票') then return 1 end
-	end, .1, 8) then
+	end, .1, 5) then
 		slog('购买行动力失败')
 		return 0
 	end
@@ -1781,7 +1779,6 @@ path.游戏社区 = function ()
 		return not findOne('国服主页Rank')
 	end)
 	wait(function ()
-		
 	end)
 	-- 浏览帖子 + 点赞
 	-- 签到

@@ -7,6 +7,10 @@ test = function ()
   -- log(findOne({'未记载的故事', '管理队伍', '国服返回箭头'})) 
   -- sendCloudMessage()
   -- ssleep(10)
+		-- 存在叶子
+		-- 不存在叶子
+    -- path.游戏首页()
+    print(findOne({'国服背包空间不足', '国服二倍速', '国服行动力不足', '国服一倍速'}))
   exit()
 end
 if not disable_test then test() end
