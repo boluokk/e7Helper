@@ -1353,7 +1353,7 @@ path.清理装备背包 = function ()
 		wait(function ()
 			if findOne(v) then return 1 end
 			stap(pos)
-		end)
+		end, 1)
 	end
 	
 	wait(function ()
@@ -1442,7 +1442,7 @@ path.清理英雄背包 = function (count, filterFunc)
 		wait(function ()
 			if findOne(v) then return 1 end
 			stap(pos)
-		end)
+		end, 1)
 	end
 	
 	for i=1,count do
@@ -1663,8 +1663,17 @@ path.升狗粮_3 = function (upgradeCount)
 		wait(function ()
 			if findOne(v) then return 1 end
 			stap(pos)
-		end)
+		end, 1)
 	end
+
+	-- 左侧选择栏1
+	wait(function ()
+		if not findOne('左侧选择栏1') then
+			stap('左侧选择栏1')
+		else
+			return 1
+		end
+	end)
 
 	wait(function ()
 		if findOne('国服英雄觉醒') then

@@ -71,10 +71,7 @@ end
 dismiss = function (id) ui.dismiss(id) end
 suie.退出 = exit
 suie.启动 = function ()
-  -- 是否配置了清理背包(必须配置, 不然会出问题卡死)
-  if not sFileExist('bagConfig.txt') then saveProfile('config.txt') log('请配置满背包处理!') suie.清理背包() return end
-  if not sFileExist('functionSetting.txt') then saveProfile('config.txt') log('请配置功能设置!') suie.功能设置() return end
-  suie.开启前()
+  if not suie.开启前() then return end
   if print_config_info then print(current_task) exit() end
   if current_task['开启日志'] then logger_display_left_bottom = false detail_log_message = true end
   path.游戏开始()
@@ -82,13 +79,17 @@ end
 suie.开启前 = function ()
   -- 保存配置
   saveProfile('config.txt')
+ -- 是否配置了清理背包(必须配置, 不然会出问题卡死)
+  if not sFileExist('bagConfig.txt') then log('请配置满背包处理!') suie.清理背包() return end
+  if not sFileExist('functionSetting.txt') then log('请配置功能设置!') suie.功能设置() return end
   -- 读取所有文件数据
   current_task = uiConfigUnion(fileNames)
   ui_config_finish = true
   dismiss(parentUID)
+  return 1
 end
 suie.刷书签 = function ()
-  suie.开启前()
+  if not suie.开启前() then return end
   path.刷书签(sgetNumberConfig("refresh_book_tag_count", 0))
 end
 suie.使用说明 = function ()
@@ -143,11 +144,11 @@ suie.背包配置保存 = function ()
   suie.背包配置取消()
 end
 suie.升3星狗粮 = function ()
-  suie.开启前()
+  if not suie.开启前() then return end
   path.升3星狗粮()
 end
 suie.购买企鹅 = function ()
-  suie.开启前()
+  if not suie.开启前() then return end
   path.购买企鹅()
 end
 suie.手动热更 = function ()
