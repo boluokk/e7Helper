@@ -197,13 +197,15 @@ end
 
 -- 0.66 誓约
 -- 0.17 神秘
-path.刷书签 = function (rest)
+path.刷书签 = function (rest, isSingle)
 	rest = rest or 0
 	local startCheck = {'国服神秘商店第一个商品',
 											'国服神秘商店第二个商品',
 											'国服神秘商店第三个商品',
 											'国服神秘商店第四个商品'}
-	setNumberConfig("is_refresh_book_tag", 1)
+	if not isSingle then
+		setNumberConfig("is_refresh_book_tag", 1)
+	end
 	path.游戏首页()
 	local tapPoint1 = point['秘密商店0']
 	local tapPoint2 = point['秘密商店1']
@@ -228,8 +230,6 @@ path.刷书签 = function (rest)
 	if current_task['红装暂停-55级'] then table.insert(target, '55红装') end
 	if current_task['红装暂停-70级'] then table.insert(target, '70红装') end
 	if current_task['红装暂停-85级'] then table.insert(target, '85红装') end
-	-- [国服神秘商店神秘奖牌 国服神秘商店誓约书签]  会导致乱买东西?
-	-- 模拟器太卡, 尽力处理
 	table.insert(target, '神秘')
 	table.insert(target, '书签')
 	if current_task['友情书签'] then table.insert(target, '友情书签') end
@@ -239,8 +239,9 @@ path.刷书签 = function (rest)
 	local msg
 	local newRg
 	local pos, countTarget, curFindCount -- 当前识别次数, 最高 4
-	msg = '刷新次数: 0/'..refreshCount..'\n神秘: 0*50(0%)\n誓约: 0*5(0%)\n友情: 0*5(0%)'
-	openHUD(msg, '刷标签')
+	local allMoney = 0
+	msg = ''
+	-- openHUD(msg, '刷标签')
 	for i=1,(refreshCount + 1) do
 		curFindCount = 1
 		if i > rest then
@@ -291,12 +292,15 @@ path.刷书签 = function (rest)
 						if countTarget and curFindCount ~= 0 then
 							if countTarget == '神秘' then
 								g1 = g1 + 1
+								allMoney = allMoney + 280
 								setNumberConfig("g1", g1)
 							elseif countTarget == '书签' then
 								g2 = g2 + 1
+								allMoney = allMoney + 184
 								setNumberConfig("g2", g2)
 							elseif countTarget == '友情书签' then
 								g3 = g3 + 1
+								allMoney = allMoney + 18
 								setNumberConfig("g3", g3)
 							end
 						end
@@ -315,19 +319,18 @@ path.刷书签 = function (rest)
 				if curFindCount == 3 and enoughResources then
 					wait(function ()
 						sswipe({858,578}, {858,150})
-						return findOne({'神秘商店最后一个商品', 
-														'神秘商店最后二个商品', 
-														'神秘商店最后三个商品'})
+						return findOne({'神秘商店最后一个商品', '神秘商店最后二个商品', '神秘商店最后三个商品'})
 					end)
 				end
 				curFindCount = curFindCount + 1
 			end
 			if i > refreshCount then path.游戏首页() break end
 			msg = '刷新次数: '..i..'/'..refreshCount..
-						'\n神秘: '..g1..'*50('..(g1/i*100)..'%)'..
-						'\n誓约: '..g2..'*5('..(g2/i*100)..'%)'..
-						'\n友情: '..g3..'*5('..(g3/i*100)..'%)'
-
+						'\n已花费砖石: '..(i * 3)..
+						'\n已花费金币: '..allMoney..'K'..
+						'\n神秘: '..(g1 * 50)..'('..string.format("%.5f", g2/i*100)..'%)'..
+						'\n誓约: '..(g2 * 5)..'('..string.format("%.5f", g2/i*100)..'%)'.. 
+						'\n友情: '..(g3 * 5)..'('..string.format("%.5f", g3/i*100)..'%)'
 			openHUD(msg, '刷标签')
 			if not enoughResources then path.游戏首页() break end
 			slog('\n'..msg, nil, true)
@@ -1899,7 +1902,7 @@ end
 
 path.免费书签 = function ()
 	current_task['更新次数'] = 0
-	path.刷书签(0)
+	path.刷书签(0, true)
 end
 
 path.长队伍点击处理 = function ()
