@@ -162,3 +162,8 @@
 4、在 E7helper 中添加当前局域网地址(ipconfig指令能找到你的ip地址)
 
 5、添加需要发送到的 qq 号，需要是好友
+
+<InArticleAdsense
+    data-ad-client="ca-pub-5994132680582412"
+    data-ad-slot="f08c47fec0942fa0">
+</InArticleAdsense>

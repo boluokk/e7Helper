@@ -11,5 +11,9 @@
   "license": "ISC",
   "devDependencies": {
     "vuepress": "^1.9.9"
+  },
+  "dependencies": {
+    "vue-google-adsense": "^1.10.1",
+    "vue-script2": "^2.1.0"
   }
 }
