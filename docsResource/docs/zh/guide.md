@@ -9,7 +9,7 @@
 ### 此APP工具源码: [地址](https://github.com/boluokk/e7Helper) （好用就给个star吧，你的star会是作者的最大帮助）👍
 
 ### 最近更新: 
-- 添加qq通知服务
+- update doc
 
 ## 设备兼容
 

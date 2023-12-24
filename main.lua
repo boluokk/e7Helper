@@ -14,7 +14,7 @@ click_start_tip = '你的star, 是作者的最大帮助'
 -- apk level 限制
 is_apk_old = function() return getApkVerInt() < 0 end
 apk_old_warning = "怎么还有人用" .. getApkVerInt()
-release_date = "12.12 13:17"
+release_date = "12.24 19:54"
 release_content = '修复免费书签问题'
 -- 获取workPath
 root_path = getWorkPath() .. '/'
