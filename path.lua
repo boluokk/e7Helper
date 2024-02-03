@@ -488,30 +488,30 @@ path.竞技场NPC = function ()
 		local curHomePage = {"657|115|0B733C", "768|113|0557AC", "873|114|1D1D9D"}
 		wait(function ()
 			-- 解决弹出 亲密度问题
-			findTap({'国服竞技场挑战升级', 
-							 '国服战斗完成竞技场确定', 
-							 '国服战斗完成确定'}, {tapInterval = 1})
+			findTap({'国服竞技场挑战升级', '国服战斗完成竞技场确定', '国服战斗完成确定'}, {tapInterval = 1})
 			stap({323,27})
 			if findOne(curHomePage) then
 				longAppearAndTap(curHomePage, nil, {323,27}, 1) -- 2s
 				return 1
 			end
 		end)
-		pos = findOne('国服NPC挑战', {rg = {855,141,996,721}})
+		pos = findOne('国服NPC挑战', {rg = {855,135,996,721}, sim = .9})
 		if not pos and isSwipe == 2 then break end
 		if not pos then
 			isSwipe = isSwipe + 1
 			wait(function ()
-				sswipe({846,498}, {846,206})
-				ssleep(1.5)
-				if findOne('780|683|FFFFFF,774|674|FFFFFF,774|690|FADD32') then
+				sswipe({846,498}, {846,100})
+				ssleep(2)
+				-- 好像被修改了
+				if findOne("780|563|421D0E,774|568|FFFFFF,770|576|D66A98,775|591|D44401") then
 					return 1				
 				end
 			end)
 		else
 			-- 开始刷NPC
 			wait(function ()
-				stap(pos)
+				-- 增大y轴，往下滑动可能有一个点击不了
+				stap({pos[1], pos[2] + 15})
 				if findOne('左上3字问号') then return 1 end
 			end)
 			untilTap('国服竞技场战斗开始', {sim = .98})
@@ -537,14 +537,12 @@ path.竞技场购票 = function ()
 	-- 是否使用叶子兑换5张票
 	-- 是否使用砖石兑换5张票 暂不支持
 	if v == '国服竞技场购买票页面' and buyTicket then
-		local tmp, ticketType = untilAppear({'国服竞技场叶子购买票', 
-																					'国服竞技场砖石购买票'})
+		local tmp, ticketType = untilAppear({'国服竞技场叶子购买票', '国服竞技场砖石购买票'})
 		if ticketType == '国服竞技场叶子购买票' then
 			log('购票')
 			untilTap('国服竞技场购买票')
 			-- 金币是否够用
-			local tmp, v = untilAppear({'国服神秘商店购买资源不足',
-																	'国服竞技场下战斗开始'})
+			local tmp, v = untilAppear({'国服神秘商店购买资源不足', '国服竞技场下战斗开始'})
 			if v == '国服神秘商店购买资源不足' then log('资源不足') return 1 end
 		end
 		if ticketType == '国服竞技场砖石购买票' then log('取消购票') untilTap('国服竞技场取消购票') return 1 end
@@ -919,22 +917,25 @@ path.友情商店 = function ()
 end
 
 path.战斗选择页 = function ()
+
 	wait(function ()
 		stap(point.战斗)
 			ssleep(1)
 			if not findOne('国服主页Rank') then return 1 end
 	end)
+
 	wait(function ()
 		if findOne('左上2字问号') then
-			if findOne('迷宫关卡banner页') then
+			if findOne('战斗下方滑动条左') then
 				return 1
 			end
-			sswipe({176,374}, {800,374})
+			-- 点击 <-
+			stap({378,663})
 		end
 	end, 1)
 
 	wait(function ()
-		stap({280,260})
+		stap({232,525})
 		if not findOne('国服迷宫主页', {sim = 1}) then ssleep(1) return 1 end
 	end)
 end

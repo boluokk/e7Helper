@@ -3,6 +3,8 @@ time = systemTime
 -- https://gitee.com/boluokk/e7-helper/raw/master/release/ 废弃(被屏蔽了)
 -- https://gitcode.net/otato001/e7hepler/-/raw/master/
 -- https://gitea.com/boluoii/e7Helper/raw/branch/master/
+
+-- 热更源
 update_source_arr = {
   'https://gitee.com/boluokk/e7_helper/raw/master/',
   'https://gitea.com/boluoii/e7Helper/raw/branch/master/',
@@ -14,8 +16,8 @@ click_start_tip = '你的star, 是作者的最大帮助'
 -- apk level 限制
 is_apk_old = function() return getApkVerInt() < 0 end
 apk_old_warning = "怎么还有人用" .. getApkVerInt()
-release_date = "12.24 19:54"
-release_content = '修复免费书签问题'
+release_date = "02.03 12:41"
+release_content = '已知问题修复。'
 -- 获取workPath
 root_path = getWorkPath() .. '/'
 -- 禁止热更新
