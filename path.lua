@@ -568,6 +568,7 @@ path.战斗代理 = function (isRepeat, isAgent, currentCount, isActivity)
 	local rightBottomRegion = isActivity and '国服右下角活动' or '国服右下角'
 	log('战斗开始')
 	-- 开启auto
+	-- 延长时间，某些设备硬件比较差
 	if not isRepeat then
 		-- untilAppear('国服Auto')
 		wait(function ()
@@ -575,24 +576,24 @@ path.战斗代理 = function (isRepeat, isAgent, currentCount, isActivity)
 				return 1
 			end
 			stap({638,31})
-		end)
+		end, .5, 60)
 		wait(function ()
 			stap('国服Auto')
 			ssleep(1)
 			if findOne(point.国服AUto成功) then return 1 end
-		end)
+		end, .5, 60)
 	end
 	
+	-- 延长时间，某些设备硬件比较差
 	if isRepeat then
 		wait(function ()
 			if findOne('国服二倍速') then return 1 end
 			ssleep(1)
 			stap('国服二倍速')
-		end)
+		end, .5, 60)
 	end
 	
 	-- 等待结束
-	-- 每次限定超时战斗为5分钟
 	if not isRepeat then
 		wait(function (game_stop_check)
 			-- 部分会有一个结束前置页, 直接点击掉

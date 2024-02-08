@@ -356,7 +356,10 @@ stap = function (pos, interval, disableTapCheck)
 end
 
 -- 识别颜色时间超时
--- 卡在某一处
+-- func 执行逻辑
+-- interval 间隔
+-- TIMEOUT 超时
+-- disableRestartGame 关闭重启游戏
 wait = function (func, interval, TIMEOUT, disableRestartGame)
 	interval = interval or wait_interval
 	
