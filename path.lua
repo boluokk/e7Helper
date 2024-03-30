@@ -364,11 +364,12 @@ path.竞技场玩家 = function ()
 		ssleep(1)
 		if not findOne('国服主页Rank') then return 1 end
 	end)
-	untilTap('国服竞技场')
+	-- 新增（征召JJC）
+	untilTap('选择JJC')
 	local r1, r2
 	wait(function ()
 		stap({386,17})
-		r1, r2 = findOne({'左上3字问号', 
+		r1, r2 = findOne({'左上3字问号',
 											'国服竞技场每周结算时间', 
 											'国服竞技场每周排名奖励'})
 		if r1 then return 1 end
@@ -459,9 +460,10 @@ path.竞技场NPC = function ()
 		end
 		stap({999,339})
 	end)
+	untilTap('选择JJC')
 	local p, v
 	wait(function ()
-		p, v = findOne({'左上3字问号', '国服竞技场每周排名奖励'})
+		p, v = findOne({'国服竞技场每周排名奖励', '左上3字问号'})
 		if v == '左上3字问号' then
 			return 1
 		end
