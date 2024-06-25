@@ -3,7 +3,7 @@
 <p>一款多功能覆盖的第七史诗脚本助手</a> </p>
 <p style="color: red;">1、此仓库后续不再推送代码，软件由root端转换到无障碍。会发送apk文件到仓库中</p>
 <p style="color: red;">2、QQ群可能满了，看群介绍有其他群可以加!!</p>
-<a style="color: greenyellow" href=https://boluokk.github.io/e7Helper/>使用文档(必读)　</a> |
+<a style="color: greenyellow" href=https://www.yuque.com/u28780164/yv3kgg/rey0agsxfl55iool?singleDoc/>使用文档(必读)　</a> |
 <a style="color: deepskyblue" href=https://g.nga.cn/read.php?tid=37578061&rand=743/>国服反和谐(教程)</a> | 
 <a style="color: mediumvioletred" href=https://www.bilibili.com/video/BV1214y1k7XB/?spm_id_from=333.337.search-card.all.click&vd_source=0a11f3e57dadf1233d83ab558c971e40/>第七史诗配装器　</a>| 
 <a href=https://qm.qq.com/cgi-bin/qm/qr?k=o6MW-K-Ws6A2-S_WhHEro1JggzREWPzt&jump_from=webapi&authKey=PRSHw0kOjKtnqEVwyXCRHnKKwAWhzXWD/y486deoyZ/AWyNfGLwHIEwjb8gf9yoX>qq交流群:206490280 </a> | 
