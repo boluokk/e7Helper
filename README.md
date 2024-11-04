@@ -22,7 +22,7 @@
 
 <p><img src="cover.png"></p>
 
-### 闭源收费版(持续维护中..)
+### 闭源收费版截图(持续维护中..)
 <p><img src="./media/收费版 (1).png"></p>
 <p><img src="./media/收费版 (2).png"></p>
 <p><img src="./media/收费版 (3).png"></p>
