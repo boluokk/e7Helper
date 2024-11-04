@@ -18,10 +18,38 @@
 ![](https://img.shields.io/badge/total_line-4k+-purple)
 <p></p>
 
+### 开源免费版截图(不在维护)
+
 <p><img src="cover.png"></p>
+
+### 闭源收费版(持续维护中..)
+<p><img src="./media/收费版 (1).png"></p>
+<p><img src="./media/收费版 (2).png"></p>
+<p><img src="./media/收费版 (3).png"></p>
+<p><img src="./media/收费版 (4).png"></p>
+<p><img src="./media/收费版 (5).png"></p>
+<p><img src="./media/收费版 (6).png"></p>
+<p><img src="./media/收费版 (7).png"></p>
+<p><img src="./media/收费版 (8).png"></p>
+<p><img src="./media/收费版 (9).png"></p>
+<p><img src="./media/收费版 (10).png"></p>
+<p><img src="./media/收费版 (11).png"></p>
+<p><img src="./media/收费版 (12).png"></p>
+<p><img src="./media/收费版 (13).png"></p>
+<p><img src="./media/收费版 (14).png"></p>
+<p><img src="./media/收费版 (15).png"></p>
+<p><img src="./media/收费版 (16).png"></p>
+<p><img src="./media/收费版 (17).png"></p>
+<p><img src="./media/收费版 (18).png"></p>
+<p><img src="./media/收费版 (19).png"></p>
+<p><img src="./media/收费版 (20).png"></p>
+<p><img src="./media/收费版 (21).png"></p>
+<p><img src="./media/收费版 (22).png"></p>
+<p><img src="./media/收费版 (23).png"></p>
+<p><img src="./media/收费版 (24).png"></p>
 </div>
 
-### 部分内容
+### 部分功能视频
 <div align="center">
     <img src="./media/qqnotify.gif">
     <img src="./media/flushtag.gif">
