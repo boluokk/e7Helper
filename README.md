@@ -17,6 +17,7 @@
 ![](https://img.shields.io/badge/repo_size-3.54MB-orange)
 ![](https://img.shields.io/badge/total_line-4k+-purple)
 <p></p>
+</div>
 
 ### 开源免费版截图(不在维护)
 
@@ -24,9 +25,11 @@
 
 ### 闭源收费版截图(持续维护中..)
 #### 最近更新：
-####        1、添加月塔、派遣任务、木降临活动。
-####        2、修复已知问题，悬浮窗消失问题。
-####        3、优化启动加载ui速度。
+```
+1、添加月塔、派遣任务、木降临活动。
+2、修复已知问题，悬浮窗消失问题。
+3、优化启动加载ui速度。
+```
 <p><img src="./media/收费版 (1).png"></p>
 <p><img src="./media/收费版 (2).png"></p>
 <p><img src="./media/收费版 (3).png"></p>
@@ -51,7 +54,7 @@
 <p><img src="./media/收费版 (22).png"></p>
 <p><img src="./media/收费版 (23).png"></p>
 <p><img src="./media/收费版 (24).png"></p>
-</div>
+
 
 ### 部分功能视频
 <div align="center">
