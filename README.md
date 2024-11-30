@@ -1,5 +1,5 @@
 <div align="center">
-<h1>E7Helper<a href="https://abundant-triangle-236.notion.site/EPIC-Seven-Heper-Docs-14b951f3bc9d80f382d4d75ee8374408?pvs=4">(English Version)</a></h1>
+<h1>E7Helper</h1>
 <p>一款多功能覆盖的第七史诗脚本助手</a> </p>
 <p style="color: red;">1、有能力可自行修改运行打包，闭源版本已收费！！！</p>
 <p style="color: red;">2、此仓库后续不再推送代码，软件由root端转换到无障碍。会发送apk文件到仓库中</p>
