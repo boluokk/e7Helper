@@ -1,5 +1,8 @@
 <div align="center">
-<h1>E7Helper</h1>
+<h1>E7Helper (<a href="https://discord.com/invite/Cd8CSFJS">Discord</a>)</h1>
+</div>
+
+<div>
 <p>一款多功能覆盖的第七史诗脚本助手</a> </p>
 <p style="color: red;">1、有能力可自行修改运行打包，闭源版本已收费！！！</p>
 <p style="color: red;">2、此仓库后续不再推送代码，软件由root端转换到无障碍。会发送apk文件到仓库中</p>
@@ -9,15 +12,9 @@
 <a style="color: mediumvioletred" href=https://www.bilibili.com/video/BV1214y1k7XB/?spm_id_from=333.337.search-card.all.click&vd_source=0a11f3e57dadf1233d83ab558c971e40/>第七史诗配装器　</a>| 
 <a href=https://qm.qq.com/cgi-bin/qm/qr?k=o6MW-K-Ws6A2-S_WhHEro1JggzREWPzt&jump_from=webapi&authKey=PRSHw0kOjKtnqEVwyXCRHnKKwAWhzXWD/y486deoyZ/AWyNfGLwHIEwjb8gf9yoX>qq交流群:206490280 </a> | 
 <a href="https://github.com/boluokk/e7QQBot">QQ消息提示项目地址</a>
-<p></p>
-
-
-![](https://img.shields.io/badge/script_size-41KB-blue)
-![](https://img.shields.io/badge/downloads-7k+-green)
-![](https://img.shields.io/badge/repo_size-3.54MB-orange)
-![](https://img.shields.io/badge/total_line-4k+-purple)
-<p></p>
 </div>
+
+<h1></h1>
 
 ### 开源免费版截图(不在维护)
 
