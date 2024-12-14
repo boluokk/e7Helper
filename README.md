@@ -1,5 +1,5 @@
 <div align="center">
-<h1>E7Helper(<a href="https://discord.com/invite/Cd8CSFJS">Join Discord</a>)</h1>
+<h1>E7Helper(<a href="https://discord.com/invite/MqJe64QHgK">Join Discord</a>)</h1>
 </div>
 
 <div>
